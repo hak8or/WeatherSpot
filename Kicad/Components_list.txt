@@ -1,0 +1,7 @@
+Components list
+
+1. MPL3115A2 - Freescale Altimeter/pressure sensor. Digikey reference: MPL3115A2-ND. Price: $3.29 per unit
+2. DHT11 - Digital Humidity Temperature Sensor. Price $7.49 for 4 pieces
+3. Light sensor - free
+4. Atmega328p - Main microcontroller - free
+5. Other - Subcomponents such as capacitors or resistors - free
