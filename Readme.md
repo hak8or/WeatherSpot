@@ -4,7 +4,7 @@ A weather reporting ecosystem consisting of a website, windows native applicatio
 
 ### Development
 1. Login to the WeatherSpot server using ```ssh root@WeatherSpot.us```.
-2. Make sure the influx database is running using ```docker ps -a``` to see active containers. If it's not running, a ```docker run weather_db``` will get it up again.
+2. Make sure the influx database is running using ```docker ps -a``` to see active containers. If it's not running, a ```docker start weather_db``` will get it up again.
 3. Do whatever you need to do.
 
 In the event the influxdb container was removed, the following will get it up again:
