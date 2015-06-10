@@ -1,0 +1,89 @@
+
+body
+{
+    background: #C8C8C8;
+    overflow: hidden;        
+}
+
+#boxA
+{
+    background: #D7DF01;
+    color: #FFFFFF;
+    width: 300px;
+    height: 300px;
+    margin-top: 75px;
+    position: relative;
+    display: block;
+    font-weight: 700; 
+    font-size: x-large; 
+    line-height: 13em;
+    text-align: center; 
+}
+
+#boxA a
+{ 
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+}
+
+#boxA:hover
+{
+    background-color: #F3F781;
+}
+
+#boxB    
+{
+    background: #EE3E80;
+    color: #FFFFFF;
+    width: 300px;
+    height: 300px;
+    position: relative;
+    left: 300px;
+    font-weight: 700; 
+    font-size: x-large; 
+    line-height: 13em;
+    text-align: center;   
+}
+
+#boxB a
+{
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+}
+         
+#boxB:hover
+{
+    background: #F16D9D;
+}
+
+#boxC
+{
+    background: #008B8B;
+    color: #FFFFFF;
+    width: 300px; 
+    height: 300px;
+    position: relative;
+    left: 600px;
+    bottom: 600px;
+    font-weight: 700;
+    line-height: 13em;
+    font-size: x-large;
+    text-align: center;
+}
+         
+#boxC a  
+{
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute; 
+}
+
+#boxC:hover
+{
+    background: #00BABA; 
+}
