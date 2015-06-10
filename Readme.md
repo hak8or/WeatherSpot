@@ -9,7 +9,7 @@ A weather reporting ecosystem consisting of a website, windows native applicatio
 
 In the event the influxdb container was removed, the following will get it up again:
 ```bash
-docker run -d -p 8083:8083 -p 8084:8084 -e PRE_CREATE_DB="weather" --name weather_db tutum/influxdb:latest
+docker run -d -p 8083:8083 -p 8084:8084 -p 8086:8086 -e PRE_CREATE_DB="weather" --name weather_db tutum/influxdb:latest
 ```
 
 ### Docker Installation
