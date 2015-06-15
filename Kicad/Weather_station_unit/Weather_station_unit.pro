@@ -1,4 +1,4 @@
-update=6/7/2015 2:47:30 PM
+update=6/14/2015 11:23:37 PM
 version=1
 last_client=kicad
 [cvpcb]
@@ -62,3 +62,16 @@ LibName28=atmel
 LibName29=contrib
 LibName30=valves
 LibName31=weather_station_library
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=C:/Users/glina_000/Documents/Capstone_WeatherSpot/Kicad/Weather_station_unit/
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+RptD_X=0
+RptD_Y=100
+RptLab=1
+LabSize=39
