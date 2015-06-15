@@ -6,3 +6,4 @@ Components list
 4. Atmega328p - Main microcontroller Price: free
 5. MCP1802 - Voltage Regulator - Digikey reference: MCP1802T-3302I/OTCT-ND. Price: free
 6. Other - Subcomponents such as capacitors or resistors. Price: free
+7. ESP8266 - Wifi module. Price:~$6? per unit
