@@ -25,3 +25,13 @@ void Heartbeat::start(void){
 	Timer1.attachInterrupt(Heartbeat::toggle);
 }
 
+/**
+ * @brief Blinks the LED much quicker to show that we are in an error state.
+ */
+void Heartbeat::panic(void){
+	// Start a timer.
+	Timer1.initialize();
+
+	// Attach a static toggle pin ISR to said timer every 50,000 microseconds.
+	Timer1.attachInterrupt(Heartbeat::toggle, 50000);
+}

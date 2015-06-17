@@ -16,4 +16,10 @@ public:
 	 * @brief ISR for toggling the heartbeat LED.
 	 */
 	inline static void toggle(void);
+
+	/**
+	 * @brief Blinks the LED much quicker to show that we are in an error state.
+	 */
+	static void panic(void);
 };
+
