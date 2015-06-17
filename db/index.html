@@ -14,10 +14,10 @@
 			padding-right: 1em;
 			text-align: center;
 		}
-		.datas tr:nth-child(1) {
+		.datas > tbody > tr:nth-child(1) {
 			background: orange;
 		}
-		.datas tr:nth-child(even) {
+		.datas > tbody > tr:nth-child(even) {
 			background: lightgrey;
 		}
 	</style>
@@ -51,14 +51,19 @@ function doQuery(query) {
 				for (var index = 0; index < points.length; ++index) {
 					$("table.datas:nth-last-of-type(1)").append("<tr>");
 					for (var innerIndex = 0; innerIndex < points[index].length; ++innerIndex) {
-						$("table.datas:nth-last-of-type(1) tr:nth-last-child(1)").append("<td>");
+						$("table.datas:nth-last-of-type(1) > tbody > tr:nth-last-child(1)").append("<td>");
 						if (innerIndex == 0) {
-							var dateStr = new Date(points[index][innerIndex]);
-							$("table.datas:nth-last-of-type(1) tr:nth-last-child(1) td:nth-last-child(1)").append(dateStr.toString());
+							var dateStr;
+							if (points[index][innerIndex] == 0) {
+								dateStr = "N/A";
+							} else {
+								dateStr = new Date(points[index][innerIndex]);
+							}
+							$("table.datas:nth-last-of-type(1) > tbody > tr:nth-last-child(1) td:nth-last-child(1)").append(dateStr.toString());
 						} else {
-							$("table.datas:nth-last-of-type(1) tr:nth-last-child(1) td:nth-last-child(1)").append(points[index][innerIndex]);
+							$("table.datas:nth-last-of-type(1) > tbody > tr:nth-last-child(1) td:nth-last-child(1)").append(points[index][innerIndex]);
 						}
-						$("table.datas:nth-last-of-type(1) tr:nth-last-child(1)").append("</td>");
+						$("table.datas:nth-last-of-type(1) > tbody > tr:nth-last-child(1)").append("</td>");
 					}
 					$("table.datas:nth-last-of-type(1)").append("</tr>");
 				}
@@ -66,8 +71,10 @@ function doQuery(query) {
 			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
+			$(".nameHeader").remove();
+			$("body").append('<h1 class="nameHeader"></h1>');
 			$(".nameHeader").html("Query Failure");
-			$("table.datas").html('<tr class="columnsRow"><td>No Data</td></tr>');
+			$("table.datas").remove();
 		},
 		dataType: "json"
 	});
@@ -84,6 +91,11 @@ function doQuery(query) {
 	</table>
 
 	<script>
+		$("#queryText").focus(function() {
+			if ($(this).val() == "Enter Query") {
+				$(this).val("");
+			}
+		});
 		$("#queryText").keydown(function(e) {
 		    // Enter is pressed
 		    if (e.keyCode == 13) { doQuery($("#queryText").val()); }
