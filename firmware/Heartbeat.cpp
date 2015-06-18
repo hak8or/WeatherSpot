@@ -6,9 +6,14 @@
  * @brief ISR for toggling the heartbeat LED.
  */
 void Heartbeat::toggle(void){
-	// This doesn't have a toggle register, so
-	// we have to do this manually.
-	PORTB = 1 << 5 ^ PORTB;
+	#if defined(__MK20DX256__) || defined(__MK20DX128__)
+		// The teensy does have a toggle register!
+		GPIOC_PTOR = 1 << 5;
+	#else
+		// This doesn't have a toggle register, so
+		// we have to do this manually.
+		PORTB = 1 << 5 ^ PORTB;
+	#endif
 }
 
 /**
@@ -16,7 +21,11 @@ void Heartbeat::toggle(void){
  */
 void Heartbeat::start(void){
 	// Make sure pin is output.
-	DDRB = 1 << 5 | DDRB;
+	#if defined(__MK20DX256__) || defined(__MK20DX128__)
+		pinMode(13, OUTPUT);
+	#else
+		DDRB = 1 << 5 | DDRB;
+	#endif
 
 	// Make a timer that runs every 500,000 milliseconds.
 	Timer1.initialize(500000);
