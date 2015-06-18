@@ -27,11 +27,13 @@ void Heartbeat::start(void){
 		DDRB = 1 << 5 | DDRB;
 	#endif
 
-	// Make a timer that runs every 500,000 milliseconds.
-	Timer1.initialize(500000);
+	// Start a timer.
+	Timer1.initialize();
 
-	// And attach a static toggle pin ISR.
-	Timer1.attachInterrupt(Heartbeat::toggle);
+	// Attach a static toggle pin ISR to said timer every 500,000 microseconds.
+	Timer1.attachInterrupt(Heartbeat::toggle, 500000);
+}
+
 }
 
 /**
