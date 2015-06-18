@@ -34,6 +34,12 @@ void Heartbeat::start(void){
 	Timer1.attachInterrupt(Heartbeat::toggle, 500000);
 }
 
+/**
+ * @brief Stops the heartbeat LED on PB5 using a timer.
+ */
+void Heartbeat::stop(void){
+	// Disable interrupts for our timer.
+	Timer1.detachInterrupt();
 }
 
 /**
