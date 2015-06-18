@@ -1,8 +1,11 @@
 #include "Arduino.h"
 #include "Heartbeat.h"
 #include "TimerOne.h"
-#include <EtherCard.h>
+#include "Sensors.h"
 #include "Network.h"
+
+#include <EtherCard.h>
+#include <DHT.h>
 
 // Gotta include this because the arduino IDE does some magic including nonsense.
 #include <SoftwareSerial.h>
@@ -34,8 +37,18 @@ void setup(){
 		network.init_wired();
 	else
 		network.init_wireless();
+
+	Sensors sensors;
+	sensors.init_DH11(2);
+	Sensor_data sensor_data = sensors.read_sensors();
+
+	Serial.print("Sensor humidity: ");
+	Serial.println(sensor_data.humidity);
+	Serial.print("Sensor temperature: ");
+	Serial.println(sensor_data.temperature_f);
+
 }
 
 void loop(){
-	
+
 }
