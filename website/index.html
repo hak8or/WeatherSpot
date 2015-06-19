@@ -14,10 +14,10 @@
 			padding-right: 1em;
 			text-align: center;
 		}
-		.datas > tbody > tr:nth-child(1) {
+		.datas > thead > tr {
 			background: orange;
 		}
-		.datas > tbody > tr:nth-child(even) {
+		.datas > tbody > tr:nth-child(odd) {
 			background: lightgrey;
 		}
 	</style>
@@ -25,13 +25,7 @@
 	<script>
 function doQuery(query) {
 	console.log(query);
-//	PROPER URL BELOW
-//	var queryURL = "http://weatherspot.us:8086/db/weather/series?u=root&p=root&q=" + encodeURIComponent(query);
-//
-
-//	TESTING WITH PHP WRAPPER URL
 	var queryURL = "http://weatherspot.us/db/query.php?db=weather&query=" + encodeURIComponent(query);
-//
 	$.ajax({
 		type: 'GET',
 		url: queryURL,
@@ -39,19 +33,21 @@ function doQuery(query) {
 			$(".nameHeader").remove();
 			$("table.datas").remove();
 			for (var dataIndex = 0; dataIndex < data.length; ++dataIndex) {
-				$("body").append('<h1 class="nameHeader"></h1><table class="datas"><tr class="columnsRow"></tr></table>');
 				var name = data[dataIndex].name;
 				var columns = data[dataIndex].columns;
 				var points = data[dataIndex].points;
 				console.log(columns);
-				$(".nameHeader:nth-last-of-type(1)").html("Series: " + name)
+
+				var appendStr = '<h1 class="nameHeader">Series: ' + name + '</h1><table class="datas"><thead><tr>';
 				for (var index = 0; index < columns.length; ++index) {
-					$("table.datas:nth-last-child(1) .columnsRow").append("<td>" + columns[index] + "</td>");
+					appendStr += "<td>" + columns[index] + "</td>";
 				}
+				appendStr += "</tr></thead>";
+
 				for (var index = 0; index < points.length; ++index) {
-					$("table.datas:nth-last-of-type(1)").append("<tr>");
+					appendStr += "<tr>"; 
 					for (var innerIndex = 0; innerIndex < points[index].length; ++innerIndex) {
-						$("table.datas:nth-last-of-type(1) > tbody > tr:nth-last-child(1)").append("<td>");
+						appendStr += "<td>"; 
 						if (innerIndex == 0) {
 							var dateStr;
 							if (points[index][innerIndex] == 0) {
@@ -59,22 +55,23 @@ function doQuery(query) {
 							} else {
 								dateStr = new Date(points[index][innerIndex]);
 							}
-							$("table.datas:nth-last-of-type(1) > tbody > tr:nth-last-child(1) td:nth-last-child(1)").append(dateStr.toString());
+							appendStr += dateStr.toString();
 						} else {
-							$("table.datas:nth-last-of-type(1) > tbody > tr:nth-last-child(1) td:nth-last-child(1)").append(points[index][innerIndex]);
+							appendStr += points[index][innerIndex]; 
 						}
-						$("table.datas:nth-last-of-type(1) > tbody > tr:nth-last-child(1)").append("</td>");
+						appendStr += "</td>"; 
 					}
-					$("table.datas:nth-last-of-type(1)").append("</tr>");
+					appendStr += "</tr>"; 
 				}
-				console.log(data[dataIndex]);
+				appendStr += "</table>";
+				$("body").append(appendStr);
+//				console.log(data[dataIndex]);
 			}
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			$(".nameHeader").remove();
-			$("body").append('<h1 class="nameHeader"></h1>');
-			$(".nameHeader").html("Query Failure");
 			$("table.datas").remove();
+			$("body").append('<h1 class="nameHeader">Query Failure</h1>');
 		},
 		dataType: "json"
 	});
@@ -85,11 +82,6 @@ function doQuery(query) {
 	<button type="button" onclick='doQuery($("#queryText").val())'>Query</button>
 	<input type="text" id="queryText" value="Enter Query"></input>
 	<p>Example Query: SELECT temp FROM Temperature</p>
-	<h1 class="nameHeader"></h1>
-	<table class="datas">
-		<tr class="columnsRow"></tr>
-	</table>
-
 	<script>
 		$("#queryText").focus(function() {
 			if ($(this).val() == "Enter Query") {
