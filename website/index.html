@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<meta charset="UTF-8"> 
+	<title>Weather Database</title>
 	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
@@ -30,7 +32,7 @@ function doQuery(query) {
 		type: 'GET',
 		url: queryURL,
 		success: function(data) {
-			$(".nameHeader").remove();
+			$(".nameHeader").remove();;
 			$("table.datas").remove();
 			for (var dataIndex = 0; dataIndex < data.length; ++dataIndex) {
 				var name = data[dataIndex].name;
@@ -46,17 +48,18 @@ function doQuery(query) {
 
 				for (var index = 0; index < points.length; ++index) {
 					appendStr += "<tr>"; 
-					for (var innerIndex = 0; innerIndex < points[index].length; ++innerIndex) {
+					appendStr += "<td>";
+					var dateStr;
+					if (points[index][0] == 0) {
+						dateStr = "N/A";
+					} else {
+						dateStr = new Date(points[index][0]);
+					}
+					appendStr += dateStr.toString();
+					appendStr += "</td>";
+					for (var innerIndex = 1; innerIndex < points[index].length; ++innerIndex) {
 						appendStr += "<td>"; 
-						if (innerIndex == 0) {
-							var dateStr;
-							if (points[index][innerIndex] == 0) {
-								dateStr = "N/A";
-							} else {
-								dateStr = new Date(points[index][innerIndex]);
-							}
-							appendStr += dateStr.toString();
-						} else {
+						if (points[index][innerIndex] !== null) {
 							appendStr += points[index][innerIndex]; 
 						}
 						appendStr += "</td>"; 
