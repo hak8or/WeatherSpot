@@ -2,6 +2,7 @@
 body 
 {
     background-image: url("../pic/sky_background.jpeg");
+    background-position: 0% 20%;
 }
 
 #front_page
