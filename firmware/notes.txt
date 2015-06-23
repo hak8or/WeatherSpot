@@ -1,0 +1,4 @@
+Make a sensors struct or class to hold all our sensor data which will be used for JSON data sent to our server.
+
+AT+CWJAP="OpenWrt","Castle2004"
+

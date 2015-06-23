@@ -28,7 +28,7 @@ void setup(){
 	Serial.print("WeatherSpot firmware Uno-V0.1\n");
 	
 	// Startup a heartbeat LED.
-	Heartbeat::start();
+	// Heartbeat::start();
 
 	// Startup our network.
 	// Find out why network disables our heartbeat LED.
@@ -47,6 +47,11 @@ void setup(){
 	Serial.print("Sensor temperature: ");
 	Serial.println(sensor_data.temperature_f);
 
+	while(1){
+		delay(5000);
+		network.send_packet(Network::Wired);
+	}
+	
 }
 
 void loop(){

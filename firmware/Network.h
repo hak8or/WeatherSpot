@@ -14,17 +14,29 @@ public:
 	 *          pings the backend to verify connectivity and DNS resolution.
 	 */
 	void init_wired(void);
-
 	void init_wireless(void);
+
+	// Used to tell apart over what interface to send to.
+	enum Interface { Wireless, Wired };
+
+	/**
+	 * @brief Sends a peice of data over TCP to our backend.
+	 * @details Does a DNS lookup for our backend, sets up a TCP connection, and sends our data.
+	 * 
+	 * @param  An enum for if we want to send our data over Wireless or Wired.
+	 */
+	void send_packet(Network::Interface interface);
 private:
-	// Hardcoded mac address.
-	const byte mac[6]        = { 0x00, 0x04, 0xA3, 0x21, 0xCA, 0x38 };
+	// The arduino IDE sucks and does not enable C++11 by default, and requires changing
+	// a file within the arduino installation directory to do so, screw that. This is why
+	// these are not const's but instead must be written to in outside.
+	static byte mac[6];
 
 	// Fallback info if the DHCP request fails.
-	const uint8_t fallback_ip[4]      = { 192, 168, 1, 250 };  // The fallback board address.
-	const uint8_t fallback_dns[4]     = { 192, 168, 1, 1 };    // The DNS server address.
-	const uint8_t fallback_gateway[4] = { 192, 168, 1, 1 };    // The gateway router address.
-	const uint8_t fallback_subnet[4]  = { 255, 255, 255, 0 };  // The subnet mask.
+	static uint8_t fallback_ip[4];      // The fallback board address.
+	static uint8_t fallback_dns[4];     // The DNS server address.
+	static uint8_t fallback_gateway[4]; // The gateway router address.
+	static uint8_t fallback_subnet[4];  // The subnet mask.
 };
 
 #endif

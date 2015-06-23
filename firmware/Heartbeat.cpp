@@ -47,8 +47,8 @@ void Heartbeat::stop(void){
  */
 void Heartbeat::panic(void){
 	// Start a timer.
-	Timer1.initialize();
+	// Timer1.initialize();
 
 	// Attach a static toggle pin ISR to said timer every 50,000 microseconds.
-	Timer1.attachInterrupt(Heartbeat::toggle, 50000);
+	// Timer1.attachInterrupt(Heartbeat::toggle, 50000);
 }
