@@ -2,25 +2,24 @@
 <?php
 
 if (isset($_GET["db"])) {
-        $paramDb = htmlspecialchars($_GET["db"]);
+        $paramDb = rawurlencode($_GET["db"]);
 }
 else {
         $paramDb = "weather";
 }
 if (isset($_GET["query"])) {
-//	$paramQuery = $_GET["query"];
-	$paramQuery = urlencode($_GET["query"]);
+	$paramQuery = rawurlencode($_GET["query"]);
 }
 else {
-        $paramQuery = "SELECT%20*%20from%20Downtown";
+        $paramQuery = rawurlencode("LIST SERIES");
 }
 
-$getURL = "http://weatherspot.us:8086/db/" . $paramDb . "/series?u=root&p=root&q=" . $paramQuery; 
+//This is cluster admin permission, only use if you need cluster admin functionality
+//$getURL = "http://weatherspot.us:8086/db/" . $paramDb . "/series?u=root&p=root&q=" . $paramQuery;		
+$getURL = "http://weatherspot.us:8086/db/" . $paramDb . "/series?u=weather_user&p=weather_password&q=" . $paramQuery; 
 
 $curl = curl_init();
 curl_setopt($curl, CURLOPT_URL, $getURL); 
 $result = curl_exec($curl);
 curl_close($curl);
-
-echo $result[0];
 ?>
