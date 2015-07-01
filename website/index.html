@@ -26,6 +26,7 @@
 
 	<script>
 function doQuery(query) {
+//	var now = new Date();
 	console.log(query);
 	var queryURL = "http://weatherspot.us/db/query.php?db=weather&query=" + encodeURIComponent(query);
 	$.ajax({
@@ -38,6 +39,8 @@ function doQuery(query) {
 				var name = data[dataIndex].name;
 				var columns = data[dataIndex].columns;
 				var points = data[dataIndex].points;
+//				var done = new Date();
+//				console.log("Got Data: " + (done - now).toString() + ": " + columns);
 				console.log(columns);
 
 				var appendStr = '<h1 class="nameHeader">Series: ' + name + '</h1><table class="datas"><thead><tr>';
@@ -70,6 +73,8 @@ function doQuery(query) {
 				$("body").append(appendStr);
 //				console.log(data[dataIndex]);
 			}
+//			var totallyDone = new Date();
+//			console.log("Done: " + (totallyDone - now).toString()); 
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			$(".nameHeader").remove();
