@@ -18,12 +18,22 @@
     <script>
 
 function initialize() {
+ var myLatLng = new google.maps.LatLng(40.586510, -74.100813);
+  var myLatLng2 = new google.maps.LatLng(40.700815, -73.892049);
   var mapOptions = {
-    zoom: 11,
-    center: new google.maps.LatLng(40.586510, -74.100813)
-  }
+    zoom: 10,
+    center: new google.maps.LatLng(40.690366, -74.045903)
+  };
   var map = new google.maps.Map(document.getElementById('map-canvas'),
                                 mapOptions);
+   var contentString= '<h1 id=“sixthHeading" class=“fifthHeading">Spot Station 1</h1>'
+   
+
+
+var infowindow= new google.maps.InfoWindow({
+content: contentString
+});
+                             
 
  var image = 'pic/cloud.png';
   var myLatLng = new google.maps.LatLng(40.586510, -74.100813);
@@ -31,6 +41,18 @@ function initialize() {
       position: myLatLng,
       map: map,
       icon: image
+      title: "Spot1"
+  });
+  google.maps.event.addListener(cloudmarker, 'click', function() {
+    infowindow.open(map,cloudmarker);
+  });
+  
+  
+  
+  var cloudmarker2 = new google.maps.Marker({
+      position: myLatLng2,
+      map: map,
+     icon: image
   });
 }
 google.maps.event.addDomListener(window, 'load', initialize);
