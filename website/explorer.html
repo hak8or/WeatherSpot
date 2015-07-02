@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"> 
+	<title>Database Explorer</title>
+	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+	<style>
+		.database-container {
+			padding-top: 1em;
+		}
+		.series-container {
+			padding-left: 3em;
+			padding-top: .875em;
+			padding-bottom: .875em;
+		}
+		.report-container {
+			padding-left: 6em;
+		}
+		.datas {
+			border: 1px solid;
+		}
+		.datas td {
+			border: 1px solid;
+			padding-left: 1em;
+			padding-right: 1em;
+			text-align: center;
+		}
+		.datas > thead > tr {
+			background: orange;
+		}
+		.datas > tbody > tr:nth-child(odd) {
+			background: lightgrey;
+		}
+	</style>
+</head>
+<body>
+	Query Limit, 0 for unlimited:
+	<input type="text" id="queryLimit" value="Enter Query Limit"></input>
+	<div class="database-container">
+		<a href="javascript:void(0);" class="database">weather</a>
+	</div>
+	<script>
+		$("#queryLimit").focus(function() {
+			if ($(this).val() == "Enter Query Limit") {
+				$(this).val("");
+			}
+		});
+		$(".database").click(function(e) {
+			databaseOnClick($(this).html());
+		});
+	</script>
+
+	<script>
+		function doQuery(db, query, callback) {
+			console.log(query);
+			var queryURL = "http://weatherspot.us/db/query.php?db=" + db + "&query=" + encodeURIComponent(query);
+			$.ajax({
+				type: 'GET',
+				url: queryURL,
+				success: function(data) {
+					callback(db, data);
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+				},
+				dataType: "json"
+			});
+		}
+		function databaseOnClick(db) {
+
+			if ($(".database-container").children(".series-container").length > 0) {
+				console.log("Already has a container");
+				$(".database-container .series-container").remove();
+				$(".database-container br").remove();
+				return;
+			}
+			doQuery(db, "LIST SERIES", databaseEnum);
+			$("#queryLimit").val("1");
+		}
+		function databaseEnum(db, data) {
+			// Want to see all series in database
+			console.log(data);
+			if (data === null) {
+				console.log("NULL Data");
+				return;
+			}
+			console.log("Commencing");
+
+			for (var dataIndex = 0; dataIndex < data.length; ++dataIndex) {
+				var name = data[dataIndex].name;
+				var columns = data[dataIndex].columns;
+				var points = data[dataIndex].points;
+				for (var pointsIndex = 0; pointsIndex < points.length; ++pointsIndex) {
+					var series_name = points[pointsIndex][1];
+					$(".database-container").append("<div class=\'series-container\'><a href=\'javascript:void(0);\' class=\'series\' id=\'series-" + series_name + "\'>" + series_name + "</a></div>");
+				}
+			}
+			$(".series").click(function(e) {
+				seriesOnClick(db, $(this).html());
+			});
+
+		}
+		function seriesOnClick(db, series) {
+			// Want to see all measurements in series
+			if ($("#series-" + series).next().hasClass("report-container")) {
+				console.log("Already has a container");
+				$("#series-" + series).next().remove();
+				return;
+			}
+			if ($("#queryLimit").val() != "Enter Query Limit" && $("#queryLimit").val() != 0)
+				doQuery(db, "SELECT * FROM " + series + " LIMIT " + $("#queryLimit").val(), seriesEnum);
+			else
+				doQuery(db, "SELECT * FROM " + series, seriesEnum);
+		}
+		function seriesEnum(db, data) {
+			$(".report-container").remove();
+			for (var dataIndex = 0; dataIndex < data.length; ++dataIndex) {
+				var name = data[dataIndex].name;
+				var columns = data[dataIndex].columns;
+				var points = data[dataIndex].points;
+				console.log(columns);
+
+				var appendStr = '<div class=\'report-container\'><h1 class="nameHeader">Series: ' + name + '</h1><table class="datas"><thead><tr>';
+				for (var index = 0; index < columns.length; ++index) {
+					appendStr += "<td>" + columns[index] + "</td>";
+				}
+				appendStr += "</tr></thead>";
+
+				for (var index = 0; index < points.length; ++index) {
+					appendStr += "<tr>"; 
+					appendStr += "<td>";
+					var dateStr;
+					if (points[index][0] == 0) {
+						dateStr = "N/A";
+					} else {
+						dateStr = new Date(points[index][0]);
+					}
+					appendStr += dateStr.toString();
+					appendStr += "</td>";
+					for (var innerIndex = 1; innerIndex < points[index].length; ++innerIndex) {
+						appendStr += "<td>"; 
+						if (points[index][innerIndex] !== null) {
+							appendStr += points[index][innerIndex]; 
+						}
+						appendStr += "</td>"; 
+					}
+					appendStr += "</tr>"; 
+				}
+				appendStr += "</table>";
+				appendStr += "</div>";
+				$("#series-" + name).after(appendStr);
+			}
+		}
+
+	</script>
+</body>
+</html>

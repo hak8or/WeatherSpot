@@ -44,7 +44,6 @@ function test_GETSetOrDefault($test, $default) {
 	}
 }
 function test_POSTSetOrDefault($test, $default) {
-	// Test if a parameter is set in the URL, otherwise return default value
 	if (isset($_POST[$test])) {
 		return $_POST[$test];
 	} else {
