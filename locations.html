@@ -15,52 +15,79 @@
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
-    <script>
+	<script>
 
-function initialize() {
- var myLatLng = new google.maps.LatLng(40.586510, -74.100813);
-  var myLatLng2 = new google.maps.LatLng(40.700815, -73.892049);
-  var mapOptions = {
-    zoom: 10,
-    center: new google.maps.LatLng(40.690366, -74.045903)
-  };
-  var map = new google.maps.Map(document.getElementById('map-canvas'),
-                                mapOptions);
-   var contentString= '<h1 id=“sixthHeading" class=“fifthHeading">Spot Station 1</h1>'
-   
+	function initialize() {
 
+		//Using the name of the series as the name of a spot, add a new location using addLocation(...) and it will auto-populate on the map 
+		//If you use a series that does not exist, it will not appear on the map
+		var locations = {}; 
+		function addLocation(_name, _lat, _long) {
+			locations[_name] = new google.maps.LatLng(_lat, _long);
+		}
+		///////////
+		addLocation("Staten_Island", 40.586510, -74.100813);
+		addLocation("Downtown", 40.700815, -73.892049);
+		addLocation("Queens_County", 40.751447, -73.900095);
+		addLocation("Rikers_Island", 40.794339, -73.886076);
+		addLocation("LaGuardia_Airport", 40.776857, -73.873911);
+		///////////
 
-var infowindow= new google.maps.InfoWindow({
-content: contentString
-});
-                             
+		var mapCenter = new google.maps.LatLng(40.690366, -74.045903);
+		var mapOptions = {
+			zoom: 10,
+			center: mapCenter 
+		};
+		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
- var image = 'pic/cloud.png';
-  
-  var cloudmarker = new google.maps.Marker({
-      position: myLatLng,
-      map: map,
-      icon: image
-      title: "Spot1"
-  });
-  google.maps.event.addListener(cloudmarker, 'click', function() {
-    infowindow.open(map,cloudmarker);
-  });
-  
-  
-  
-  var cloudmarker2 = new google.maps.Marker({
-      position: myLatLng2,
-      map: map,
-     icon: image
-  });
-}
-google.maps.event.addDomListener(window, 'load', initialize);
+		function makeInfoWindowCallback(db, data) {
+			var seriesName = data[0].name;
+			var measurement = data[0].points[0][2]; 
+			makeInfoWindow(seriesName, seriesName + " Latest Temp: " + measurement.toString(), locations[seriesName]);
+		}
+		var image = 'pic/cloud.png';
+		function makeInfoWindow(_title, _content, _where) {
+			console.log("Title: " + _title + "; Content: " + _content + "; Where: " + _where);
+			var infowindow= new google.maps.InfoWindow({
+				content: _content 
+			});
+				 
+			var cloudmarker = new google.maps.Marker({
+				position: _where,
+				map: map,
+				icon: image,
+				title: _title 
+			});
+			google.maps.event.addListener(cloudmarker, 'click', function() {
+				infowindow.open(map,cloudmarker);
+			});
+		}
+		function doQuery(db, query, callback) {
+			console.log(query);
+			var queryURL = "http://weatherspot.us/db/query.php?db=" + db + "&query=" + encodeURIComponent(query);
+			$.ajax({
+				type: 'GET',
+				url: queryURL,
+				success: function(data) {
+					callback(db, data);
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+				},
+				dataType: "json"
+			});
+		}
 
-    </script>
+		for (var loc in locations) {
+			var latestTemperature = "SELECT temperature FROM " + loc + " LIMIT 1";
+			doQuery("weather", latestTemperature, makeInfoWindowCallback); 
+		}
+	}
+	google.maps.event.addDomListener(window, 'load', initialize);
+
+	</script>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="css/logo-nav.css" rel="stylesheet">
@@ -92,18 +119,21 @@ google.maps.event.addDomListener(window, 'load', initialize);
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="index.html">Main</a>
+                        <a href="index.php">Main</a>
                     </li>
                     <li>
                         <a href="graphs.html">Graphs</a>
                     </li>
                     <li>
+                        <a href="sql.html">SQL</a>
+                    </li>
+                    <li>
                         <a href="about.html">About</a>
                     </li>
-		    <li>
-                        <a href=“locations.html">Spot Locations</a>
+                        <li>
+                        <a href= locations.html>Spot Locations</a>
                     </li>
                 </ul>
             </div>
@@ -125,10 +155,10 @@ google.maps.event.addDomListener(window, 'load', initialize);
     <!-- /.container -->
 
     <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 </body>
 
