@@ -13,7 +13,7 @@
             <TabItem Header="Graphs">
                 <Grid Background="#FFE5E5E5">
                     <Button x:Name="closeButton" Content="Close" HorizontalAlignment="Left" Margin="84,324,0,0" VerticalAlignment="Top" Width="75" Click="closeClick"/>
-                    <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Margin="84,296,0,0" VerticalAlignment="Top" Width="75" Click="ExportClick"/>
+                    <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Margin="84,296,0,0" VerticalAlignment="Top" Width="75" Click="exportClick"/>
                     <Button x:Name="fetchButton" Content="Fetch" HorizontalAlignment="Left" Margin="84,242,0,0" VerticalAlignment="Top" Width="75" Click="fetchClick"/>
                     <Calendar HorizontalAlignment="Left" VerticalAlignment="Top" Margin="37,67,0,0" IsTodayHighlighted="False" IsManipulationEnabled="True"/>
                     <d3:ChartPlotter Name="plotter" Margin="313,13,92.4,176">
@@ -24,7 +24,7 @@
                         <d3:HorizontalAxisTitle>Time</d3:HorizontalAxisTitle>
                     </d3:ChartPlotter>
                     <TextBox x:Name="textBoxOut" HorizontalAlignment="Left" Height="105" Margin="313,296,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="409" IsEnabled="False"/>
-                    <Button x:Name="importButton" Content="Import" HorizontalAlignment="Left" Margin="84,269,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button x:Name="importButton" Content="Import" HorizontalAlignment="Left" Margin="84,269,0,0" VerticalAlignment="Top" Width="75" Click="importClick"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Statistics">
