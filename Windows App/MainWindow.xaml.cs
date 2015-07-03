@@ -24,10 +24,12 @@ namespace WeatherSpot
 {
     public partial class MainWindow : Window
     {
+        private PlottingClass mainGraph;         
+
         public MainWindow()
         {
             InitializeComponent();
-           // Loaded += new RoutedEventHandler(MainWindow_Loaded);
+            mainGraph = new PlottingClass(this);
         }
 
         private void fetchClick(object sender, RoutedEventArgs e)
@@ -57,10 +59,9 @@ namespace WeatherSpot
             JObject results = JObject.Parse(sLine);
             JArray jarr = (JArray)results.SelectToken("points");
 
-            PlottingClass fetchGraph = new PlottingClass(this); 
-
-            fetchGraph.AddData(ref jarr);
-            fetchGraph.PlotGraph();
+            mainGraph.RemoveGraph();
+            mainGraph.AddData(ref jarr);
+            mainGraph.PlotGraph();
         }
 
         private void importClick(object sender, RoutedEventArgs e)
@@ -68,7 +69,7 @@ namespace WeatherSpot
             string initialData = "";
             List<double> rawData = new List<double>();
             PlottingClass importGraph = new PlottingClass(this);
-
+        
             importGraph.RemoveGraph();
 
             // Open dialog menu
@@ -93,39 +94,19 @@ namespace WeatherSpot
                         importGraph.AddX(Convert.ToDouble(initialData));
                     }
                 }
-
                 importGraph.PlotGraph();
-            }
-            else
-            {
-                MessageBox.Show("Failed to Import Data");
             }
         }
 
         private void exportClick(object sender, RoutedEventArgs e)
         {
-            /*
-            string fileOutput = "";
-            string userHomePath = "";
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "WeatherSpot files (*.ws)|*.ws";
 
-            for (int i = 0; i < N; i++)
+            if (saveFileDialog.ShowDialog() == true)
             {
-                if( i == (N-1))
-                {
-                    fileOutput += x[i] + ";" + y[i];
-                }
-                else
-                {
-                    fileOutput += x[i] + ";" + y[i] + ";";
-                }       
-            }
-
-            userHomePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            userHomePath += @"\Documents\export_data.ws"; 
-
-            System.IO.File.WriteAllText(userHomePath, fileOutput);
-            MessageBox.Show("Success");
-            */
+                File.WriteAllText(saveFileDialog.FileName, mainGraph.ToString());
+            } 
         }
 
         private void closeClick(object sender, RoutedEventArgs e)

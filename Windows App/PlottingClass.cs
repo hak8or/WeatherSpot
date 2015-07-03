@@ -28,10 +28,9 @@ namespace WeatherSpot
         private MainWindow main;
 
         // Data used by the graph
-        private List<double> x = new List<double>();
-        private List<double> y = new List<double>();
-        private const int N = 4;
-
+        private static  List<double> x = new List<double>();
+        private static  List<double> y = new List<double>();
+     
         public PlottingClass(MainWindow win)
         {
             main = win;
@@ -39,21 +38,43 @@ namespace WeatherSpot
 
         public void AddData(ref JArray jsonDataArray)
         {
-            for (int i = 0; i < N; i++)
+            x.Clear();
+            y.Clear();
+
+            for (int i = 0; i < jsonDataArray.Count; i++)
             {
                 x.Add(Convert.ToDouble(jsonDataArray[i][0].ToString()));
                 y.Add(Convert.ToDouble(jsonDataArray[i][2].ToString()));
             }
         }
 
-        public void AddX(double x)
+        public void AddX(double inX)
         {
-            this.x.Add(x);
+            x.Add(inX);
         }
 
-        public void AddY(double y)
+        public void AddY(double inY)
         {
-            this.y.Add(y);
+            y.Add(inY);
+        }
+
+        public override string ToString()
+        {
+            string toStr = "";
+
+            for (int i = 0; i < x.Count; i++)
+            {
+                if (i == (x.Count - 1))
+                {
+                    toStr += x[i] + ";" + y[i];
+                }
+                else
+                {
+                    toStr += x[i] + ";" + y[i] + ";";
+                }
+            }
+
+            return toStr;
         }
 
         public void PlotGraph()
@@ -83,3 +104,4 @@ namespace WeatherSpot
     } // end of class
 
 } // end of namespace
+                     
