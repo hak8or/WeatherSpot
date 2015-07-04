@@ -29,13 +29,34 @@
             </TabItem>
             <TabItem Header="Statistics">
                 <Grid Background="#FFE5E5E5">
-                    <GroupBox x:Name="groupBox" Header="Avg From Last Fetch" HorizontalAlignment="Left" Margin="208,64,0,0" VerticalAlignment="Top" Height="137" Width="338"/>
-                    <TextBox x:Name="temperatureOut" HorizontalAlignment="Left" Height="23" Margin="405,95,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
-                    <TextBox x:Name="humidityLabel" HorizontalAlignment="Left" Height="23" Margin="228,123,0,0" TextWrapping="Wrap" Text="Humidity" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
-                    <TextBox x:Name="pressureLabel" HorizontalAlignment="Left" Height="23" Margin="228,151,0,0" TextWrapping="Wrap" Text="Pressure" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
-                    <TextBox x:Name="humidityOut" HorizontalAlignment="Left" Height="23" Margin="405,123,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
-                    <TextBox x:Name="pressureOut" HorizontalAlignment="Left" Height="23" Margin="405,151,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
-                    <TextBox x:Name="temperatureLabel" HorizontalAlignment="Left" Height="23" Margin="228,95,0,0" TextWrapping="Wrap" Text="Temperature" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <GroupBox x:Name="groupBoxMax_Copy" Header="Min" HorizontalAlignment="Left" Margin="411,202,0,0" VerticalAlignment="Top" Height="137" Width="338"/>
+                    <GroupBox x:Name="groupBoxMax" Header="Max" HorizontalAlignment="Left" Margin="34,202,0,0" VerticalAlignment="Top" Height="137" Width="338"/>
+                    <GroupBox x:Name="groupBoxAvg" Header="Average" HorizontalAlignment="Left" Margin="34,24,0,0" VerticalAlignment="Top" Height="137" Width="338"/>
+                    <TextBox x:Name="temperatureAvgOut" HorizontalAlignment="Left" Height="23" Margin="230,57,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityAvgLabel" HorizontalAlignment="Left" Height="23" Margin="55,85,0,0" TextWrapping="Wrap" Text="Humidity" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureAvgLabel" HorizontalAlignment="Left" Height="23" Margin="55,113,0,0" TextWrapping="Wrap" Text="Pressure" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityAvgOut" HorizontalAlignment="Left" Height="23" Margin="230,86,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureAvgOut" HorizontalAlignment="Left" Height="23" Margin="230,114,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureAvgLabel" HorizontalAlignment="Left" Height="23" Margin="55,57,0,0" TextWrapping="Wrap" Text="Temperature" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMaxLabel" HorizontalAlignment="Left" Height="23" Margin="55,235,0,0" TextWrapping="Wrap" Text="Temperature" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMaxLabel" HorizontalAlignment="Left" Height="23" Margin="55,263,0,0" TextWrapping="Wrap" Text="Humidity" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMaxLabel" HorizontalAlignment="Left" Height="23" Margin="55,291,0,0" TextWrapping="Wrap" Text="Pressure" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMaxOut" HorizontalAlignment="Left" Height="23" Margin="230,235,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMaxOut" HorizontalAlignment="Left" Height="23" Margin="230,263,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMaxOut" HorizontalAlignment="Left" Height="23" Margin="230,291,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMinLabel" HorizontalAlignment="Left" Height="23" Margin="432,235,0,0" TextWrapping="Wrap" Text="Temperature" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMinLabel" HorizontalAlignment="Left" Height="23" Margin="432,263,0,0" TextWrapping="Wrap" Text="Humidity" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMinLabel" HorizontalAlignment="Left" Height="23" Margin="432,291,0,0" TextWrapping="Wrap" Text="Pressure" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMinOut" HorizontalAlignment="Left" Height="23" Margin="608,235,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMinOut" HorizontalAlignment="Left" Height="23" Margin="608,264,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMinOut" HorizontalAlignment="Left" Height="23" Margin="608,292,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMedianLabel" HorizontalAlignment="Left" Height="23" Margin="432,57,0,0" TextWrapping="Wrap" Text="Temperature" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMedianLabel" HorizontalAlignment="Left" Height="23" Margin="432,85,0,0" TextWrapping="Wrap" Text="Humidity" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMedianLabel" HorizontalAlignment="Left" Height="23" Margin="432,113,0,0" TextWrapping="Wrap" Text="Pressure" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMedianOut" HorizontalAlignment="Left" Height="23" Margin="608,57,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMedianOut" HorizontalAlignment="Left" Height="23" Margin="608,85,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMedianOut" HorizontalAlignment="Left" Height="23" Margin="608,113,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <GroupBox x:Name="groupBoxMax_Copy1" Header="Median" HorizontalAlignment="Left" Margin="411,24,0,0" VerticalAlignment="Top" Height="137" Width="338"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Console">
@@ -46,7 +67,7 @@
             </TabItem>
             <TabItem Header="About">
                 <Grid Background="#FFE5E5E5">
-                    <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="250,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="160" Width="311"><Run FontSize="21.333" Text="Science is magic that works."/><LineBreak/><Run Text="&#x9;&#x9;&#x9;"/><Run FontStyle="Italic" FontSize="16" Text="~ Kurt Vonnegut"/></TextBlock>
+                    <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="245,167,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="60" Width="311"><Run FontSize="21.333" Text="Science is magic that works."/><LineBreak/><Run Text="&#x9;&#x9;&#x9;"/><Run FontStyle="Italic" FontSize="16" Text="~ Kurt Vonnegut"/></TextBlock>
                 </Grid>
             </TabItem>
         </TabControl>

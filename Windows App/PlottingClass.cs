@@ -101,6 +101,42 @@ namespace WeatherSpot
             main.plotter.RemoveUserElements();
         }
 
+        public double GetAverage()
+        {
+            return y.Average(); 
+        }
+
+        public double GetMax()
+        {
+            return y.Max();
+        }
+
+        public double GetMin()
+        {
+            return y.Min();
+        }
+
+        public double GetMedian()
+        {
+            double median = 0.0;
+            int index = 0;
+            List<double> medianList = new List<double>(y);
+
+            medianList.Sort();
+                      
+            if(medianList.Count % 2 == 0)
+            {
+                index = medianList.Count / 2;
+                median = (medianList[index - 1] + medianList[index]) / 2;            
+            }
+            else
+            {
+                median = medianList[medianList.Count / 2];
+            }
+            
+            return median;
+        }
+
     } // end of class
 
 } // end of namespace

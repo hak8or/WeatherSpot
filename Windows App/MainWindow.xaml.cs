@@ -68,9 +68,7 @@ namespace WeatherSpot
         {
             string initialData = "";
             List<double> rawData = new List<double>();
-            PlottingClass importGraph = new PlottingClass(this);
-        
-            importGraph.RemoveGraph();
+            PlottingClass importGraph = new PlottingClass(this);              
 
             // Open dialog menu
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -78,7 +76,8 @@ namespace WeatherSpot
 
             // User successfully opened a file
             if (openFileDialog.ShowDialog() == true)
-            {                
+            {
+                importGraph.RemoveGraph();
                 initialData =  File.ReadAllText(openFileDialog.FileName);
                 string[] stringTokens = initialData.Split(';');
                 
@@ -94,7 +93,14 @@ namespace WeatherSpot
                         importGraph.AddX(Convert.ToDouble(initialData));
                     }
                 }
+
                 importGraph.PlotGraph();
+
+                // Displaying Statistics Data
+                temperatureAvgOut.Text = Convert.ToString(importGraph.GetAverage());
+                temperatureMaxOut.Text = Convert.ToString(importGraph.GetMax());
+                temperatureMinOut.Text = Convert.ToString(importGraph.GetMin());
+                temperatureMedianOut.Text = Convert.ToString(importGraph.GetMedian());
             }
         }
 
