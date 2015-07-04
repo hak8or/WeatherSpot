@@ -62,7 +62,7 @@
             <TabItem Header="Console">
                 <Grid Background="#FFE5E5E5">
                     <TextBox x:Name="consoleOutBox" HorizontalAlignment="Left" Height="366" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="794" IsEnabled="False"/>
-                    <TextBox x:Name="consoleInBox" HorizontalAlignment="Left" Height="23" Margin="10,391,0,0" TextWrapping="Wrap" Text="Enter Querry" VerticalAlignment="Top" Width="794"/>
+                    <TextBox x:Name="consoleInBox" HorizontalAlignment="Left" Height="23" Margin="10,391,0,0" TextWrapping="Wrap" Text="Enter Querry" VerticalAlignment="Top" Width="794" KeyDown="consoleKeyPressed"/>
                 </Grid>
             </TabItem>
             <TabItem Header="About">

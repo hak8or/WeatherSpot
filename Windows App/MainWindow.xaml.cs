@@ -1,7 +1,8 @@
 ﻿/*
     Author:     Piotr Kapela    [https://github.com/pkapela]
-    Name:       WeatherSpot
+    Program:    WeatherSpot
     Created:    Jun/5/2015
+    File:       MainWindow.xaml.cs
     Desc:       WeatherSpot is a client type application which connects to weatherspot.us
                 website to fetch and display the data on a graph. The data itself is gathered 
                 by embedded devices which monitor and record into Influx Database properties 
@@ -14,54 +15,35 @@
 
 using System;
 using System.Windows;
-using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using Microsoft.Win32;
 using System.Collections.Generic;
+//using System.Windows.Forms;
 
 namespace WeatherSpot
 {
     public partial class MainWindow : Window
     {
-        private PlottingClass mainGraph;         
+        private PlottingClass fetchGraph;         
 
         public MainWindow()
         {
             InitializeComponent();
-            mainGraph = new PlottingClass(this);
+            fetchGraph = new PlottingClass(this);
         }
 
         private void fetchClick(object sender, RoutedEventArgs e)
         {
-            string sURL = "";
-            sURL = "http://weatherspot.us/db/query.php?db=weather&query=SELECT%20*%20FROM%20Temperature";
+            const string dbQuery = "SELECT * FROM Temperature";
 
-            WebRequest wrGETURL;
-            wrGETURL = WebRequest.Create(sURL);
-            /*
-                    WebProxy myProxy = new WebProxy("myproxy", 80);
-                    myProxy.BypassProxyOnLocal = true;
+            JObject parseResults = JObject.Parse(NetworkClass.serverResponse(dbQuery));
+            JArray jsonArray = (JArray)parseResults.SelectToken("points");
 
-                    wrGETURL.Proxy = WebProxy.GetDefaultProxy();    
-           */
-            Stream objStream;
-            objStream = wrGETURL.GetResponse().GetResponseStream();
-
-            StreamReader objReader = new StreamReader(objStream);
-
-            string sLine = "";
-            sLine = objReader.ReadLine();
-            sLine = objReader.ReadLine();
-
-            HelperClass.stringFormatter(ref sLine);
-
-            JObject results = JObject.Parse(sLine);
-            JArray jarr = (JArray)results.SelectToken("points");
-
-            mainGraph.RemoveGraph();
-            mainGraph.AddData(ref jarr);
-            mainGraph.PlotGraph();
+            fetchGraph.RemoveGraph();
+            fetchGraph.AddData(ref jsonArray);
+            fetchGraph.PlotGraph();
+            fetchGraph.SetStatistics(true);
         }
 
         private void importClick(object sender, RoutedEventArgs e)
@@ -95,12 +77,7 @@ namespace WeatherSpot
                 }
 
                 importGraph.PlotGraph();
-
-                // Displaying Statistics Data
-                temperatureAvgOut.Text = Convert.ToString(importGraph.GetAverage());
-                temperatureMaxOut.Text = Convert.ToString(importGraph.GetMax());
-                temperatureMinOut.Text = Convert.ToString(importGraph.GetMin());
-                temperatureMedianOut.Text = Convert.ToString(importGraph.GetMedian());
+                importGraph.SetStatistics(true);              
             }
         }
 
@@ -111,7 +88,7 @@ namespace WeatherSpot
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                File.WriteAllText(saveFileDialog.FileName, mainGraph.ToString());
+                File.WriteAllText(saveFileDialog.FileName, fetchGraph.ToString());
             } 
         }
 
@@ -121,6 +98,24 @@ namespace WeatherSpot
             Application.Current.Shutdown();
         }
 
+        private void consoleKeyPressed(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key.ToString() == "Return")
+            {
+                if(consoleInBox.Text == "clr")
+                {
+                    consoleOutBox.Text = "";
+                    consoleInBox.Text = "";
+                }
+                else
+                {
+                    consoleOutBox.Text += ">" + consoleInBox.Text.ToUpper() + "\n";
+                    consoleOutBox.Text += NetworkClass.serverResponse(consoleInBox.Text) + "\n\n";
+                    consoleInBox.Text = "";                    
+                }                
+            }
+        } // end of method
+                 
     } // end of class
 
 } // end of namespace

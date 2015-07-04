@@ -1,7 +1,8 @@
 ﻿/*
     Author:     Piotr Kapela    [https://github.com/pkapela]
-    Name:       WeatherSpot
+    Program:    WeatherSpot
     Created:    Jun/5/2015
+    File:       PlottingClass.cs
     Desc:       WeatherSpot is a client type application which connects to weatherspot.us
                 website to fetch and display the data on a graph. The data itself is gathered 
                 by embedded devices which monitor and record into Influx Database properties 
@@ -101,22 +102,40 @@ namespace WeatherSpot
             main.plotter.RemoveUserElements();
         }
 
-        public double GetAverage()
+        public void SetStatistics(bool setParameter)
+        {
+            if (setParameter == true)
+            {
+                main.temperatureAvgOut.Text = Convert.ToString(this.GetAverage());
+                main.temperatureMaxOut.Text = Convert.ToString(this.GetMax());
+                main.temperatureMinOut.Text = Convert.ToString(this.GetMin());
+                main.temperatureMedianOut.Text = Convert.ToString(this.GetMedian());
+            }
+            else
+            {
+                main.temperatureAvgOut.Text = "0.0";
+                main.temperatureMaxOut.Text = "0.0";
+                main.temperatureMinOut.Text = "0.0";
+                main.temperatureMedianOut.Text = "0.0";
+            }
+        }
+
+        private double GetAverage()
         {
             return y.Average(); 
         }
 
-        public double GetMax()
+        private double GetMax()
         {
             return y.Max();
         }
 
-        public double GetMin()
+        private double GetMin()
         {
             return y.Min();
         }
 
-        public double GetMedian()
+        private double GetMedian()
         {
             double median = 0.0;
             int index = 0;
@@ -135,7 +154,8 @@ namespace WeatherSpot
             }
             
             return median;
-        }
+
+        } // end of method
 
     } // end of class
 

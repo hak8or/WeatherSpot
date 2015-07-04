@@ -1,7 +1,8 @@
 ﻿/*
     Author:     Piotr Kapela    [https://github.com/pkapela]
-    Name:       WeatherSpot
+    Program:    WeatherSpot
     Created:    Jun/5/2015
+    File:       HelperClass.cs
     Desc:       WeatherSpot is a client type application which connects to weatherspot.us
                 website to fetch and display the data on a graph. The data itself is gathered 
                 by embedded devices which monitor and record into Influx Database properties 
@@ -19,6 +20,19 @@ namespace WeatherSpot
 {
     static class HelperClass
     {
+        static public void serverStringFormatter(ref string inputStr)
+        {
+            string serverURL = "http://weatherspot.us/db/query.php?db=weather&query=";
+            string[] inputTokens = inputStr.Split(' ');
+            
+            for(int i = 0; i < inputTokens.Length; i++)
+            {
+                serverURL += inputTokens[i] + "%20";
+            }
+
+            inputStr = serverURL;
+        }
+
         static public void stringFormatter(ref string inputStr)
         {
             for(int i = 0; i < inputStr.Length; i++)
