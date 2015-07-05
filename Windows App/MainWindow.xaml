@@ -67,7 +67,10 @@
             </TabItem>
             <TabItem Header="About">
                 <Grid Background="#FFE5E5E5">
-                    <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="245,167,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="60" Width="311"><Run FontSize="21.333" Text="Science is magic that works."/><LineBreak/><Run Text="&#x9;&#x9;&#x9;"/><Run FontStyle="Italic" FontSize="16" Text="~ Kurt Vonnegut"/></TextBlock>
+                    <TextBlock x:Name="creditsSection" HorizontalAlignment="Left" Margin="246,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="176" Width="294" TextAlignment="Center"><Run FontSize="21.333" Text="The Weatherspot Team"/><LineBreak/><Run FontSize="14.667"/><LineBreak/><Run FontSize="14.667" Text="Glinojecki, Damian "/><LineBreak/><Run FontSize="14.667" Text="Kapela, Piotr "/><LineBreak/><Run FontSize="14.667" Text="Lenahan, Peter"/><LineBreak/><Run FontSize="14.667" Text="Shoykhet, Brandon "/><LineBreak/><Run FontSize="21.333" Text=""/><LineBreak/><Run FontSize="21.333"/><LineBreak/><Run FontSize="21.333"/></TextBlock>
+                    <Image x:Name="cloudImage" HorizontalAlignment="Left" Height="149" Margin="332,10,0,0" VerticalAlignment="Top" Width="117" Source="cloud.png"/>
+                    <TextBlock x:Name="licenseSection" HorizontalAlignment="Left" Margin="191,266,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="427" Height="103" TextAlignment="Justify" Text="Weatherspot © 2015, This software uses two external open source libraries  Dynamic Data Display which is protected under the license of Microsoft Reciprocal License (Ms-RL) and Json.NET by Newtonsoft protected by the MIT License (MIT). Please refer to the documentation of the program for more details as well as for the copies of the licenses. "/>
+                    <TextBlock x:Name="httpSection" HorizontalAlignment="Left" Margin="320,374,0,0" TextWrapping="Wrap" Text="http://weatherspot.us" VerticalAlignment="Top" Width="143" FontSize="14.667"/>
                 </Grid>
             </TabItem>
         </TabControl>
