@@ -19,13 +19,19 @@
 byte Ethernet::buffer[500];
 
 // If we should use wireless or wired ethernet.
-const bool use_wired = true;
+const bool use_wired = false;
 
 void setup(){
 	// Start up the serial communication.
 	// Find out why this cuts off the next serial print.
 	Serial.begin(115200);
-	Serial.print("WeatherSpot firmware Uno-V0.1\n");
+	for(int i = 0; i < 3; i++)
+		Serial.print(F("==============="));
+
+	Serial.println(F("\r\nWeatherSpot firmware Uno-V0.1"));
+
+	for(int i = 0; i < 3; i++)
+		Serial.print(F("==============="));
 	
 	// Startup a heartbeat LED.
 	Heartbeat::start();
@@ -40,13 +46,18 @@ void setup(){
 
 	Sensors sensors;
 	sensors.init_DH11(2);
-	Sensor_data sensor_data = sensors.read_sensors();
 
-	Serial.print("Sensor humidity: ");
-	Serial.println(sensor_data.humidity);
-	Serial.print("Sensor temperature: ");
-	Serial.println(sensor_data.temperature_f);
+	while(true){
+		Sensor_data sensor_data = sensors.read_sensors();
+		Serial.print(F("Sensor humidity: "));
+		Serial.println(sensor_data.humidity);
+		Serial.print(F("Sensor temperature: "));
+		Serial.println(sensor_data.temperature_f);
 
+		network.send_packet(Network::Wireless, sensor_data);
+
+		delay(20000);
+	}
 }
 
 void loop(){

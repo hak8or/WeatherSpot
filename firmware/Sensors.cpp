@@ -21,7 +21,7 @@ void Sensors::init_DH11(uint8_t data_pin){
 
 	dht_module->begin();
 
-	Serial.println("Setting up DHT11.");
+	Serial.println(F("Setting up DHT11."));
 }
 
 /**
@@ -38,7 +38,7 @@ Sensor_data Sensors::read_sensors(void){
   		sensor_data.humidity = 0.0;
 
   		Heartbeat::panic();
-  		Serial.println("Attempt to read DH11 before initilized.");
+  		Serial.println(F("Attempt to read DH11 before initilized."));
 
   		return sensor_data;
 	}

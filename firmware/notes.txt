@@ -1,0 +1,21 @@
+Make a sensors struct or class to hold all our sensor data which will be used for JSON data sent to our server.
+
+AT+RST
+AT+CWMODE=3
+AT+CWJAP="OpenWrt","castle2004"
+AT+CIFSR
+
+http://www.electrodragon.com/w/ESP8266
+http://www.rei-labs.net/esp8266-connecting-to-internet/
+http://electronut.in/an-iot-project-with-esp8266/
+http://mcuoneclipse.com/2014/12/14/tutorial-iot-datalogger-with-esp8266-wifi-module-and-frdm-kl25z/
+
+Pinout of wifi module:
+TX -> RX
+RX -> TX
+CH_PD -> 3v3
+VCC -> 3v3
+GND -> GND
+RST -> OPEN
+
+pull RST down only for a second and let go, it will restart the module
