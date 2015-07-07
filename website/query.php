@@ -18,16 +18,22 @@ switch ($method) {
 	break;
 	case "POST":
 		// Example for CURLing to write data:
-		// $> curl -X POST http://weatherspot.us/db/query.php --data "data=[{\"name\" : \"Downtown\",\"columns\" : [\"temperature\", \"humidity\", \"pressure\", \"lighting\"],\"points\" : [[5, 6, 7, 8]]}]"
+		// $> curl -X POST 'http://weatherspot.us/db/query.php?series=Queens_County&temperature=85&humidity=75&pressure=99&lighting=25'
 	
-		$paramData = test_POSTSetOrDefault("data", "");
+		$paramSeries = test_GETSetOrDefault("series", "");
+		$paramTemperature = test_GETSetOrDefault("temperature", "");
+		$paramHumidity = test_GETSetOrDefault("humidity", "");
+		$paramPressure = test_GETSetOrDefault("pressure", "");
+		$paramLighting = test_GETSetOrDefault("lighting", "");
+		$paramData = buildJSON($paramSeries, $paramTemperature, $paramHumidity, $paramPressure, $paramLighting);
 		if ($paramData == "") {
-			echo "No Data";
+			echo "Bad Data";
 			break;
 		}
-		$paramDb = test_POSTSetOrDefault("db", "weather");
-		$paramUser = test_POSTSetOrDefault("u", "weather_writer");
-		$paramPassword = test_POSTSetOrDefault("p", "weather_password");
+
+		$paramDb = test_GETSetOrDefault("db", "weather");
+		$paramUser = test_GETSetOrDefault("u", "weather_writer");
+		$paramPassword = test_GETSetOrDefault("p", "weather_password");
 		 
 		$postURL = "http://weatherspot.us:8086/db/" . $paramDb . "/series?u=" . $paramUser . "&p=" . $paramPassword; 
 		doPOSTCurl($postURL, $paramData);
@@ -35,6 +41,14 @@ switch ($method) {
 }
 
 
+function buildJSON($series, $temperature, $humidity, $pressure, $light) {
+	if (!$series || !$temperature || !$humidity || !$pressure || !$light) {
+		return "";
+	}
+	$json = '[{"name":"' . $series . '", "columns":["temperature","humidity","pressure","lighting"],"points":[[' . $temperature . ',' . $humidity . ',' . $pressure . ',' . $light . ']]}]';
+
+	return $json;
+}
 function test_GETSetOrDefault($test, $default) {
 	// Test if a parameter is set in the URL, otherwise return default value
 	if (isset($_GET[$test])) {
@@ -44,6 +58,7 @@ function test_GETSetOrDefault($test, $default) {
 	}
 }
 function test_POSTSetOrDefault($test, $default) {
+	// Test if a parameter is set in the URL, otherwise return default value
 	if (isset($_POST[$test])) {
 		return $_POST[$test];
 	} else {
