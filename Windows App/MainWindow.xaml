@@ -16,15 +16,16 @@
                     <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Margin="84,296,0,0" VerticalAlignment="Top" Width="75" Click="exportClick"/>
                     <Button x:Name="fetchButton" Content="Fetch" HorizontalAlignment="Left" Margin="84,242,0,0" VerticalAlignment="Top" Width="75" Click="fetchClick"/>
                     <Calendar HorizontalAlignment="Left" VerticalAlignment="Top" Margin="37,67,0,0" IsTodayHighlighted="False" IsManipulationEnabled="True"/>
-                    <d3:ChartPlotter Name="plotter" Margin="313,13,92.4,176">
+                    <d3:ChartPlotter Name="plotter" Margin="313,13,92.4,176" Background="#FFE5E5E5">
                         <d3:Header TextBlock.FontSize="20">
                             Temperature
                         </d3:Header>
                         <d3:VerticalAxisTitle Content="F"/>
                         <d3:HorizontalAxisTitle>Time</d3:HorizontalAxisTitle>
                     </d3:ChartPlotter>
-                    <TextBox x:Name="textBoxOut" HorizontalAlignment="Left" Height="105" Margin="313,296,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="409" IsEnabled="False"/>
+                    <TextBox x:Name="textBoxOut" HorizontalAlignment="Left" Height="105" Margin="332,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="390" IsEnabled="False"/>
                     <Button x:Name="importButton" Content="Import" HorizontalAlignment="Left" Margin="84,269,0,0" VerticalAlignment="Top" Width="75" Click="importClick"/>
+                    <Rectangle Height="35.2" VerticalAlignment="Bottom" Fill="#FF2C2CD0" Margin="-9.6,0,-9.6,-10.4"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Statistics">
@@ -57,12 +58,14 @@
                     <TextBox x:Name="humidityMedianOut" HorizontalAlignment="Left" Height="23" Margin="608,85,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
                     <TextBox x:Name="pressureMedianOut" HorizontalAlignment="Left" Height="23" Margin="608,113,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
                     <GroupBox x:Name="groupBoxMax_Copy1" Header="Median" HorizontalAlignment="Left" Margin="411,24,0,0" VerticalAlignment="Top" Height="137" Width="338"/>
+                    <Rectangle Height="35.2" VerticalAlignment="Bottom" Fill="#FFDF8E10" Margin="-9.6,0,-9.6,-10.4"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Console">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="consoleOutBox" HorizontalAlignment="Left" Height="366" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="794" IsEnabled="False"/>
-                    <TextBox x:Name="consoleInBox" HorizontalAlignment="Left" Height="23" Margin="10,391,0,0" TextWrapping="Wrap" Text="Enter Querry" VerticalAlignment="Top" Width="794" KeyDown="consoleKeyPressed"/>
+                    <TextBox x:Name="consoleOutBox" HorizontalAlignment="Left" Height="341.2" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="794"  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />                   
+                    <TextBox x:Name="consoleInBox" HorizontalAlignment="Left" Height="23" Margin="10,369.4,0,0" TextWrapping="Wrap" Text="Enter Querry" VerticalAlignment="Top" Width="794" KeyDown="consoleKeyPressed"/>
+                    <Rectangle Height="35.2" VerticalAlignment="Bottom" Fill="#FF630A9F" Margin="-9.6,0,-9.6,-10.4"/>
                 </Grid>
             </TabItem>
             <TabItem Header="About">
@@ -71,6 +74,7 @@
                     <Image x:Name="cloudImage" HorizontalAlignment="Left" Height="149" Margin="332,10,0,0" VerticalAlignment="Top" Width="117" Source="cloud.png"/>
                     <TextBlock x:Name="licenseSection" HorizontalAlignment="Left" Margin="191,266,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="427" Height="103" TextAlignment="Justify" Text="Weatherspot © 2015, This software uses two external open source libraries  Dynamic Data Display which is protected under the license of Microsoft Reciprocal License (Ms-RL) and Json.NET by Newtonsoft protected by the MIT License (MIT). Please refer to the documentation of the program for more details as well as for the copies of the licenses. "/>
                     <TextBlock x:Name="httpSection" HorizontalAlignment="Left" Margin="320,374,0,0" TextWrapping="Wrap" Text="http://weatherspot.us" VerticalAlignment="Top" Width="143" FontSize="14.667"/>
+                    <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="689,376,0,0" TextWrapping="Wrap" Text="version: 0.1b" VerticalAlignment="Top" Height="23" Width="98"/>
                 </Grid>
             </TabItem>
         </TabControl>

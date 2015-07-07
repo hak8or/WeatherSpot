@@ -35,7 +35,7 @@ namespace WeatherSpot
 
         private void fetchClick(object sender, RoutedEventArgs e)
         {
-            const string dbQuery = "SELECT * FROM Temperature";
+            const string dbQuery = "SELECT * FROM Downtown";
 
             JObject parseResults = JObject.Parse(NetworkClass.serverResponse(dbQuery));
             JArray jsonArray = (JArray)parseResults.SelectToken("points");
@@ -110,7 +110,32 @@ namespace WeatherSpot
                 else
                 {
                     consoleOutBox.Text += ">" + consoleInBox.Text.ToUpper() + "\n";
-                    consoleOutBox.Text += NetworkClass.serverResponse(consoleInBox.Text) + "\n\n";
+                    
+                    JObject parseResults = JObject.Parse(NetworkClass.serverResponse(consoleInBox.Text));
+                    JArray jsonArray = (JArray)parseResults.SelectToken("columns");
+
+                    int rowCount = jsonArray.Count;
+
+                    for (int i = 0; i < jsonArray.Count; i++)
+                    {
+                        consoleOutBox.Text += jsonArray[i].ToString() + "\t\t";
+
+                    }
+
+                    jsonArray = (JArray)parseResults.SelectToken("points");                    
+                    consoleOutBox.Text += "\n";
+
+                    for (int i = 0; i < jsonArray.Count ; i++)
+                    {                       
+                        for(int j = 0; j < rowCount; j++)
+                        {
+                            consoleOutBox.Text += jsonArray[i][j].ToString() + "\t\t";
+                        }
+
+                        consoleOutBox.Text += "\n";
+                    }
+            
+                    consoleOutBox.Text += "\n";
                     consoleInBox.Text = "";                    
                 }                
             }
