@@ -5,6 +5,10 @@
 #include "Network.h"
 #include "Sensors.h"
 
+// Uncomment to enable wired network. Done using define instead of just a normal
+// if since it seems we can't optimize it away.
+// #define wired_network_enable
+
 /**
  * @brief Sets up a TCP connection to our backend server.
  * 
@@ -12,6 +16,8 @@
  *          pings the backend to verify connectivity and DNS resolution.
  */
 void Network::init_wired(void){
+	Serial.println(F("Wired Ethernet is not yet tested/implimented!"));
+#ifdef wired_network_enable
 	// First check if we can connect to the ethernet module.
 	// Make sure any changes to this are manually changed also in
 	// Network::Network since sizeof doesn't work because somehow
@@ -45,6 +51,7 @@ void Network::init_wired(void){
 		Heartbeat::panic();
 	} else
 		ether.printIp("thingspeak.com IP address: ", ether.hisip);
+#endif
 }
 
 /**
@@ -57,6 +64,7 @@ void Network::send_packet(Network::Interface interface, Sensor_data sensor_data)
 	if (interface == Wired) {
 		Serial.println(F("Wired Ethernet is not yet tested/implimented!"));
 
+#ifdef wired_network_enable
 		Stash stash;
 		byte sd = stash.create();
 		stash.print("field1=3");
@@ -85,10 +93,11 @@ void Network::send_packet(Network::Interface interface, Sensor_data sensor_data)
 
 			  const char* reply = ether.tcpReply(session);
 			  if (reply != 0) {
-			    Serial.println("Got a response!");
+			    Serial.println(F("Got a response!"));
 			    Serial.println(reply);
 			  }
 		}
+#endif
 	}else if(interface == Wireless){
 		/*
 		// Make sure we are disconnected first.
@@ -100,7 +109,7 @@ void Network::send_packet(Network::Interface interface, Sensor_data sensor_data)
 			volatile char foo = wifi_serial->read();*/
 
 		// Connect to our server.
-		wifi_serial->println("AT+CIPSTART=4,\"TCP\",\"184.106.153.149\",80");
+		wifi_serial->println("AT+CIPSTART=4,\"TCP\",\"104.131.85.242\",80");
 
 		// Check if the TCP connection is setup.
 		if(wifi_serial->find("OK"))
@@ -111,11 +120,22 @@ void Network::send_packet(Network::Interface interface, Sensor_data sensor_data)
 			// return;
 		}
 
-		String getStr = "GET /update?key=8ZISX29L64E3ZDHW";
-		getStr = getStr + "&field1=" + String(sensor_data.temperature_f);
-		getStr = getStr + "&field2=" + String(sensor_data.humidity) + "\r\n";
+		String getStr = "POST /db/query.php?";
+		getStr = getStr + "series=Downtown";
+		getStr = getStr + "&temperature=" + String(sensor_data.temperature_f);
+		getStr = getStr + "&humidity=" + String(sensor_data.humidity);
+		getStr = getStr + "&pressure=65";
+		getStr = getStr + "&lighting=65";
+		getStr = getStr + "\r\n\r\n";
 
 		String cmd = "AT+CIPSEND=4," + String(getStr.length());
+
+		Serial.print(F("Sending:  \n\t"));
+		Serial.print(cmd);
+		Serial.print(F("\n\t"));
+		Serial.print(getStr);
+		Serial.print(F("\n"));
+
 		wifi_serial->println(cmd);
 
 		// Send a packet if we can.
@@ -152,22 +172,20 @@ void Network::init_wireless(void){
 	wifi_serial = new SoftwareSerial(6, 5);
 	wifi_serial->begin(9600);
 
-	// Set the wifi_serial to timeout after 5s instead of default 1s
-	wifi_serial->setTimeout(5000);
+	// Set the wifi_serial to timeout after 10s instead of default 1s
+	wifi_serial->setTimeout(10000);
 
 	// TODO
 	//	Make proper commands with verification as a function.
 
 	// Rest the module so it is in a known state and check if it works.
 	wifi_serial->println("AT+RST");
-	delay(500);
-	if(wifi_serial->find("AT+RST\r\n\r\nOK\r\n"))
+	if(find("OK", 15000))
 		Serial.println(F("Wifi reseting ack recieved ..."));
 	else
 		Serial.println(F("Wifi reset failed, no reply or garbage returned."));
 
-	// Wait for the reset to finish.
-	delay(750);
+	return;
 
 	if(wifi_serial->find("ready"))
 		Serial.println(F("Wifi reset succesfull!"));
@@ -175,39 +193,39 @@ void Network::init_wireless(void){
 		Serial.println(F("Wifi reset failed, no reply or garbage returned."));
 
 	// And the correct wireless mode.
-	wifi_serial->println("AT+CWMODE=3");
-	if(wifi_serial->find("AT+CWMODE=3\r\n\r\nOK\r\n"))
+	wifi_serial->print("AT+CWMODE=3\r\n");
+	if(wifi_serial->find("OK"))
 		Serial.println(F("Wifi mode select was succesfull."));
 	else
 		Serial.println(F("Wifi mode select failed, no reply or garbage returned."));
 	
 	// Login to the network.
 	// Todo: search for the AP we want to to confirm it exists.
-	wifi_serial->println("AT+CWJAP=\"OpenWrt\",\"castle2004\"");
-
-	// For debugging when using a logic sniffer.
-	if(debug_wifi){
-		pinMode(10, OUTPUT);
-		digitalWrite(10, HIGH);
-		digitalWrite(10, LOW);
-		digitalWrite(10, HIGH);
-	}
+	wifi_serial->print("AT+CWJAP=\"OpenWrt\",\"castle2004\"\r\n");
 
 	// Check to make sure we connected to the wifi network.
-	if(wifi_serial->find('OK'))
+	if(wifi_serial->find('WIFI GOT IP'))
 		Serial.println(F("Wifi connected to OpenWRT network succesfully!"));
 	else
 		Serial.println(F("Wifi connected to OpenWRT network failed."));
 
 	// Allow multiple TCP connections.
-	wifi_serial->println("AT+CIPMUX=1");
+	wifi_serial->print("AT+CIPMUX=1");
 	if(wifi_serial->find("AT+CIPMUX=1\r\n\r\nOK\r\n"))
 		Serial.println(F("Wifi multiple TCP setting was succesfull."));
 	else
 		Serial.println(F("Wifi multiple TCP setting failed, no reply or garbage returned."));
 
+
+	// Make the TCP timout after 5 seconds, done in order to help prevent the "busy s..." error.	
+	wifi_serial->print("AT+CIPSTO=5");
+	if(wifi_serial->find("AT+CIPSTO=5\r\n\r\nOK\r\n"))
+		Serial.println(F("Wifi TCP timeout setting was succesfull."));
+	else
+		Serial.println(F("Wifi TCP timeout setting failed, no reply or garbage returned."));
+
 	// Check to *really* make sure we connected to the wifi network.
-	/*wifi_serial->println("AT+CWJAP=?");
+	/*wifi_serial->print("AT+CWJAP=?\r\n");
 	if(wifi_serial->find('OK'))
 		Serial.println(F("Wifi network connectivity verification succesfully!"));
 	else
@@ -242,4 +260,27 @@ void Network::serial_proxy_mode(void){
 	wifi_serial->println("AT+CIFSR");
 	while (wifi_serial->available())
     	Serial.write(wifi_serial->read());
+}
+
+/**
+ * @brief Blocks till either timeout or we find the requested reply.
+ * 
+ * @param reply The reply we are waiting for.
+ * @param milliseconds The timeout for how long we are willing to wait.
+ * 
+ * @return If we found the reply within the timeout.
+ */
+bool Network::find(char reply[], uint16_t milliseconds){
+	uint32_t start_time = millis();
+
+	while(start_time - millis() > milliseconds){
+		// Dump any chars we find to the buffer.
+		while (wifi_serial->available() > 0){
+			this->reply_buffer[this->buffer_filled] = 
+		}
+
+	}
+	
+
+	return false;
 }

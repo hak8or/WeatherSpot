@@ -36,16 +36,15 @@ void setup(){
 	// Startup a heartbeat LED.
 	Heartbeat::start();
 
+	Sensors sensors;
+	sensors.init_DH11(2);
+
 	// Startup our network.
-	// Find out why network disables our heartbeat LED.
 	Network network;
 	if (use_wired)
 		network.init_wired();
 	else
 		network.init_wireless();
-
-	Sensors sensors;
-	sensors.init_DH11(2);
 
 	while(true){
 		Sensor_data sensor_data = sensors.read_sensors();
@@ -54,8 +53,9 @@ void setup(){
 		Serial.print(F("Sensor temperature: "));
 		Serial.println(sensor_data.temperature_f);
 
-		network.send_packet(Network::Wireless, sensor_data);
+		// network.send_packet(Network::Wireless, sensor_data);
 
+		Serial.println(F("Waiting 20 seconds ..."));
 		delay(20000);
 	}
 }

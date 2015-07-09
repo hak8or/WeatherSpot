@@ -24,6 +24,7 @@ public:
 
 
 	void init_wireless(void);
+
 	/**
 	 * @brief Sends a peice of data over TCP to our backend.
 	 * @details Does a DNS lookup for our backend, sets up a TCP connection, and sends our data.
@@ -47,15 +48,27 @@ private:
 	const uint8_t fallback_gateway[4] = { 192, 168, 1, 1 };    // The gateway router address.
 	const uint8_t fallback_subnet[4]  = { 255, 255, 255, 0 };  // The subnet mask.
 
+	// Reply buffer for communication from our serial based modules.
+	const uint8_t reply_buffer_size = 25;
+	char reply_buffer[25];
+	uint8_t buffer_filled = 0;
+
 	// For talking to the wifi module.
 	SoftwareSerial *wifi_serial;
 
-	const bool debug_wifi = true;
+	/**
+	 * @brief Blocks till either timeout or we find the requested reply.
+	 * 
+	 * @param reply The reply we are waiting for.
+	 * @param milliseconds The timeout for how long we are willing to wait.
+	 * 
+	 * @return If we found the reply within the timeout.
+	 */
+	bool find(char reply[], uint16_t milliseconds);
 
 	/**
 	 * @brief Dumps wifi network information over to the pc serial.
 	 */
 	void get_wifi_info(void);
 };
-
 #endif
