@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"> 
+	<title>Weather Database</title>
+	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+	<style>
+		.datas {
+			border: 1px solid;
+		}
+		.datas td {
+			border: 1px solid;
+			padding-left: 1em;
+			padding-right: 1em;
+			text-align: center;
+		}
+		.datas > thead > tr {
+			background: orange;
+		}
+		.datas > tbody > tr:nth-child(odd) {
+			background: lightgrey;
+		}
+	</style>
+
+	<script>
+function doQuery(query) {
+//	var now = new Date();
+	console.log(query);
+	var queryURL = "http://weatherspot.us/db/query.php?db=weather&query=" + encodeURIComponent(query);
+	$.ajax({
+		type: 'GET',
+		url: queryURL,
+		success: function(data) {
+			$(".nameHeader").remove();;
+			$("table.datas").remove();
+			for (var dataIndex = 0; dataIndex < data.length; ++dataIndex) {
+				var name = data[dataIndex].name;
+				var columns = data[dataIndex].columns;
+				var points = data[dataIndex].points;
+//				var done = new Date();
+//				console.log("Got Data: " + (done - now).toString() + ": " + columns);
+				console.log(columns);
+
+				var appendStr = '<h1 class="nameHeader">Series: ' + name + '</h1><table class="datas"><thead><tr>';
+				for (var index = 0; index < columns.length; ++index) {
+					appendStr += "<td>" + columns[index] + "</td>";
+				}
+				appendStr += "</tr></thead>";
+
+				for (var index = 0; index < points.length; ++index) {
+					appendStr += "<tr>"; 
+					appendStr += "<td>";
+					var dateStr;
+					if (points[index][0] == 0) {
+						dateStr = "N/A";
+					} else {
+						dateStr = new Date(points[index][0]);
+					}
+					appendStr += dateStr.toString();
+					appendStr += "</td>";
+					for (var innerIndex = 1; innerIndex < points[index].length; ++innerIndex) {
+						appendStr += "<td>"; 
+						if (points[index][innerIndex] !== null) {
+							appendStr += points[index][innerIndex]; 
+						}
+						appendStr += "</td>"; 
+					}
+					appendStr += "</tr>"; 
+				}
+				appendStr += "</table>";
+				$("body").append(appendStr);
+//				console.log(data[dataIndex]);
+			}
+//			var totallyDone = new Date();
+//			console.log("Done: " + (totallyDone - now).toString()); 
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$(".nameHeader").remove();
+			$("table.datas").remove();
+			$("body").append('<h1 class="nameHeader">Query Failure</h1>');
+		},
+		dataType: "json"
+	});
+}
+	</script>
+</head>
+<body>
+	<button type="button" onclick='doQuery($("#queryText").val())'>Query</button>
+	<input type="text" id="queryText" value="Enter Query"></input>
+	<p>Example Query: SELECT temp FROM Temperature</p>
+	<script>
+		$("#queryText").focus(function() {
+			if ($(this).val() == "Enter Query") {
+				$(this).val("");
+			}
+		});
+		$("#queryText").keydown(function(e) {
+		    // Enter is pressed
+		    if (e.keyCode == 13) { doQuery($("#queryText").val()); }
+		});
+	</script>
+</body>
+</html>
