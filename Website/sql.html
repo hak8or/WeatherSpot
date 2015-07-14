@@ -20,7 +20,84 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+	
+	
+	<!-- THIS IS TEMPORARY CODE -->
+	<style>
+		.datas {
+			border: 1px solid;
+		}
+		.datas td {
+			border: 1px solid;
+			padding-left: 1em;
+			padding-right: 1em;
+			text-align: center;
+		}
+		.datas > thead > tr {
+			background: orange;
+		}
+		.datas > tbody > tr:nth-child(odd) {
+			background: lightgrey;
+		}
+	</style>
+	
+	<script>
+function doQuery(query) {
+	console.log(query);
+	var queryURL = "http://weatherspot.us/db/query.php?db=weather&query=" + encodeURIComponent(query);
+	$.ajax({
+		type: 'GET',
+		url: queryURL,
+		success: function(data) {
+			$(".nameHeader").remove();;
+			$("table.datas").remove();
+			for (var dataIndex = 0; dataIndex < data.length; ++dataIndex) {
+				var name = data[dataIndex].name;
+				var columns = data[dataIndex].columns;
+				var points = data[dataIndex].points;
+				console.log(columns);
 
+				var appendStr = '<h1 class="nameHeader">Series: ' + name + '</h1><table class="datas"><thead><tr>';
+				for (var index = 0; index < columns.length; ++index) {
+					appendStr += "<td>" + columns[index] + "</td>";
+				}
+				appendStr += "</tr></thead>";
+
+				for (var index = 0; index < points.length; ++index) {
+					appendStr += "<tr>"; 
+					appendStr += "<td>";
+					var dateStr;
+					if (points[index][0] == 0) {
+						dateStr = "N/A";
+					} else {
+						dateStr = new Date(points[index][0]);
+					}
+					appendStr += dateStr.toString();
+					appendStr += "</td>";
+					for (var innerIndex = 1; innerIndex < points[index].length; ++innerIndex) {
+						appendStr += "<td>"; 
+						if (points[index][innerIndex] !== null) {
+							appendStr += points[index][innerIndex]; 
+						}
+						appendStr += "</td>"; 
+					}
+					appendStr += "</tr>"; 
+				}
+				appendStr += "</table>";
+				$("body > div.container").append(appendStr);
+//				console.log(data[dataIndex]);
+			}
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$(".nameHeader").remove();
+			$("table.datas").remove();
+			$("body > div.container").append('<h1 class="nameHeader">Query Failure</h1>');
+		},
+		dataType: "json"
+	});
+}
+	</script>
+	
 </head>
 
 <body>
@@ -69,9 +146,10 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h1>Graphs</h1>
-		<iframe style="width:80%; min-height: 500px" src="db/d3query.html"></iframe>
-                <p></p>
+                <h1>SQL</h1>
+                <button type="button" onclick='doQuery($("#queryText").val())'>Query</button>
+		<input type="text" id="queryText" value="Enter Query"></input>
+		<p>Example Query: SELECT temp FROM Temperature</p>
             </div>
         </div>
     </div>
@@ -82,6 +160,18 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script>
+    	$("#queryText").focus(function() {
+    		if ($(this).val() == "Enter Query") {
+    			$(this).val("");
+    		}
+    	});
+    	$("#queryText").keydown(function(e) {
+    	    // Enter is pressed
+    	    if (e.keyCode == 13) { doQuery($("#queryText").val()); }
+    	});
+    </script>
 
 </body>
 
