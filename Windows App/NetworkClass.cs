@@ -33,16 +33,16 @@ namespace WeatherSpot
                     wrGETURL.Proxy = WebProxy.GetDefaultProxy();    
            */
             Stream objStream;
-            objStream = serverResponse.GetResponse().GetResponseStream();
-
-            StreamReader objReader = new StreamReader(objStream);
-
             string strLine = "";
+
+            objStream = serverResponse.GetResponse().GetResponseStream();
+            StreamReader objReader = new StreamReader(objStream);
+        
             strLine = objReader.ReadLine();
             strLine = objReader.ReadLine();
 
             HelperClass.stringFormatter(ref strLine);
-
+               
             return strLine;
 
         } // end of method

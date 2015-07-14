@@ -37,13 +37,20 @@ namespace WeatherSpot
         {
             const string dbQuery = "SELECT * FROM Downtown";
 
-            JObject parseResults = JObject.Parse(NetworkClass.serverResponse(dbQuery));
-            JArray jsonArray = (JArray)parseResults.SelectToken("points");
+            try
+            {
+                JObject parseResults = JObject.Parse(NetworkClass.serverResponse(dbQuery));
+                JArray jsonArray = (JArray)parseResults.SelectToken("points");
 
-            fetchGraph.RemoveGraph();
-            fetchGraph.AddData(ref jsonArray);
-            fetchGraph.PlotGraph();
-            fetchGraph.SetStatistics(true);
+                fetchGraph.RemoveGraph();
+                fetchGraph.AddData(ref jsonArray);
+                fetchGraph.PlotGraph();
+                fetchGraph.SetStatistics(true);
+            }
+            catch(Exception)
+            {
+                MessageBox.Show("Fetch Error, Try Again");
+            } 
         }
 
         private void importClick(object sender, RoutedEventArgs e)
@@ -109,34 +116,40 @@ namespace WeatherSpot
                 }
                 else
                 {
-                    consoleOutBox.Text += ">" + consoleInBox.Text.ToUpper() + "\n";
-                    
-                    JObject parseResults = JObject.Parse(NetworkClass.serverResponse(consoleInBox.Text));
-                    JArray jsonArray = (JArray)parseResults.SelectToken("columns");
-
-                    int rowCount = jsonArray.Count;
-
-                    for (int i = 0; i < jsonArray.Count; i++)
+                    try
                     {
-                        consoleOutBox.Text += jsonArray[i].ToString() + "\t\t";
+                        consoleOutBox.Text += ">" + consoleInBox.Text.ToUpper() + "\n";
 
-                    }
+                        JObject parseResults = JObject.Parse(NetworkClass.serverResponse(consoleInBox.Text));
+                        JArray jsonArray = (JArray)parseResults.SelectToken("columns");
 
-                    jsonArray = (JArray)parseResults.SelectToken("points");                    
-                    consoleOutBox.Text += "\n";
+                        int rowCount = jsonArray.Count;
 
-                    for (int i = 0; i < jsonArray.Count ; i++)
-                    {                       
-                        for(int j = 0; j < rowCount; j++)
+                        for (int i = 0; i < jsonArray.Count; i++)
                         {
-                            consoleOutBox.Text += jsonArray[i][j].ToString() + "\t\t";
+                            consoleOutBox.Text += jsonArray[i].ToString() + "\t\t";
+                        }
+
+                        jsonArray = (JArray)parseResults.SelectToken("points");
+                        consoleOutBox.Text += "\n";
+
+                        for (int i = 0; i < jsonArray.Count; i++)
+                        {
+                            for (int j = 0; j < rowCount; j++)
+                            {
+                                consoleOutBox.Text += jsonArray[i][j].ToString() + "\t\t";
+                            }
+
+                            consoleOutBox.Text += "\n";
                         }
 
                         consoleOutBox.Text += "\n";
+                        consoleInBox.Text = "";
                     }
-            
-                    consoleOutBox.Text += "\n";
-                    consoleInBox.Text = "";                    
+                    catch(Exception)
+                    {
+                        consoleOutBox.Text += "\nUNRECOGNIZED COMMAND";
+                    }                    
                 }                
             }
         } // end of method
