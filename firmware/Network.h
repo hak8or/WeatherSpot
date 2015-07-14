@@ -39,6 +39,7 @@ public:
 	 */
 	void serial_proxy_mode(void);
 private:
+#ifdef wired_network_enable
 	// Hardcoded mac address.
 	const byte mac[6]        = { 0x00, 0x04, 0xA3, 0x21, 0xCA, 0x38 };
 
@@ -47,11 +48,12 @@ private:
 	const uint8_t fallback_dns[4]     = { 192, 168, 1, 1 };    // The DNS server address.
 	const uint8_t fallback_gateway[4] = { 192, 168, 1, 1 };    // The gateway router address.
 	const uint8_t fallback_subnet[4]  = { 255, 255, 255, 0 };  // The subnet mask.
+#endif
 
 	// Reply buffer for communication from our serial based modules.
-	const uint8_t reply_buffer_size = 25;
-	char reply_buffer[25];
-	uint8_t buffer_filled = 0;
+	// #define reply_buffer_size 25;
+	// char reply_buffer[reply_buffer_size];
+	// uint8_t reply_buffer_current_index = 0;
 
 	// For talking to the wifi module.
 	SoftwareSerial *wifi_serial;
@@ -64,7 +66,7 @@ private:
 	 * 
 	 * @return If we found the reply within the timeout.
 	 */
-	bool find(char reply[], uint16_t milliseconds);
+	bool find(const char reply[], const uint8_t reply_length, const uint16_t milliseconds);
 
 	/**
 	 * @brief Dumps wifi network information over to the pc serial.

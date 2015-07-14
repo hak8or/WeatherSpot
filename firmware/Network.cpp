@@ -180,7 +180,7 @@ void Network::init_wireless(void){
 
 	// Rest the module so it is in a known state and check if it works.
 	wifi_serial->println("AT+RST");
-	if(find("OK", 15000))
+	if(find("OK", 2, 15000))
 		Serial.println(F("Wifi reseting ack recieved ..."));
 	else
 		Serial.println(F("Wifi reset failed, no reply or garbage returned."));
@@ -263,24 +263,37 @@ void Network::serial_proxy_mode(void){
 }
 
 /**
- * @brief Blocks till either timeout or we find the requested reply.
+ * @brief Blocks till either timeout or we find the requested reply on the wifi serial port.
  * 
  * @param reply The reply we are waiting for.
  * @param milliseconds The timeout for how long we are willing to wait.
  * 
  * @return If we found the reply within the timeout.
  */
-bool Network::find(char reply[], uint16_t milliseconds){
+bool Network::find(const char reply[], const uint8_t reply_length, const uint16_t milliseconds){
 	uint32_t start_time = millis();
+	uint8_t  current_reply_index = 0;
 
-	while(start_time - millis() > milliseconds){
-		// Dump any chars we find to the buffer.
-		while (wifi_serial->available() > 0){
-			this->reply_buffer[this->buffer_filled] = 
+	// Make sure we don't spend forever waiting for the char sequence.
+	while((start_time - millis()) > milliseconds){
+		if (wifi_serial->available() > 0) {
+			// Check if the reply on our serial port is the first char of reply.
+			char reply_char = wifi_serial->read();
+			if (reply_char == reply[current_reply_index]){
+				// Check if we succesfully compared the entire reply.
+				if ((reply_length - 1) == current_reply_index)
+					return true;
+				else 
+					current_reply_index++;
+			}
+			else{
+				// Store the char into our major reply buffer.
+				// reply_buffer[reply_buffer_current_index++] = reply_char;
+				return false;
+			}
 		}
-
 	}
-	
 
+	// If we timed out, then it's considerd we didn't find our char array.
 	return false;
 }
