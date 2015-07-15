@@ -19,13 +19,19 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using Microsoft.Win32;
 using System.Collections.Generic;
+using System.Windows.Input;
 //using System.Windows.Forms;
 
 namespace WeatherSpot
 {
     public partial class MainWindow : Window
     {
-        private PlottingClass fetchGraph;         
+        private PlottingClass fetchGraph;
+        private List<string> consoleHistory = new List<string>();
+
+        private int historyCounter = 0;
+        private int moduloCounter = 0;
+        private const int HISTORY_LIMIT = 50;
 
         public MainWindow()
         {
@@ -90,6 +96,7 @@ namespace WeatherSpot
 
         private void exportClick(object sender, RoutedEventArgs e)
         {
+            // Save dialog menu
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "WeatherSpot files (*.ws)|*.ws";
 
@@ -114,8 +121,8 @@ namespace WeatherSpot
                     consoleOutBox.Text = "";
                     consoleInBox.Text = "";
                 }
-                else
-                {
+                if(consoleInBox.Text != "") // Processing only non-empty strings
+                {                    
                     try
                     {
                         consoleOutBox.Text += ">" + consoleInBox.Text.ToUpper() + "\n";
@@ -123,6 +130,12 @@ namespace WeatherSpot
                         JObject parseResults = JObject.Parse(NetworkClass.serverResponse(consoleInBox.Text));
                         JArray jsonArray = (JArray)parseResults.SelectToken("columns");
 
+                        // Saving input for the history reference      
+                        consoleHistory.Insert(moduloCounter % HISTORY_LIMIT, consoleInBox.Text);
+                        moduloCounter++;
+                        historyCounter = consoleHistory.Count;
+
+                        // This part of the code properly displays the data in the console window 
                         int rowCount = jsonArray.Count;
 
                         for (int i = 0; i < jsonArray.Count; i++)
@@ -148,12 +161,64 @@ namespace WeatherSpot
                     }
                     catch(Exception)
                     {
-                        consoleOutBox.Text += "\nUNRECOGNIZED COMMAND";
+                        consoleOutBox.Text += "UNRECOGNIZED COMMAND\n\n";
+
+                        // Saving input for the history reference                        
+                        consoleHistory.Insert(moduloCounter % HISTORY_LIMIT, consoleInBox.Text);
+                        moduloCounter++;
+                        historyCounter = consoleHistory.Count;
+                        consoleInBox.Text = "";
                     }                    
                 }                
+            }           
+        } 
+        
+        /*
+            BASH-like history feature which enables a user to browse previous commands
+            by pressing either down or up arrow keys. 
+        */
+        private void consolePreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up)
+            {
+                historyCounter++;
+
+                if ((historyCounter < consoleHistory.Count) && (historyCounter >= 0))
+                {
+                    consoleInBox.Text = consoleHistory[historyCounter];
+                }
+                else
+                {
+                    consoleInBox.Text = "";
+                    historyCounter = consoleHistory.Count;
+                }
             }
+            if (e.Key == Key.Down)
+            {
+                historyCounter--;
+                      
+                if((historyCounter < consoleHistory.Count) && (historyCounter >= 0))
+                {
+                    consoleInBox.Text = consoleHistory[historyCounter];
+                }
+                else
+                {
+                    consoleInBox.Text = consoleHistory[0];
+                    historyCounter++;
+                }                
+            }
+        }
+
+        /*  
+            The event clears the input box out of the initial label (Enter query)
+            for the convenience of a user.  
+        */
+        private void consoleMouseClick(object sender, MouseButtonEventArgs e)
+        {
+            consoleInBox.Text = "";
+
         } // end of method
-                 
+
     } // end of class
 
 } // end of namespace

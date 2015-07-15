@@ -64,7 +64,7 @@
             <TabItem Header="Console">
                 <Grid Background="#FFE5E5E5">
                     <TextBox x:Name="consoleOutBox" HorizontalAlignment="Left" Height="341.2" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="794"  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />                   
-                    <TextBox x:Name="consoleInBox" HorizontalAlignment="Left" Height="23" Margin="10,369.4,0,0" TextWrapping="Wrap" Text="Enter Querry" VerticalAlignment="Top" Width="794" KeyDown="consoleKeyPressed"/>
+                    <TextBox x:Name="consoleInBox" HorizontalAlignment="Left" Height="23" Margin="10,369.4,0,0" TextWrapping="Wrap" Text="Enter Query" VerticalAlignment="Top" Width="794" KeyDown="consoleKeyPressed" PreviewKeyDown="consolePreviewKeyDown" PreviewMouseLeftButtonDown="consoleMouseClick"/>
                     <Rectangle Height="35.2" VerticalAlignment="Bottom" Fill="#FF630A9F" Margin="-9.6,0,-9.6,-10.4"/>
                 </Grid>
             </TabItem>
