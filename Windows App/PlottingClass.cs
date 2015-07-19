@@ -29,49 +29,63 @@ namespace WeatherSpot
         private MainWindow main;
 
         // Data used by the graph
-        private static  List<double> x = new List<double>();
-        private static  List<double> y = new List<double>();
+        private static List<double> time_x = new List<double>();
+        private static List<double> temp_y = new List<double>();
+        private static List<double> hum_y = new List<double>();
+        private static List<double> press_y = new List<double>();
+
+        private int tempLabel = 0;
      
         public PlottingClass(MainWindow win)
         {
             main = win;
         }
 
-        public void AddData(ref JArray jsonDataArray)
+        public void AddData(ref JArray jsonDataArray, ref JArray jsonLabelArray)
         {
-            x.Clear();
-            y.Clear();
+            time_x.Clear();
+            temp_y.Clear();
+
+            for(int i = 0; i < jsonLabelArray.Count; i++)
+            {
+                if(jsonLabelArray[i].ToString() == "temperature")
+                {
+                    tempLabel = i;
+              //      main.textBoxOut.Text = jsonLabelArray[i].ToString();
+                }
+            }
 
             for (int i = 0; i < jsonDataArray.Count; i++)
             {
-                x.Add(Convert.ToDouble(jsonDataArray[i][0].ToString()));
-                y.Add(Convert.ToDouble(jsonDataArray[i][2].ToString()));
+                time_x.Add(Convert.ToDouble(jsonDataArray[i][0].ToString()));
+                temp_y.Add(Convert.ToDouble(jsonDataArray[i][tempLabel].ToString()));
+               // hum_y.Add(Convert.ToDouble(jsonDataArray[i][2].ToString()));
             }
         }
 
         public void AddX(double inX)
         {
-            x.Add(inX);
+            time_x.Add(inX);
         }
 
         public void AddY(double inY)
         {
-            y.Add(inY);
+            temp_y.Add(inY);
         }
 
         public override string ToString()
         {
             string toStr = "";
 
-            for (int i = 0; i < x.Count; i++)
+            for (int i = 0; i < time_x.Count; i++)
             {
-                if (i == (x.Count - 1))
+                if (i == (time_x.Count - 1))
                 {
-                    toStr += x[i] + ";" + y[i];
+                    toStr += time_x[i] + ";" + temp_y[i];
                 }
                 else
                 {
-                    toStr += x[i] + ";" + y[i] + ";";
+                    toStr += time_x[i] + ";" + temp_y[i] + ";";
                 }
             }
 
@@ -81,8 +95,8 @@ namespace WeatherSpot
         public void PlotGraph()
         {
             // Create data sources:
-            var xDataSource = x.AsXDataSource();
-            var yDataSource = y.AsYDataSource();
+            var xDataSource = time_x.AsXDataSource();
+            var yDataSource = temp_y.AsYDataSource();
 
             CompositeDataSource compositeDataSource = xDataSource.Join(yDataSource);
            
@@ -92,9 +106,8 @@ namespace WeatherSpot
                 Colors.DarkRed,
                 3,
                 "Temp");
-
-            // Force evertyhing plotted to be visible
-            main.plotter.FitToView();          
+        
+            main.plotter.FitToView();
         }
 
         public void RemoveGraph()
@@ -122,24 +135,24 @@ namespace WeatherSpot
 
         private double GetAverage()
         {
-            return y.Average(); 
+            return temp_y.Average(); 
         }
 
         private double GetMax()
         {
-            return y.Max();
+            return temp_y.Max();
         }
 
         private double GetMin()
         {
-            return y.Min();
+            return temp_y.Min();
         }
 
         private double GetMedian()
         {
             double median = 0.0;
             int index = 0;
-            List<double> medianList = new List<double>(y);
+            List<double> medianList = new List<double>(temp_y);
 
             medianList.Sort();
                       

@@ -15,7 +15,7 @@
                     <Button x:Name="closeButton" Content="Close" HorizontalAlignment="Left" Margin="84,324,0,0" VerticalAlignment="Top" Width="75" Click="closeClick"/>
                     <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Margin="84,296,0,0" VerticalAlignment="Top" Width="75" Click="exportClick"/>
                     <Button x:Name="fetchButton" Content="Fetch" HorizontalAlignment="Left" Margin="84,242,0,0" VerticalAlignment="Top" Width="75" Click="fetchClick"/>
-                    <Calendar HorizontalAlignment="Left" VerticalAlignment="Top" Margin="37,67,0,0" IsTodayHighlighted="False" IsManipulationEnabled="True"/>
+                    <Calendar Name="FetchCalendar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="37,67,0,0" IsTodayHighlighted="False" IsManipulationEnabled="True" SelectedDatesChanged="CalendarSelectedDatesChanged"/>
                     <d3:ChartPlotter Name="plotter" Margin="313,13,92.4,176" Background="#FFE5E5E5">
                         <d3:Header TextBlock.FontSize="20">
                             Temperature

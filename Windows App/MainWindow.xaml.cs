@@ -32,6 +32,8 @@ namespace WeatherSpot
         private int historyCounter = 0;
         private int moduloCounter = 0;
         private const int HISTORY_LIMIT = 50;
+        private string dayAfter = "";
+        private string dayBefore = "";
 
         public MainWindow()
         {
@@ -41,21 +43,25 @@ namespace WeatherSpot
 
         private void fetchClick(object sender, RoutedEventArgs e)
         {
-            const string dbQuery = "SELECT * FROM Downtown";
+            string dbQuery = "SELECT temperature FROM Downtown WHERE time > '" + dayBefore + "' AND time < '" + dayAfter + "'";
 
             try
-            {
-                JObject parseResults = JObject.Parse(NetworkClass.serverResponse(dbQuery));
+            {               
+                JObject parseResults = JObject.Parse(NetworkClass.serverResponse(dbQuery));             
                 JArray jsonArray = (JArray)parseResults.SelectToken("points");
+                JArray jsonArrayLabels = (JArray)parseResults.SelectToken("columns");
+
+                textBoxOut.Text = dbQuery;
 
                 fetchGraph.RemoveGraph();
-                fetchGraph.AddData(ref jsonArray);
+                fetchGraph.AddData(ref jsonArray, ref jsonArrayLabels);
                 fetchGraph.PlotGraph();
                 fetchGraph.SetStatistics(true);
             }
             catch(Exception)
             {
                 MessageBox.Show("Fetch Error, Try Again");
+                textBoxOut.Text = dbQuery;
             } 
         }
 
@@ -216,6 +222,24 @@ namespace WeatherSpot
         private void consoleMouseClick(object sender, MouseButtonEventArgs e)
         {
             consoleInBox.Text = "";
+
+        } 
+        
+        /*
+            By using the calendar a user can choose a specific day to fetch the data.
+            The event creates two dates used for SQL query which is used by HTTP get
+            routine in NetworkClass.cs. 
+        */
+        private void CalendarSelectedDatesChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {          
+            if (FetchCalendar.SelectedDate.HasValue)
+            {                
+                DateTime date = FetchCalendar.SelectedDate.Value;
+
+                dayBefore = date.AddDays(-1).ToString("yyyy-MM-dd");
+                dayAfter = date.AddDays(1).ToString("yyyy-MM-dd");
+
+            }
 
         } // end of method
 
