@@ -18,7 +18,6 @@ public:
 	 */
 	void init_DH11(uint8_t data_pin);
 
-
 	/**
 	 * @brief Reads sensor data.
 	 * 
@@ -35,6 +34,7 @@ private:
 struct Sensor_data {
 	float humidity;
 	float temperature_f;
+	uint16_t light;
 };
 
 #endif

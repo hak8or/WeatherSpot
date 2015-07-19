@@ -52,6 +52,8 @@ void setup(){
 		Serial.println(sensor_data.humidity);
 		Serial.print(F("Sensor temperature: "));
 		Serial.println(sensor_data.temperature_f);
+		Serial.print(F("Sensor light reading: "));
+		Serial.println(sensor_data.light);
 
 		// network.send_packet(Network::Wireless, sensor_data);
 
