@@ -32,8 +32,10 @@ namespace WeatherSpot
         private int historyCounter = 0;
         private int moduloCounter = 0;
         private const int HISTORY_LIMIT = 50;
+
         private string dayAfter = "";
         private string dayBefore = "";
+        private string sensorLocation = "";
 
         public MainWindow()
         {
@@ -43,7 +45,7 @@ namespace WeatherSpot
 
         private void fetchClick(object sender, RoutedEventArgs e)
         {
-            string dbQuery = "SELECT temperature FROM Downtown WHERE time > '" + dayBefore + "' AND time < '" + dayAfter + "'";
+            string dbQuery = "SELECT temperature FROM " + sensorLocation + " WHERE time > '" + dayBefore + "' AND time < '" + dayAfter + "'";
 
             try
             {               
@@ -222,7 +224,6 @@ namespace WeatherSpot
         private void consoleMouseClick(object sender, MouseButtonEventArgs e)
         {
             consoleInBox.Text = "";
-
         } 
         
         /*
@@ -240,7 +241,32 @@ namespace WeatherSpot
                 dayAfter = date.AddDays(1).ToString("yyyy-MM-dd");
 
             }
+        }
 
+        /*
+            The following two events are responsible for sensors selection.
+            The first entry in the drop menu box is used as the default value
+            for the query.
+        */
+        private void ComboBoxLoaded(object sender, RoutedEventArgs e)
+        {
+            // Adding values for the drop menu box
+            List<string> data = new List<string>();
+            data.Add("Downtown");
+            data.Add("Sun");
+            data.Add("Black Hole");
+
+            // Binding data with locationSelection xaml element
+            locationSelector.ItemsSource = data;
+
+            // Selection of the first item
+            locationSelector.SelectedIndex = 0;
+        }
+
+        private void ComboBoxSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            sensorLocation = locationSelector.SelectedItem as string;
+                        
         } // end of method
 
     } // end of class
