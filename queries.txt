@@ -1,0 +1,29 @@
+// InfluxDB is structured with Databases full of Series' which contain Measurements
+// This is comparable to MySql having Databases full of Tables which contain Fields
+// Documentation: https://influxdb.com/docs/v0.8/api/query_language.html
+//
+// Selection Examples
+// Select ALL measurements FROM series Downtown
+SELECT * FROM Downtown
+
+//Select temperature measurements FROM series Downtown
+SELECT temperature FROM Downtown
+
+//Count how many temperature measurements are in series Downtown
+SELECT count(temperature) FROM Downtown
+
+//The GROUP BY clause is used with aggregate functions; https://influxdb.com/docs/v0.8/api/aggregate_functions.html
+//Select the average temperature of every hour
+SELECT MEAN(temperature) FROM Downtown GROUP BY time(1h)
+
+//Select how many temperature measurements are taken each day
+SELECT count(temperature) FROM Downtown GROUP BY time(24h)
+
+//Select the highest temperature of each day
+SELECT MAX(temperature) FROM Downtown GROUP BY time(24h)
+
+//Select temperatures from only 2015-07-20 (July 20th, 2015)
+SELECT temperature FROM Downtown WHERE '2015-07-20' < time and time < '2015-07-21'
+
+//Select temperatures from only 2015-07-20; adjusted for Eastern Daylight Time (+4 hours)
+SELECT temperature FROM Downtown WHERE '2015-07-20' + 4h < time and time < '2015-07-21' + 4h
