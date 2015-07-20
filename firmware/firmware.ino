@@ -44,7 +44,7 @@ void setup(){
 	if (use_wired)
 		network.init_wired();
 	else
-		network.init_wireless();
+		network.init_wireless("OpenWrt", "castle2004");
 
 	while(true){
 		Sensor_data sensor_data = sensors.read_sensors();

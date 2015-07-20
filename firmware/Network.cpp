@@ -163,9 +163,14 @@ void Network::send_packet(Network::Interface interface, Sensor_data sensor_data)
 }
 
 /**
- * @brief Setup the wireless module and connect to the wifi network.
+ * @brief Connects to a wireless network using the ESP module.
+ * 
+ * @param SSID      The SSID of the wireless network we want to connect to.
+ * @param password  The password of the wireless network we want to connect to.
+ * 
+ * @return True if we were able to connect to the network and get an IP, false if otherwise.
  */
-void Network::init_wireless(void){
+bool Network::init_wireless(const String SSID, const String password){
 	// Generate the member object
 	// Pin D5 -> TX (Make sure to have a 5v -> 3.3v resistor divider here!!!)
 	// Pin D6 -> RX
@@ -201,7 +206,7 @@ void Network::init_wireless(void){
 	
 	// Login to the network.
 	// Todo: search for the AP we want to to confirm it exists.
-	wifi_serial->print("AT+CWJAP=\"OpenWrt\",\"castle2004\"\r\n");
+	wifi_serial->print("AT+CWJAP=\"" + SSID + "\",\"" + password + "\"");
 
 	// Check to make sure we connected to the wifi network.
 	if(wifi_serial->find('WIFI GOT IP'))

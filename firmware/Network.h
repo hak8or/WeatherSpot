@@ -22,8 +22,15 @@ public:
 		Wireless
 	};
 
-
-	void init_wireless(void);
+	/**
+	 * @brief Connects to a wireless network using the ESP module.
+	 * 
+	 * @param SSID      The SSID of the wireless network we want to connect to.
+	 * @param password  The password of the wireless network we want to connect to.
+	 * 
+	 * @return True if we were able to connect to the network and get an IP, false if otherwise.
+	 */
+	bool init_wireless(const String SSID, const String password);
 
 	/**
 	 * @brief Sends a peice of data over TCP to our backend.
