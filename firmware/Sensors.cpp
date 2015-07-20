@@ -16,9 +16,7 @@ Sensors::Sensors(void){
  */
 void Sensors::init_DH11(uint8_t data_pin){
 	this->data_pin = data_pin;
-
-	dht_module = new DHT(this->data_pin, DHT11);
-
+	dht_module = new DHT(this->data_pin, DHT11, 2);
 	dht_module->begin();
 
 	Serial.println(F("Setting up DHT11."));

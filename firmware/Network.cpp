@@ -22,8 +22,8 @@ bool Network::send_packet(Sensor_data sensor_data){
 	// Construct our POST request.
 	String post_request = "POST /db/query.php?";
 	post_request = post_request + "series=Downtown";
-	post_request = post_request + "&temperature=1337";
-	post_request = post_request + "&humidity=9001";
+	post_request = post_request + "&temperature=" + String(sensor_data.temperature_f);
+	post_request = post_request + "&humidity=" + String(sensor_data.humidity);
 	post_request = post_request + "&pressure=65";
 	post_request = post_request + "&lighting=65";
 	post_request = post_request + "\r\n";
