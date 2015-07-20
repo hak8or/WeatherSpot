@@ -1,3 +1,5 @@
+#pragma once
+
 // Used to turn the heartbeat LED on and off using a timer.
 class Heartbeat
 {

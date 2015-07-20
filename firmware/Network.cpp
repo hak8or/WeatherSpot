@@ -1,58 +1,8 @@
-#include <EtherCard.h>
 #include <SoftwareSerial.h>
 #include "Arduino.h"
 #include "Heartbeat.h"
 #include "Network.h"
 #include "Sensors.h"
-
-// Uncomment to enable wired network. Done using define instead of just a normal
-// if since it seems we can't optimize it away.
-// #define wired_network_enable
-
-/**
- * @brief Sets up a TCP connection to our backend server.
- * 
- * @details Attempts to connect to the network via DHCP, uses static if DHCP fails,
- *          pings the backend to verify connectivity and DNS resolution.
- */
-void Network::init_wired(void){
-	Serial.println(F("Wired Ethernet is not yet tested/implimented!"));
-#ifdef wired_network_enable
-	// First check if we can connect to the ethernet module.
-	// Make sure any changes to this are manually changed also in
-	// Network::Network since sizeof doesn't work because somehow
-	// arduino makes this not be global (Wtf?!).
-	uint8_t firmware_version = ether.begin(500, mac);
-	if (firmware_version == 0){
-		Serial.println(F("Ethernet module is not responding ..."));
-		Heartbeat::panic();
-	} else {
-		Serial.print(F("\nEthernet module firmware: "));
-		Serial.println(firmware_version, DEC);
-	}
-
-	// Attempt to get a IP address.
-	if(!ether.dhcpSetup())
-		if(!ether.staticSetup(fallback_ip, fallback_gateway, fallback_dns)) {
-		    Serial.println(F("Failed setting an IP address ..."));
-			Heartbeat::panic();
-		}
-
-	// Dump info to terminal upon bootup.
-	ether.printIp("IP:   ",        ether.myip);
-	ether.printIp("GW:   ",        ether.gwip);
-	ether.printIp("Mask: ",        ether.netmask);
-	ether.printIp("DHCP server: ", ether.dhcpip);
-
-	// Attempt to do a DNS lookup to our backend.
-	if(!ether.dnsLookup("weatherspot.us"))
-	{
-	    Serial.println(F("Can't do a DNS lookup of thingspeak.com ..."));
-		Heartbeat::panic();
-	} else
-		ether.printIp("thingspeak.com IP address: ", ether.hisip);
-#endif
-}
 
 /**
  * @brief Sends a peice of data over TCP to our backend.
@@ -60,106 +10,67 @@ void Network::init_wired(void){
  * 
  * @param  An enum for if we want to send our data over Wireless or Wired.
  */
-void Network::send_packet(Network::Interface interface, Sensor_data sensor_data){
-	if (interface == Wired) {
-		Serial.println(F("Wired Ethernet is not yet tested/implimented!"));
+void Network::send_packet(Sensor_data sensor_data){
+	/*
+	// Make sure we are disconnected first.
+	wifi_serial->println("AT+CIPSTATUS");
+	wifi_serial->println("AT+CIPCLOSE");
 
-#ifdef wired_network_enable
-		Stash stash;
-		byte sd = stash.create();
-		stash.print("field1=3");
-		stash.save();
+	// Dump anything in the recieve buffers.
+	while(wifi_serial->available() > 0)
+		volatile char foo = wifi_serial->read();*/
 
-		// https://api.thingspeak.com/update?key=8ZISX29L64E3ZDHW&field1=0
-		// Generate the header with payload - note that the stash size is used,
-	    // and that a "stash descriptor" is passed in as argument using "$H"
-	    Stash::prepare(
-	    	PSTR("POST /update HTTP/1.1\n"
-	    		 "Host: api.thingspeak.com\n"
-	             "Connection: close\n"
-	             "X-THINGSPEAKAPIKEY: 8ZISX29L64E3ZDHW\n"
-	             "Content-Type: application/x-www-form-urlencoded\n"
-	             "Content-Length: $D\n\n"
-	             "$H"),
-	    	stash.size(), sd);
+	// Connect to our server.
+	wifi_serial->println("AT+CIPSTART=4,\"TCP\",\"104.131.85.242\",80");
 
-		// send the packet - this also releases all stash buffers once done
-	    byte session = ether.tcpSend();
-
-		Serial.println(F("Send TCP packet to thingspeak!"));
-
-		while(1){
-			ether.packetLoop(ether.packetReceive());
-
-			  const char* reply = ether.tcpReply(session);
-			  if (reply != 0) {
-			    Serial.println(F("Got a response!"));
-			    Serial.println(reply);
-			  }
-		}
-#endif
-	}else if(interface == Wireless){
-		/*
-		// Make sure we are disconnected first.
-		wifi_serial->println("AT+CIPSTATUS");
-		wifi_serial->println("AT+CIPCLOSE");
-
-		// Dump anything in the recieve buffers.
-		while(wifi_serial->available() > 0)
-			volatile char foo = wifi_serial->read();*/
-
-		// Connect to our server.
-		wifi_serial->println("AT+CIPSTART=4,\"TCP\",\"104.131.85.242\",80");
-
-		// Check if the TCP connection is setup.
-		if(wifi_serial->find("OK"))
-			Serial.println(F("Wifi TCP connection attempt succesfull."));
-		else{
-			// Serial.println(F("Wifi TCP connection attempt failed."));
-			// wifi_serial->println("AT+CIPCLOSE");
-			// return;
-		}
-
-		String getStr = "POST /db/query.php?";
-		getStr = getStr + "series=Downtown";
-		getStr = getStr + "&temperature=" + String(sensor_data.temperature_f);
-		getStr = getStr + "&humidity=" + String(sensor_data.humidity);
-		getStr = getStr + "&pressure=65";
-		getStr = getStr + "&lighting=65";
-		getStr = getStr + "\r\n\r\n";
-
-		String cmd = "AT+CIPSEND=4," + String(getStr.length());
-
-		Serial.print(F("Sending:  \n\t"));
-		Serial.print(cmd);
-		Serial.print(F("\n\t"));
-		Serial.print(getStr);
-		Serial.print(F("\n"));
-
-		wifi_serial->println(cmd);
-
-		// Send a packet if we can.
-		if(wifi_serial->find(">"))
-			wifi_serial->print(getStr);
-		else{
-			Serial.println(F("Wifi module didn't query what http contents to send, error."));
-			// wifi_serial->println("AT+CIPCLOSE");
-			// return;
-		}
-
-		// Check if the packet was sent.
-		if(wifi_serial->find("OK"))
-			Serial.println(F("Wifi packet was sent."));
-		else{
-			// Wifi return is not as expected for success:
-			// 		+IPD,4,1:8
-			// 		OK
-			// Serial.println(F("Wifi packet was not sent!"));
-		}
-
-		// Close the connection.
-		wifi_serial->println("AT+CIPCLOSE");
+	// Check if the TCP connection is setup.
+	if(wifi_serial->find("OK"))
+		Serial.println(F("Wifi TCP connection attempt succesfull."));
+	else{
+		// Serial.println(F("Wifi TCP connection attempt failed."));
+		// wifi_serial->println("AT+CIPCLOSE");
+		// return;
 	}
+
+	String getStr = "POST /db/query.php?";
+	getStr = getStr + "series=Downtown";
+	getStr = getStr + "&temperature=" + String(sensor_data.temperature_f);
+	getStr = getStr + "&humidity=" + String(sensor_data.humidity);
+	getStr = getStr + "&pressure=65";
+	getStr = getStr + "&lighting=65";
+	getStr = getStr + "\r\n\r\n";
+
+	String cmd = "AT+CIPSEND=4," + String(getStr.length());
+
+	Serial.print(F("Sending:  \n\t"));
+	Serial.print(cmd);
+	Serial.print(F("\n\t"));
+	Serial.print(getStr);
+	Serial.print(F("\n"));
+
+	wifi_serial->println(cmd);
+
+	// Send a packet if we can.
+	if(wifi_serial->find(">"))
+		wifi_serial->print(getStr);
+	else{
+		Serial.println(F("Wifi module didn't query what http contents to send, error."));
+		// wifi_serial->println("AT+CIPCLOSE");
+		// return;
+	}
+
+	// Check if the packet was sent.
+	if(wifi_serial->find("OK"))
+		Serial.println(F("Wifi packet was sent."));
+	else{
+		// Wifi return is not as expected for success:
+		// 		+IPD,4,1:8
+		// 		OK
+		// Serial.println(F("Wifi packet was not sent!"));
+	}
+
+	// Close the connection.
+	wifi_serial->println("AT+CIPCLOSE");
 }
 
 /**

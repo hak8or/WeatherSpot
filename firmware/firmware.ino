@@ -10,16 +10,9 @@
 // Gotta include this because the arduino IDE does some magic including nonsense.
 #include <SoftwareSerial.h>
 
-// Size of the tcp/ip send and receive buffer.
-//
-// This has to be global because who knows why. :/
-// Make sure any changes to this are manually changed also in
-// Network::Network since sizeof doesn't work because somehow
-// arduino makes this not be global (Wtf?!).
-byte Ethernet::buffer[500];
-
-// If we should use wireless or wired ethernet.
-const bool use_wired = false;
+#include "Sensors.h"
+#include "Heartbeat.h"
+#include "Network.h"
 
 void setup(){
 	// Start up the serial communication.
@@ -41,11 +34,9 @@ void setup(){
 
 	// Startup our network.
 	Network network;
-	if (use_wired)
-		network.init_wired();
-	else
-		network.init_wireless("OpenWrt", "castle2004");
+	network.init_wireless("OpenWrt", "castle2004");
 
+	// And do our loop for sending and recieving data.
 	while(true){
 		Sensor_data sensor_data = sensors.read_sensors();
 		Serial.print(F("Sensor humidity: "));
@@ -55,10 +46,11 @@ void setup(){
 		Serial.print(F("Sensor light reading: "));
 		Serial.println(sensor_data.light);
 
-		// network.send_packet(Network::Wireless, sensor_data);
+		// network.send_packet(sensor_data);
 
-		Serial.println(F("Waiting 20 seconds ..."));
-		delay(20000);
+		// Serial.println(F("Waiting 20 seconds ..."));
+		// delay(20000);
+		delay(500);
 	}
 }
 
