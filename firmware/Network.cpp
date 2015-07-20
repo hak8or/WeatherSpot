@@ -172,9 +172,9 @@ void Network::send_packet(Network::Interface interface, Sensor_data sensor_data)
  */
 bool Network::init_wireless(const String SSID, const String password){
 	// Generate the member object
-	// Pin D5 -> TX (Make sure to have a 5v -> 3.3v resistor divider here!!!)
-	// Pin D6 -> RX
-	wifi_serial = new SoftwareSerial(6, 5);
+	// Pin D3 -> RX
+	// Pin D4 -> TX
+	wifi_serial = new SoftwareSerial(3, 4);
 	wifi_serial->begin(9600);
 
 	// Set the wifi_serial to timeout after 10s instead of default 1s
