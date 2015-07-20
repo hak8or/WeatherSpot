@@ -112,7 +112,7 @@ bool Network::init_wireless(const String SSID, const String password){
 	
 	// Login to the network.
 	// Todo: search for the AP we want to to confirm it exists.
-	String command = "AT+CWJAP=\"" + SSID + "\",\"" + password + "\"";
+	String command = "AT+CWJAP_CUR=\"" + SSID + "\",\"" + password + "\"";
 	if (send_command(command, "WIFI GOT IP", 11, 5000))
 		Serial.println(F("Wifi connected to OpenWRT network succesfully!"));
 	else{
