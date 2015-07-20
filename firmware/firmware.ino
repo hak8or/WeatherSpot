@@ -1,18 +1,11 @@
-#include "Arduino.h"
-#include "Heartbeat.h"
-#include "TimerOne.h"
-#include "Sensors.h"
-#include "Network.h"
-
-#include <EtherCard.h>
-#include <DHT.h>
-
 // Gotta include this because the arduino IDE does some magic including nonsense.
 #include <SoftwareSerial.h>
 
 #include "Sensors.h"
 #include "Heartbeat.h"
 #include "Network.h"
+#include "DHT.h"
+#include "TimerOne.h"
 
 void setup(){
 	// Start up the serial communication.
