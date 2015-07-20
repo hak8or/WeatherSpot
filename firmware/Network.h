@@ -45,6 +45,19 @@ public:
 	 * @details Not really working yet, sad face. :(
 	 */
 	void serial_proxy_mode(void);
+
+	/**
+	 * @brief Sends a command to the WIFI module.
+	 * @details Sends a command to the wifi module, waits for a verification before a timeout.
+	 * 
+	 * @param command The command we will be sending.
+	 * @param reply The reply we expect back.
+	 * @param reply_length The length of the reply in chars.
+	 * @param timeout How long we are willing to wait for the reply in milliseconds.
+	 * 
+	 * @return True if command and verification within timeout was correct, false if otherwise.
+	 */
+	bool send_command(const String command, const String reply, const uint8_t reply_length, const uint16_t timeout);
 private:
 #ifdef wired_network_enable
 	// Hardcoded mac address.
@@ -58,9 +71,9 @@ private:
 #endif
 
 	// Reply buffer for communication from our serial based modules.
-	// #define reply_buffer_size 25;
-	// char reply_buffer[reply_buffer_size];
-	// uint8_t reply_buffer_current_index = 0;
+	#define reply_buffer_size 100
+	char reply_buffer[reply_buffer_size];
+	uint8_t reply_buffer_current_index = 0;
 
 	// For talking to the wifi module.
 	SoftwareSerial *wifi_serial;
@@ -73,7 +86,7 @@ private:
 	 * 
 	 * @return If we found the reply within the timeout.
 	 */
-	bool find(const char reply[], const uint8_t reply_length, const uint16_t milliseconds);
+	bool find(const String reply, const uint8_t reply_length, const uint16_t milliseconds);
 
 	/**
 	 * @brief Dumps wifi network information over to the pc serial.

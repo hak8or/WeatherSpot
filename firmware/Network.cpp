@@ -177,67 +177,50 @@ bool Network::init_wireless(const String SSID, const String password){
 	wifi_serial = new SoftwareSerial(3, 4);
 	wifi_serial->begin(9600);
 
-	// Set the wifi_serial to timeout after 10s instead of default 1s
-	wifi_serial->setTimeout(10000);
-
-	// TODO
-	//	Make proper commands with verification as a function.
-
 	// Rest the module so it is in a known state and check if it works.
-	wifi_serial->println("AT+RST");
-	if(find("OK", 2, 15000))
-		Serial.println(F("Wifi reseting ack recieved ..."));
-	else
-		Serial.println(F("Wifi reset failed, no reply or garbage returned."));
-
-	return;
-
-	if(wifi_serial->find("ready"))
-		Serial.println(F("Wifi reset succesfull!"));
-	else
-		Serial.println(F("Wifi reset failed, no reply or garbage returned."));
+	if (send_command("AT+RST", "OK", 2, 1500))
+		Serial.println(F("Wifi reseting ack recieved."));
+	else{
+		Serial.println(F("Wifi reseting failed."));
+		return false;
+	}
+	
+	// Delay a bit in case we get a "WIFI Disconnect" messege afterwards.
+	delay(60);
 
 	// And the correct wireless mode.
-	wifi_serial->print("AT+CWMODE=3\r\n");
-	if(wifi_serial->find("OK"))
+	if (send_command("AT+CWMODE=3", "OK", 2, 1500))
 		Serial.println(F("Wifi mode select was succesfull."));
-	else
+	else{
 		Serial.println(F("Wifi mode select failed, no reply or garbage returned."));
+		return false;
+	}
+
+	// Delay a bit since for some reason the CWMODE seems to return some gunk at the end.
+	delay(60);
 	
 	// Login to the network.
 	// Todo: search for the AP we want to to confirm it exists.
-	wifi_serial->print("AT+CWJAP=\"" + SSID + "\",\"" + password + "\"");
-
-	// Check to make sure we connected to the wifi network.
-	if(wifi_serial->find('WIFI GOT IP'))
+	String command = "AT+CWJAP=\"" + SSID + "\",\"" + password + "\"";
+	if (send_command(command, "WIFI GOT IP", 11, 5000))
 		Serial.println(F("Wifi connected to OpenWRT network succesfully!"));
-	else
+	else{
 		Serial.println(F("Wifi connected to OpenWRT network failed."));
+		return false;
+	}
 
 	// Allow multiple TCP connections.
-	wifi_serial->print("AT+CIPMUX=1");
-	if(wifi_serial->find("AT+CIPMUX=1\r\n\r\nOK\r\n"))
+	if (send_command("AT+CIPMUX=1", "OK", 2, 1500))
 		Serial.println(F("Wifi multiple TCP setting was succesfull."));
-	else
+	else{
 		Serial.println(F("Wifi multiple TCP setting failed, no reply or garbage returned."));
-
-
-	// Make the TCP timout after 5 seconds, done in order to help prevent the "busy s..." error.	
-	wifi_serial->print("AT+CIPSTO=5");
-	if(wifi_serial->find("AT+CIPSTO=5\r\n\r\nOK\r\n"))
-		Serial.println(F("Wifi TCP timeout setting was succesfull."));
-	else
-		Serial.println(F("Wifi TCP timeout setting failed, no reply or garbage returned."));
-
-	// Check to *really* make sure we connected to the wifi network.
-	/*wifi_serial->print("AT+CWJAP=?\r\n");
-	if(wifi_serial->find('OK'))
-		Serial.println(F("Wifi network connectivity verification succesfully!"));
-	else
-		Serial.println(F("Wifi network connectivity verification failed!"));*/
+		return false;
+	}
 
 	// Dumps the wifi info to the serial port.
-	// get_wifi_info();
+	get_wifi_info();
+
+	return true;
 }
 
 /**
@@ -275,12 +258,14 @@ void Network::serial_proxy_mode(void){
  * 
  * @return If we found the reply within the timeout.
  */
-bool Network::find(const char reply[], const uint8_t reply_length, const uint16_t milliseconds){
+bool Network::find(const String reply, const uint8_t reply_length, const uint16_t milliseconds){
 	uint32_t start_time = millis();
 	uint8_t  current_reply_index = 0;
 
 	// Make sure we don't spend forever waiting for the char sequence.
-	while((start_time - millis()) > milliseconds){
+	while((millis() - start_time) < milliseconds){
+		// Serial.println("Start time: " + String(start_time) + " Millis: " + String(millis()));
+		// Serial.println("Time passed: " + String(millis() - start_time) + " Timeout: " + String(milliseconds));
 		if (wifi_serial->available() > 0) {
 			// Check if the reply on our serial port is the first char of reply.
 			char reply_char = wifi_serial->read();
@@ -292,13 +277,62 @@ bool Network::find(const char reply[], const uint8_t reply_length, const uint16_
 					current_reply_index++;
 			}
 			else{
-				// Store the char into our major reply buffer.
-				// reply_buffer[reply_buffer_current_index++] = reply_char;
-				return false;
+				// Reset the index back to zero so we can start searching again.
+				current_reply_index = 0;
+
+				// Increment buffer index.
+				reply_buffer_current_index++;
+
+				// Empty our buffer if it is full.
+				if (reply_buffer_current_index == reply_buffer_size){
+					reply_buffer_current_index = 0;
+
+					for (int index = 0; index < reply_buffer_size; index++)
+						reply_buffer[index] = ' ';
+				}
+
+				// Put the char in our buffer.
+				reply_buffer[reply_buffer_current_index] = reply_char;
 			}
 		}
 	}
 
 	// If we timed out, then it's considerd we didn't find our char array.
 	return false;
+}
+
+/**
+ * @brief Sends a command to the WIFI module.
+ * @details Sends a command to the wifi module, waits for a verification before a timeout.
+ * 
+ * @param command The command we will be sending.
+ * @param reply The reply we expect back.
+ * @param reply_length The length of the reply in chars.
+ * @param timeout How long we are willing to wait for the reply in milliseconds.
+ * 
+ * @return True if command and verification within timeout was correct, false if otherwise.
+ */
+bool Network::send_command(const String command, const String reply, const uint8_t reply_length, const uint16_t timeout){
+	// Send the command.
+	wifi_serial->println(command);
+
+	// Check if we got the expected reply back.
+	if(!find(reply, reply_length, timeout)){
+		Serial.print("Command failed: ");
+		Serial.println(command);
+
+		// Dump the buffer.
+		Serial.println(F("Reply ======= start"));
+		for (int i = 0; i < reply_buffer_current_index; i++)
+			Serial.print(reply_buffer[i]);
+		Serial.println(F("Reply ======= end"));
+
+		// Empty our buffer.
+		reply_buffer_current_index = 0;
+		for (int index = 0; index < reply_buffer_size; index++)
+			reply_buffer[index] = ' ';
+
+		return false;
+	} else
+		return true;
 }
