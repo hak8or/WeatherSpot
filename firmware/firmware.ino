@@ -34,7 +34,14 @@ void setup(){
 
 	// Startup our network.
 	Network network;
-	network.init_wireless("OpenWrt", "castle2004");
+	while (!network.init_wireless("OpenWrt", "castle2004")){
+		Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
+		Heartbeat::panic();
+		delay(3000);
+	}
+
+	// Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
+	Heartbeat::start();
 
 	// And do our loop for sending and recieving data.
 	while(true){
@@ -46,12 +53,19 @@ void setup(){
 		Serial.print(F("Sensor light reading: "));
 		Serial.println(sensor_data.light);
 
-		// network.send_packet(sensor_data);
+		// Keep trying to send the packet to our backend server.
+		while (!network.send_packet(sensor_data)){
+			Serial.println(F("Failed sending POST request to backend, retying in 3 seconds."));
+			Heartbeat::panic();
+			delay(3000);
+		}
 
-		// Serial.println(F("Waiting 20 seconds ..."));
-		// delay(20000);
-		delay(500);
+		Serial.println(F("Waiting 20 seconds ..."));
+		delay(20000);
 	}
+
+	// Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
+	Heartbeat::start();
 }
 
 void loop(){

@@ -30,8 +30,11 @@ void Heartbeat::start(void){
 	// Start a timer.
 	Timer1.initialize();
 
-	// Attach a static toggle pin ISR to said timer every 500,000 microseconds.
-	Timer1.attachInterrupt(Heartbeat::toggle, 500000);
+	// Make sure we are not using any other ISR's.
+	Timer1.detachInterrupt();
+
+	// Attach a static toggle pin ISR to said timer every 1,000,000 microseconds.
+	Timer1.attachInterrupt(Heartbeat::toggle, 1000000);
 }
 
 /**
@@ -46,8 +49,8 @@ void Heartbeat::stop(void){
  * @brief Blinks the LED much quicker to show that we are in an error state.
  */
 void Heartbeat::panic(void){
-	// Start a timer.
-	Timer1.initialize();
+	// Make sure we got rid of the old heartbeat ISR.
+	Timer1.detachInterrupt();
 
 	// Attach a static toggle pin ISR to said timer every 50,000 microseconds.
 	Timer1.attachInterrupt(Heartbeat::toggle, 50000);
