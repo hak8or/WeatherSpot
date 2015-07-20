@@ -36,6 +36,7 @@ Sensor_data Sensors::read_sensors(void){
 	if (dht_module == NULL) {
 		sensor_data.temperature_f = 0.0;
   		sensor_data.humidity = 0.0;
+  		sensor_data.light = 0;
 
   		Heartbeat::panic();
   		Serial.println(F("Attempt to read DH11 before initilized."));
