@@ -128,6 +128,14 @@ bool Network::init_wireless(const String SSID, const String password){
 		return false;
 	}
 
+	// Do a ping request to make sure the server is up.
+	if (send_command("AT+PING=\"www.weatherspot.us\"", "OK", 2, 1500))
+		Serial.println(F("Wifi ping test to weatherspot.us OK"));
+	else{
+		Serial.println(F("Wifi ping test to weatherspot.us Failed."));
+		return false;
+	}
+
 	// Dumps the wifi info to the serial port.
 	get_wifi_info();
 
