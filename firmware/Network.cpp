@@ -120,11 +120,11 @@ bool Network::init_wireless(const String SSID, const String password){
 		return false;
 	}
 
-	// Allow multiple TCP connections.
-	if (send_command("AT+CIPMUX=1", "OK", 2, 1500))
-		Serial.println(F("Wifi multiple TCP setting was succesfull."));
+	// Allow just a single TCP connection.
+	if (send_command("AT+CIPMUX=0", "OK", 2, 1500))
+		Serial.println(F("Wifi single TCP setting was succesfull."));
 	else{
-		Serial.println(F("Wifi multiple TCP setting failed, no reply or garbage returned."));
+		Serial.println(F("Wifi single TCP setting failed, no reply or garbage returned."));
 		return false;
 	}
 
