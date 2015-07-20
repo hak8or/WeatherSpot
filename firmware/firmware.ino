@@ -38,7 +38,10 @@ void setup(){
 
 	// And do our loop for sending and recieving data.
 	while(true){
+		// Read our sensors.
 		Sensor_data sensor_data = sensors.read_sensors();
+
+		// Dump the info to our screen.
 		Serial.print(F("Sensor humidity: "));
 		Serial.println(sensor_data.humidity);
 		Serial.print(F("Sensor temperature: "));
