@@ -10,67 +10,51 @@
  * 
  * @param  An enum for if we want to send our data over Wireless or Wired.
  */
-void Network::send_packet(Sensor_data sensor_data){
-	/*
-	// Make sure we are disconnected first.
-	wifi_serial->println("AT+CIPSTATUS");
-	wifi_serial->println("AT+CIPCLOSE");
-
-	// Dump anything in the recieve buffers.
-	while(wifi_serial->available() > 0)
-		volatile char foo = wifi_serial->read();*/
-
+bool Network::send_packet(Sensor_data sensor_data){
 	// Connect to our server.
-	wifi_serial->println("AT+CIPSTART=4,\"TCP\",\"104.131.85.242\",80");
-
-	// Check if the TCP connection is setup.
-	if(wifi_serial->find("OK"))
-		Serial.println(F("Wifi TCP connection attempt succesfull."));
+	if (send_command("AT+CIPSTART=\"TCP\",\"104.131.85.242\",80", "OK", 2, 1500))
+		Serial.println(F("Wifi TCP connection created."));
 	else{
-		// Serial.println(F("Wifi TCP connection attempt failed."));
-		// wifi_serial->println("AT+CIPCLOSE");
-		// return;
+		Serial.println(F("Wifi TCP connection creation failed."));
+		return false;
 	}
 
-	String getStr = "POST /db/query.php?";
-	getStr = getStr + "series=Downtown";
-	getStr = getStr + "&temperature=" + String(sensor_data.temperature_f);
-	getStr = getStr + "&humidity=" + String(sensor_data.humidity);
-	getStr = getStr + "&pressure=65";
-	getStr = getStr + "&lighting=65";
-	getStr = getStr + "\r\n\r\n";
+	// Construct our POST request.
+	String post_request = "POST /db/query.php?";
+	post_request = post_request + "series=Downtown";
+	post_request = post_request + "&temperature=1337";
+	post_request = post_request + "&humidity=9001";
+	post_request = post_request + "&pressure=65";
+	post_request = post_request + "&lighting=65";
+	post_request = post_request + "\r\n";
 
-	String cmd = "AT+CIPSEND=4," + String(getStr.length());
+	// Construct the command to begin our POST request.
+	String command = "AT+CIPSEND=" + String(post_request.length());
 
 	Serial.print(F("Sending:  \n\t"));
-	Serial.print(cmd);
-	Serial.print(F("\n\t"));
-	Serial.print(getStr);
-	Serial.print(F("\n"));
+	Serial.println(command);
+	Serial.print(F("\nWith the contents:\n\t"));
+	Serial.println(post_request);
 
-	wifi_serial->println(cmd);
-
-	// Send a packet if we can.
-	if(wifi_serial->find(">"))
-		wifi_serial->print(getStr);
+	// Tell the wifi module we want to send a HTTP request.
+	if (send_command(command, ">", 1, 1500))
+		Serial.println(F("Wifi queried for HTTP contents."));
 	else{
 		Serial.println(F("Wifi module didn't query what http contents to send, error."));
-		// wifi_serial->println("AT+CIPCLOSE");
-		// return;
+		return false;
 	}
 
-	// Check if the packet was sent.
-	if(wifi_serial->find("OK"))
-		Serial.println(F("Wifi packet was sent."));
+	// And now we send our POST request.
+	if (send_command(post_request, "OK", 2, 5000))
+		Serial.println(F("Wifi POST request sent succesfully."));
 	else{
-		// Wifi return is not as expected for success:
-		// 		+IPD,4,1:8
-		// 		OK
-		// Serial.println(F("Wifi packet was not sent!"));
+		Serial.println(F("Wifi POST request failed."));
+		return false;
 	}
 
-	// Close the connection.
-	wifi_serial->println("AT+CIPCLOSE");
+	// It seems that CIPSEND automatically closes the TCP connection or our backend
+	// terminates the TCP connection, so CIPCLOSE isn't needed.
+	return true;
 }
 
 /**

@@ -23,8 +23,10 @@ public:
 	 * @details Does a DNS lookup for our backend, sets up a TCP connection, and sends our data.
 	 * 
 	 * @param  An enum for if we want to send our data over Wireless or Wired.
+	 * 
+	 * @return True if we were able succesfully send the POST request, false if otherwise.
 	 */
-	void send_packet(const Sensor_data sensor_data);
+	bool send_packet(const Sensor_data sensor_data);
 
 	/**
 	 * @brief Turns the arduino in a proxy for serial commands from the PC to wifi module.
