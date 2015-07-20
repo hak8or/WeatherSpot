@@ -243,11 +243,13 @@ void Network::serial_proxy_mode(void){
  */
  void Network::get_wifi_info(void){
 	Serial.println(F("\r\n============== Wifi Network info =============="));
+	uint32_t start_time = millis();
 
 	// Mirror output of a "get network info" command.
 	wifi_serial->println("AT+CIFSR");
-	while (wifi_serial->available())
-    	Serial.write(wifi_serial->read());
+	while ((millis() - start_time) < 500)
+		if (wifi_serial->available())
+	    	Serial.write(wifi_serial->read());
 }
 
 /**
