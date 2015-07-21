@@ -7,6 +7,12 @@
 #include "DHT.h"
 #include "TimerOne.h"
 
+// global network object
+Network network;
+
+// global sensors object
+Sensors sensors;
+
 void setup(){
 	// Start up the serial communication.
 	// Find out why this cuts off the next serial print.
@@ -22,11 +28,11 @@ void setup(){
 	// Startup a heartbeat LED.
 	Heartbeat::start();
 
-	Sensors sensors;
+	
 	sensors.init_DH11(2);
 
 	// Startup our network.
-	Network network;
+	
 	while (!network.init_wireless("OpenWrt", "castle2004")){
 		Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
 		Heartbeat::panic();
