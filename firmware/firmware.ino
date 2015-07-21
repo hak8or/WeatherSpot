@@ -87,6 +87,9 @@ void loop(){
 		delay(3000);
 	}
 
+        // Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
+	Heartbeat::start();
+
 	Serial.println(F("Waiting 20 seconds ..."));
 	delay(20000);
 
