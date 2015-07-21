@@ -1,0 +1,297 @@
+Cmp-Mod V01 Created by Cvpcb (2014-12-04 BZR 5312)-product   date = 6/21/2015 9:40:15 PM
+
+BeginCmp
+TimeStamp = /5574887D;
+Reference = IC1;
+ValeurCmp = ATMEGA328P-MM;
+IdModule  = custom:QFN-28-4x4mm_fixed_mask;
+EndCmp
+
+BeginCmp
+TimeStamp = /55748BD3;
+Reference = C9;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /55748C1A;
+Reference = C8;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /557493B8;
+Reference = C6;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /5574976D;
+Reference = R6;
+ValeurCmp = 4.7K;
+IdModule  = Resistors_SMD:R_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /557497E5;
+Reference = R8;
+ValeurCmp = 4.7K;
+IdModule  = Resistors_SMD:R_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /5574A097;
+Reference = SW1;
+ValeurCmp = SW_PUSH;
+IdModule  = custom:push_switch_SMD;
+EndCmp
+
+BeginCmp
+TimeStamp = /5574A352;
+Reference = C7;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /5574A3AF;
+Reference = R5;
+ValeurCmp = 10K;
+IdModule  = Resistors_SMD:R_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /5574E767;
+Reference = Q1;
+ValeurCmp = Oscilator;
+IdModule  = custom:ceramic_resonator_smd;
+EndCmp
+
+BeginCmp
+TimeStamp = /5574F468;
+Reference = R4;
+ValeurCmp = 470;
+IdModule  = Resistors_SMD:R_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /5574F548;
+Reference = D1;
+ValeurCmp = LED;
+IdModule  = custom:SMD-0402_LED;
+EndCmp
+
+BeginCmp
+TimeStamp = /5574FBEC;
+Reference = P1;
+ValeurCmp = FTDI CONN;
+IdModule  = custom:FTDI_PORT;
+EndCmp
+
+BeginCmp
+TimeStamp = /55755BDF;
+Reference = U2;
+ValeurCmp = MCP1802;
+IdModule  = custom:MCP1802T;
+EndCmp
+
+BeginCmp
+TimeStamp = /55755F04;
+Reference = C5;
+ValeurCmp = 1uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /5575606C;
+Reference = C1;
+ValeurCmp = 1uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /55756462;
+Reference = BT1;
+ValeurCmp = BATTERY;
+IdModule  = custom:BATT_CONN;
+EndCmp
+
+BeginCmp
+TimeStamp = /55758B85;
+Reference = R2;
+ValeurCmp = 10K;
+IdModule  = Resistors_SMD:R_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /55758D21;
+Reference = R1;
+ValeurCmp = PhotoResistor;
+IdModule  = Socket_Strips:Socket_Strip_Straight_1x02;
+EndCmp
+
+BeginCmp
+TimeStamp = /55759F77;
+Reference = U3;
+ValeurCmp = DHT11;
+IdModule  = custom:DHT11;
+EndCmp
+
+BeginCmp
+TimeStamp = /5575A8A5;
+Reference = R3;
+ValeurCmp = 5K;
+IdModule  = Resistors_SMD:R_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /5575B85A;
+Reference = U1;
+ValeurCmp = MPL3115A2;
+IdModule  = custom:MPL3115A2;
+EndCmp
+
+BeginCmp
+TimeStamp = /5575BACB;
+Reference = C3;
+ValeurCmp = 10uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /5575BB22;
+Reference = C4;
+ValeurCmp = 100nF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /5575C9C3;
+Reference = C2;
+ValeurCmp = 100nF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /557E407F;
+Reference = U5;
+ValeurCmp = ESP-01;
+IdModule  = custom:ESP-01;
+EndCmp
+
+BeginCmp
+TimeStamp = /557E4691;
+Reference = U4;
+ValeurCmp = ESP-07;
+IdModule  = custom:ESP-07;
+EndCmp
+
+BeginCmp
+TimeStamp = /557E532F;
+Reference = TP6;
+ValeurCmp = Test_Point;
+IdModule  = custom:TEST_POINT;
+EndCmp
+
+BeginCmp
+TimeStamp = /557E5608;
+Reference = R7;
+ValeurCmp = 10K;
+IdModule  = Resistors_SMD:R_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /557ED43D;
+Reference = TP1;
+ValeurCmp = Test_Point;
+IdModule  = custom:TEST_POINT;
+EndCmp
+
+BeginCmp
+TimeStamp = /557EE1B5;
+Reference = TP4;
+ValeurCmp = Test_Point;
+IdModule  = custom:TEST_POINT;
+EndCmp
+
+BeginCmp
+TimeStamp = /557EF01F;
+Reference = TP2;
+ValeurCmp = Test_Point;
+IdModule  = custom:TEST_POINT;
+EndCmp
+
+BeginCmp
+TimeStamp = /557EFD52;
+Reference = TP5;
+ValeurCmp = Test_Point;
+IdModule  = custom:TEST_POINT;
+EndCmp
+
+BeginCmp
+TimeStamp = /557F09C9;
+Reference = TP7;
+ValeurCmp = Test_Point;
+IdModule  = custom:TEST_POINT;
+EndCmp
+
+BeginCmp
+TimeStamp = /557F0D13;
+Reference = TP9;
+ValeurCmp = Test_Point;
+IdModule  = custom:TEST_POINT;
+EndCmp
+
+BeginCmp
+TimeStamp = /557F1ECC;
+Reference = TP3;
+ValeurCmp = Test_Point;
+IdModule  = custom:TEST_POINT;
+EndCmp
+
+BeginCmp
+TimeStamp = /557F36D9;
+Reference = TP8;
+ValeurCmp = Test_Point;
+IdModule  = custom:TEST_POINT;
+EndCmp
+
+BeginCmp
+TimeStamp = /557F3DE5;
+Reference = TP10;
+ValeurCmp = Test_Point;
+IdModule  = custom:TEST_POINT;
+EndCmp
+
+BeginCmp
+TimeStamp = /557F7805;
+Reference = conn2;
+ValeurCmp = SPI_CONN;
+IdModule  = custom:SPI_CONN;
+EndCmp
+
+BeginCmp
+TimeStamp = /557F82DD;
+Reference = conn1;
+ValeurCmp = I2C_CONN;
+IdModule  = custom:I2C_CONN;
+EndCmp
+
+BeginCmp
+TimeStamp = /55876C2A;
+Reference = D2;
+ValeurCmp = LED;
+IdModule  = custom:SMD-0402_LED;
+EndCmp
+
+BeginCmp
+TimeStamp = /55876D4B;
+Reference = R9;
+ValeurCmp = 470;
+IdModule  = Resistors_SMD:R_0402;
+EndCmp
+
+EndListe
