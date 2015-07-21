@@ -63,5 +63,25 @@ void setup(){
 }
 
 void loop(){
+        // Read our sensors.
+	Sensor_data sensor_data = sensors.read_sensors();
+
+	// Dump the info to our screen.
+	Serial.print(F("Sensor humidity: "));
+	Serial.println(sensor_data.humidity);
+	Serial.print(F("Sensor temperature: "));
+	Serial.println(sensor_data.temperature_f);
+	Serial.print(F("Sensor light reading: "));
+	Serial.println(sensor_data.light);
+
+	// Keep trying to send the packet to our backend server.
+	while (!network.send_packet(sensor_data)){
+		Serial.println(F("Failed sending POST request to backend, retying in 3 seconds."));
+		Heartbeat::panic();
+		delay(3000);
+	}
+
+	Serial.println(F("Waiting 20 seconds ..."));
+	delay(20000);
 
 }
