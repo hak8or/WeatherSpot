@@ -60,8 +60,6 @@ void setup(){
 		delay(20000);
 	}
 
-	// Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
-	Heartbeat::start();
 }
 
 void loop(){
