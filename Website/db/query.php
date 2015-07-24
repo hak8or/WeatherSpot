@@ -20,11 +20,11 @@ switch ($method) {
 		// Example for CURLing to write data:
 		// $> curl -X POST 'http://weatherspot.us/db/query.php?series=Queens_County&temperature=85&humidity=75&pressure=99&lighting=25'
 	
-		$paramSeries = test_GETSetOrDefault("series", "");
-		$paramTemperature = test_GETSetOrDefault("temperature", "");
-		$paramHumidity = test_GETSetOrDefault("humidity", "");
-		$paramPressure = test_GETSetOrDefault("pressure", "");
-		$paramLighting = test_GETSetOrDefault("lighting", "");
+		$paramSeries = test_GETSetOrDefault("series", test_GETSetOrDefault("s", ""));
+		$paramTemperature = test_GETSetOrDefault("temperature", test_GETSetOrDefault("t", ""));
+		$paramHumidity = test_GETSetOrDefault("humidity", test_GETSetOrDefault("h", ""));
+		$paramPressure = test_GETSetOrDefault("pressure", test_GETSetOrDefault("pr", ""));
+		$paramLighting = test_GETSetOrDefault("lighting", test_GETSetOrDefault("l", ""));
 		$paramData = buildJSON($paramSeries, $paramTemperature, $paramHumidity, $paramPressure, $paramLighting);
 		if ($paramData == "") {
 			echo "Bad Data";

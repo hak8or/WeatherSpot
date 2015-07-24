@@ -53,7 +53,7 @@ path {
 
 // Taken from http://bl.ocks.org/d3noob/b3ff6ae1c120eea654b5
 function graphQuery(query) {
-	var queryURL = "query.php?db=weather&query=" + query; 
+	var queryURL = "query.php?db=weather&query=" + encodeURIComponent(query); 
 
 	// Set the dimensions of the canvas / graph
 	var margin = {top: 30, right: 20, bottom: 30, left: 50},
