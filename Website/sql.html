@@ -8,6 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Weatherspot</title>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="/js/jquery.timepicker.min.js"></script>
+    <script src="/js/queryFactory.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/jquery.timepicker.css">
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/dark-hive/jquery-ui.css">
 
     <!-- Bootstrap Core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -51,6 +59,10 @@ function doQuery(query) {
 		success: function(data) {
 			$(".nameHeader").remove();;
 			$("table.datas").remove();
+			if (data.length == 0) {
+				$('body > div.container').append("<h1 class='nameHeader'>No Data</h1>");
+				return;
+			}
 			for (var dataIndex = 0; dataIndex < data.length; ++dataIndex) {
 				var name = data[dataIndex].name;
 				var columns = data[dataIndex].columns;
@@ -150,13 +162,14 @@ function doQuery(query) {
                 <button type="button" onclick='doQuery($("#queryText").val())'>Query</button>
 		<input type="text" id="queryText" value="Enter Query"></input>
 		<p>Example Query: SELECT temp FROM Temperature</p>
+		<button type="button" onclick='makeQueryFactory("div.container > div.row > div.col-lg-12", "Query", doQuery); $(this).remove()'>Use Query Factory</button>
             </div>
         </div>
     </div>
     <!-- /.container -->
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<!--    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>  -->
 
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
