@@ -36,12 +36,12 @@ path {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 	<button type="button" onclick='graphQuery($("#queryText").val())'>Query</button>
 	<input type="text" id="queryText" value="Enter Query"></input>
-	<button type="button" onclick='$("svg").remove()'>Clear Graphs</button><h4 id="failText"></h4>
+	<button type="button" onclick='$("svg").remove()'>Clear Graphs</button><h4 style='width: 9em; text-align: center;' id="failText"></h4>
 	<p>
 		Example Query: <strong>SELECT temperature FROM Downtown WHERE time > now() - 24h</strong><br>
 		Returns a graph of temperature from Downtown over the last 24 hours
 	</p>
-	<button type="button" onclick='makeQueryFactory("body", "Graph Query", graphQuery); $(this).remove()'>Use Query Factory</button>
+	<button type="button" onclick='weatherspot_queryFactory.makeQueryFactory("body", "Graph Query", graphQuery); $(this).remove()'>Use Query Factory</button>
 	<script>
 		$("#queryText").focus(function() {
 			if ($(this).val() == "Enter Query") {
@@ -104,6 +104,8 @@ path {
 		    if (data[0] === undefined) {
 			console.log("No Datas! " + queryURL);
 			$("#failText").html("No Data Returned");
+			$("#failText").css({"background-color": "red", "opacity": 1});
+			$("#failText").animate({"background-color": "", "opacity": 0}, 2500);
 			$("svg:nth-last-of-type(1)").remove();
 			return;
 		    }
