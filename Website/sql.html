@@ -60,7 +60,8 @@ function doQuery(query) {
 			$(".nameHeader").remove();;
 			$("table.datas").remove();
 			if (data.length == 0) {
-				$('body > div.container').append("<h1 class='nameHeader'>No Data</h1>");
+				$('body > div.container').append("<h1 style='background-color:red; width: 4em; text-align:center' class='nameHeader'>No Data</h1>");
+				$(".nameHeader").animate({"background-color": ""}, 2000);
 				return;
 			}
 			for (var dataIndex = 0; dataIndex < data.length; ++dataIndex) {
@@ -162,7 +163,7 @@ function doQuery(query) {
                 <button type="button" onclick='doQuery($("#queryText").val())'>Query</button>
 		<input type="text" id="queryText" value="Enter Query"></input>
 		<p>Example Query: SELECT temp FROM Temperature</p>
-		<button type="button" onclick='makeQueryFactory("div.container > div.row > div.col-lg-12", "Query", doQuery); $(this).remove()'>Use Query Factory</button>
+		<button type="button" onclick='weatherspot_queryFactory.makeQueryFactory("div.container > div.row > div.col-lg-12", "Query", doQuery); $(this).remove()'>Use Query Factory</button>
             </div>
         </div>
     </div>
