@@ -174,6 +174,9 @@ function formToQueryString() {
 			queryStr += timestampStr;
 		}
 	}
+	var limitStr = $('#limitTextbox').val();
+	if (limitStr > 0)
+		queryStr += " LIMIT " + limitStr;
 
 
 	console.log("Query Factory String: " + queryStr);
@@ -189,7 +192,7 @@ function resetButtonOnClick() {
 	$('.timePicker').remove();
 	$('.booleanChoice').remove();	
 	while (WHERECount > 0) {
-		$('#queryFactory br:nth-last-of-type(2)').remove();
+		$('#queryFactory br:nth-last-of-type(3)').remove();
 		--WHERECount;
 	}
 	$('#resetBtn').remove();
@@ -201,7 +204,10 @@ var queryCallback = null;
 function WHEREClauseButtonOnClick() {
 	$('#queryBtn').remove();
 	$('#resetBtn').remove();
-	$('#queryFactory br:last-child').remove();
+	$('#queryFactory br:last-of-type').remove();
+	$('#queryFactory br:last-of-type').remove();
+	$('#queryFactory p:last-of-type').remove();
+	$('#limitTextbox').remove();
 	if ($('#queryFactory br').length > 0) {
 		makeBooleanChoiceSelection();
 	}
@@ -212,6 +218,8 @@ function WHEREClauseButtonOnClick() {
 	makeDateEntryTextbox();
 	makeTimeEntryTextbox();
 	makeWHEREClauseButton();
+	$('#queryFactory').append('<br>');
+	makeLimitTextbox();
 	$('#queryFactory').append('<br>');
 	makeQueryButton();
 	makeResetButton();
@@ -229,6 +237,11 @@ function makeLabel() {
 	var prependStr = "<p>All Times are UTC</p>";
 	$('#factoryContainer').prepend(prependStr);
 }
+function makeLimitTextbox() {
+	var appendStr = "<p style='display:inline; padding-left: 4px'>Query Limit:<input value='1' type='number' id='limitTextbox' style='width: 6em'></input></p>";
+	$('#queryFactory').append(appendStr);
+	
+}
 function makeQueryFactory(appendToElem, _buttonText, _queryCallback) {
 	buttonText = _buttonText;
 	queryCallback = _queryCallback;
@@ -237,6 +250,8 @@ function makeQueryFactory(appendToElem, _buttonText, _queryCallback) {
 	makeSeriesSelection();
 	makeMeasurementSelection();
 	makeWHEREClauseButton();
+	$('#queryFactory').append('<br>');
+	makeLimitTextbox();
 	$('#queryFactory').append('<br>');
 	makeQueryButton();
 	makeLabel();
