@@ -1,4 +1,4 @@
-function doQuery(db, query, callback) {
+function doQueryCallback(db, query, callback) {
 	//console.log(query);
 	var queryURL = "http://weatherspot.us/db/query.php?db=" + db + "&query=" + encodeURIComponent(query);
 	$.ajax({
@@ -22,7 +22,7 @@ function makeSeriesSelectionCallback(data) {
 	$('#queryFactory').prepend(appendStr);
 }
 function makeSeriesSelection() {
-	doQuery("weather", "LIST SERIES;", makeSeriesSelectionCallback);
+	doQueryCallback("weather", "LIST SERIES;", makeSeriesSelectionCallback);
 }
 function makeMeasurementSelection() {
 	var appendStr = "<select id='measurement'>";
@@ -40,13 +40,34 @@ function makeBeforeOrAfterSelection() {
 	appendStr += "<option value='>'>After</option>";
 	$('#queryFactory').append(appendStr);
 }
+var WHERECount = 0;
 function makeDateEntryTextbox() {
-	var appendStr = "<input value='Date...' type='text' class='datePicker' style='width: 10em'></input>";
+	var dateStr = "";
+	if (WHERECount == 1) {
+		$('.beforeOrAfter:last-of-type option:nth-child(2)').prop('selected', true);
+		dateStr = todaysDateString(-1);				//Todays date minus 1 day
+	}
+	else if (WHERECount == 2)
+		dateStr = todaysDateString();
+	else
+		dateStr = "Date...";
+
+	console.log(dateStr);
+	var appendStr = "<input value='" + dateStr + "' type='text' class='datePicker' style='width: 10em'></input>";
 	$('#queryFactory').append(appendStr);
 	$('.datePicker').datepicker( { dateFormat: "yy-mm-dd" } );
 }
 function makeTimeEntryTextbox() {
-	var appendStr = "<input value='Time...' type='text' class='timePicker' style='width: 7em'></input>"; 
+	
+	var timeStr = "";
+	if (WHERECount == 1) {
+		timeStr = nowTimeString();
+	}
+	else if (WHERECount == 2)
+		timeStr = nowTimeString();
+	else
+		timeStr = "Time...";
+	var appendStr = "<input value='" + timeStr + "' type='text' class='timePicker' style='width: 7em'></input>"; 
 	$('#queryFactory').append(appendStr);
 	$('.timePicker').timepicker( { 'timeFormat': 'H:i:s' } );
 }
@@ -55,6 +76,41 @@ function makeBooleanChoiceSelection() {
 	appendStr += "<option value='and'>And</option>";
 	appendStr += "<option value='or'>Or</option>";
 	$('#queryFactory').append(appendStr);
+
+}
+function nowTimeString() {
+	var d = new Date();
+	var hours = d.getHours() + getTimeZoneAdjustment("EDT");
+	var minutes = d.getMinutes();
+	var seconds = d.getSeconds();
+	var output = ((''+hours).length<2 ? '0' : '') + hours + ':' +
+	    ((''+minutes).length<2 ? '0' : '') + minutes + ':' +
+	    ((''+seconds).length<2 ? '0' : '') + seconds;
+
+	return output;
+}
+function getTimeZoneAdjustment(zone) {
+	//Add more timezones!
+	switch(zone) {
+		case "EDT":	//Eastern Daylight Time UTC-4
+			return 4;
+		default:
+			return 0;
+	}
+}
+function todaysDateString(dayOffset) {
+	if (typeof(dayOffset)==='undefined') dayOffset = 0;	//Default parameter to 0
+	// Thanks Tadeck@stackoverflow
+	// http://stackoverflow.com/questions/8398897/how-to-get-current-date-in-jquery
+	var d = new Date();
+	var month = d.getMonth()+1;
+	var day = d.getDate()+dayOffset;
+
+	var output = d.getFullYear() + '-' +
+	    ((''+month).length<2 ? '0' : '') + month + '-' +
+	    ((''+day).length<2 ? '0' : '') + day;
+
+	return output;
 
 }
 function formatDateTextboxes() {
@@ -96,6 +152,8 @@ function formatBooleanSelections() {
 	return formatStrArr;
 
 }
+//Build a query string from the components of the queryFactory form
+//Returns a proper InfluxDB Query Language query.
 function formToQueryString() {
 	var queryStr = "SELECT ";
 	queryStr += $('#measurement').val() + " FROM ";
@@ -120,15 +178,34 @@ function formToQueryString() {
 
 	console.log("Query Factory String: " + queryStr);
 
-	graphQuery(queryStr);
+	return queryStr;
+}
+function makeResetButton() {
+	$('#queryFactory').append("<button id='resetBtn' type='button' onclick='resetButtonOnClick()'>Reset</button>");
+}
+function resetButtonOnClick() {
+	$('.beforeOrAfter').remove();
+	$('.datePicker').remove();
+	$('.timePicker').remove();
+	$('.booleanChoice').remove();	
+	while (WHERECount > 0) {
+		$('#queryFactory br:nth-last-of-type(2)').remove();
+		--WHERECount;
+	}
+	$('#resetBtn').remove();
 }
 
+var buttonText = null;
+var queryCallback = null;
+
 function WHEREClauseButtonOnClick() {
-	$('#graphQueryBtn').remove()
+	$('#queryBtn').remove();
+	$('#resetBtn').remove();
 	$('#queryFactory br:last-child').remove();
 	if ($('#queryFactory br').length > 0) {
 		makeBooleanChoiceSelection();
 	}
+	++WHERECount;
 
 	$('#queryFactory').append('<br>');
 	makeBeforeOrAfterSelection();
@@ -136,22 +213,31 @@ function WHEREClauseButtonOnClick() {
 	makeTimeEntryTextbox();
 	makeWHEREClauseButton();
 	$('#queryFactory').append('<br>');
-	makeGraphQueryButton();
+	makeQueryButton();
+	makeResetButton();
 	
 }
-function makeGraphQueryButton() {
-	$('#queryFactory').append("<button id='graphQueryBtn' type='button' onclick='formToQueryString()'>Graph Query</button>");
+function makeQueryButton() {
+	$('#queryFactory').append("<button id='queryBtn' type='button' onclick='queryCallback(formToQueryString())'>" + buttonText + "</button>");
 }
 
 function makeWHEREClauseButton() {
 	var appendStr = "<a href='javascript:void(0);' style='display: inline' onclick='WHEREClauseButtonOnClick(); $(this).remove()'>Add Where Clause</a>"
 	$('#queryFactory').append(appendStr);
 }
-function makeQueryFactory() {
-	$('body').append("<div id='queryFactory'></div>");
+function makeLabel() {
+	var prependStr = "<p>All Times are UTC</p>";
+	$('#factoryContainer').prepend(prependStr);
+}
+function makeQueryFactory(appendToElem, _buttonText, _queryCallback) {
+	buttonText = _buttonText;
+	queryCallback = _queryCallback;
+
+	$(appendToElem).append("<div id='factoryContainer' style='outline: pink solid 1px'><div id='queryFactory'></div></div>");
 	makeSeriesSelection();
 	makeMeasurementSelection();
 	makeWHEREClauseButton();
 	$('#queryFactory').append('<br>');
-	makeGraphQueryButton();
+	makeQueryButton();
+	makeLabel();
 }
