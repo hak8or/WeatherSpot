@@ -41,7 +41,7 @@ path {
 		Example Query: <strong>SELECT temperature FROM Downtown WHERE time > now() - 24h</strong><br>
 		Returns a graph of temperature from Downtown over the last 24 hours
 	</p>
-	<button type="button" onclick='weatherspot_queryFactory.makeQueryFactory("body", "Graph Query", graphQuery); $(this).remove()'>Use Query Factory</button>
+	<button type="button" onclick='queryFactory.init("body", "Graph Query", graphQuery); $(this).remove()'>Use Query Factory</button>
 	<script>
 		$("#queryText").focus(function() {
 			if ($(this).val() == "Enter Query") {
