@@ -37,7 +37,7 @@
 		var booleansArr = formatBooleanSelections();
 		if (dateStrArr.length > 0) {
 			queryStr += " WHERE ";
-			for (var index in dateStrArr) {
+			for (var index = 0; index < dateStrArr.length; ++index) {
 				if (index > 0) {
 					queryStr += " " + booleansArr[index - 1] + " ";
 				}
@@ -75,7 +75,6 @@
 		$('#queryFactory br:last-of-type').remove();
 		queryLimit = $('#limitTextbox').val();
 		$('#queryFactory p:last-of-type').remove();
-		$('#limitTextbox').remove();
 		if ($('#queryFactory br').length > 0) {
 			makeBooleanChoiceSelection();
 		}
@@ -123,17 +122,16 @@
 	// The following is a set of functions creating pieces of the form one at a 
 	// time, they are all called by the init() function or caused by button clicks.
 	////////////////////
-	function makeSeriesSelectionCallback(data) {
-		var appendStr = "<select id='series'>";
-		$.each(data[0].points, function(i, e) {
-			appendStr += "<option value='" + e[1] + "'>" + e[1] + "</option>";
-		});
-		appendStr += "<option value='/.*/'>All</option>";
-		appendStr += "</select>";
-		$('#queryFactory').prepend(appendStr);
-	}
 	function makeSeriesSelection() {
-		doQueryCallback("weather", "LIST SERIES;", makeSeriesSelectionCallback);
+		doQueryCallback("weather", "LIST SERIES;", function(data) {
+			var appendStr = "<select id='series'>";
+			$.each(data[0].points, function(i, e) {
+				appendStr += "<option value='" + e[1] + "'>" + e[1] + "</option>";
+			});
+			appendStr += "<option value='/.*/'>All</option>";
+			appendStr += "</select>";
+			$('#queryFactory').prepend(appendStr);
+		});
 	}
 	function makeMeasurementSelection() {
 		var appendStr = "<select id='measurement'>";
@@ -168,7 +166,6 @@
 		$('.datePicker').datepicker( { dateFormat: "yy-mm-dd" } );
 	}
 	function makeTimeEntryTextbox() {
-		
 		var timeStr = "";
 		if (WHERECount == 1) {
 			timeStr = nowTimeString();
@@ -198,7 +195,7 @@
 		$('#queryFactory').append("<button id='queryBtn' type='button' onclick='queryFactory.QueryButtonOnClick()'>" + buttonText + "</button>");
 	}
 	function makeLabel(label) {
-		if (typeof(label)==='undefined') label = "All Times are UTC";
+		label = label || "All Times are UTC";	// Label defaults to "All Times are UTC"
 		var prependStr = "<p>" + label + "</p>";
 		$('#factoryContainer').prepend(prependStr);
 	}
@@ -230,7 +227,7 @@
 		}
 	}
 	function todaysDateString(dayOffset) {
-		if (typeof(dayOffset)==='undefined') dayOffset = 0;	//Default parameter to 0
+		dayOffset = dayOffset || 0;	// Default parameter to 0
 		// Thanks Tadeck@stackoverflow
 		// http://stackoverflow.com/questions/8398897/how-to-get-current-date-in-jquery
 		var d = new Date();
@@ -286,7 +283,5 @@
 			//console.log("BOOLEAN Index: " + index + " Element: " + $(elem).val());
 		});
 		return formatStrArr;
-
 	}
-
 }( window.queryFactory = window.queryFactory || {}, jQuery));
