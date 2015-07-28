@@ -20,6 +20,14 @@ namespace WeatherSpot
 {
     static class HelperClass
     {
+        static public double UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            // Unix timestamp is seconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return Convert.ToDouble(dtDateTime);
+        }
+
         static public void serverStringFormatter(ref string inputStr)
         {
             string serverURL = "http://weatherspot.us/db/query.php?db=weather&query=";
