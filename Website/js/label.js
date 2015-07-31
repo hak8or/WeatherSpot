@@ -5,7 +5,7 @@ function Label(opt_options) {
 
  // Label specific
  var span = this.span_ = document.createElement('span');
- span.style.cssText = 'position: relative; left: -50%; top: -24px; ' +
+ span.style.cssText = 'position: relative; left: -50%; top: -10px; ' +
                       'white-space: nowrap; border: 1px solid blue; ' +
                       'padding: 2px; background-color: white; z-index: 100';
 
