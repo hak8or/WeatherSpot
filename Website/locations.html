@@ -9,6 +9,9 @@
 
     <title>Weatherspot</title>
     <style>
+	body {
+		background-color: #d0eafa;
+	}
 	html, body, #map-canvas {
 		max-width: 600px;
 		width: 100%;
@@ -18,9 +21,32 @@
 	/* This is a temporary fix, should actually make this more specific */
 	/* If another .container is added this line might interfere with it */
 	body > .container { padding-left: 20% }
+
+	/* Google Maps Sidebar List Items Styles */
+	#marker_list li {
+		list-style: none;
+		border: 1px solid #ccc;
+		cursor: pointer;
+		background-color: #efefef;
+	}
+	path { 
+	    stroke: steelblue;
+	    stroke-width: 2;
+	    fill: none;
+	}
+
+	.axis path,
+	.axis line {
+	    fill: none;
+	    stroke: grey;
+	    stroke-width: 1;
+	    shape-rendering: crispEdges;
+	}
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
     <script type="text/javascript" src="js/label.js"></script>
+    <script type="text/javascript" src="js/queryFunctions.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
 	<script>
 
 	function initialize() {
@@ -46,17 +72,35 @@
 		};
 		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-		function makeInfoWindowCallback(db, data) {
+		var infowindow = new google.maps.InfoWindow();
+		google.maps.event.addListener(infowindow, 'closeclick', function() {
+			//Unhighlight the marker_list items
+			$("#marker_list li").css({"background-color": "#efefef"});
+		});
+
+		function makeMarkerWithLabelCallback(db, data) {
 			var seriesName = data[0].name;
 			var measurement = data[0].points[0][2]; 
-			makeInfoWindow(seriesName, measurement.toString(), locations[seriesName]);
+			makeMarkerWithLabel(seriesName, measurement.toString(), locations[seriesName]);
 		}
 		var image = 'pic/cloud.png';
-		function makeInfoWindow(_title, _content, _where) {
-			console.log("Title: " + _title + "; Content: " + _content + "; Where: " + _where);
-			var infowindow= new google.maps.InfoWindow({
-				content: _content 
+		function createMarkerButton(marker) {
+			//Creates a sidebar button
+			var ul = document.getElementById("marker_list");
+			var li = document.createElement("li");
+			var title = marker.getTitle();
+			li.innerHTML = title;
+			ul.appendChild(li);
+			
+			//Trigger a click event to marker when the button is clicked.
+			google.maps.event.addDomListener(li, "click", function(){
+				$("#marker_list li").css({"background-color": "#efefef"});		//Unhighlight all list items
+				$(this).css({"background-color": "yellow"});				//Highlight clicked item
+				google.maps.event.trigger(marker, "click");				//Forward click event to the marker
 			});
+		}	
+		function makeMarkerWithLabel(_title, _content, _where) {
+			console.log("Title: " + _title + "; Content: " + _content + "; Where: " + _where);
 				 
 			var cloudmarker = new google.maps.Marker({
 				position: _where,
@@ -65,6 +109,7 @@
 				title: _title, 
 				animation: google.maps.Animation.DROP
 			});
+			createMarkerButton(cloudmarker);
                         var label = new Label({
                             map: map,
                             label: _content
@@ -73,7 +118,10 @@
                         label.bindTo('text', cloudmarker, 'position');
 
 			google.maps.event.addListener(cloudmarker, 'click', function() {
+				infowindow.setContent("<strong>" + _title + ": " + _content + "</title>");
 				infowindow.open(map,cloudmarker);
+				removeGraphs();
+				graphFourMeasurements(_title);
 			});
 		}
 		function doQuery(db, query, callback) {
@@ -93,7 +141,7 @@
 
 		for (var loc in locations) {
 			var latestTemperature = "SELECT temperature FROM " + loc + " LIMIT 1";
-			doQuery("weather", latestTemperature, makeInfoWindowCallback); 
+			doQuery("weather", latestTemperature, makeMarkerWithLabelCallback); 
 		}
 		console.log("Last Loc: " + loc);
 	}
@@ -103,6 +151,7 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/loadIcon.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="css/logo-nav.css" rel="stylesheet">
@@ -162,7 +211,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1>Spot Locations</h1>
-		<div id="map-canvas"> </div>
+		<div style="width: 75%" id="map-container">
+			<div style="float:left" id="map-canvas"> </div>
+			<ul style="float:right" id="marker_list"></ul>
+		</div>
                 <p></p>
             </div>
         </div>
