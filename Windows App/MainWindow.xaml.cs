@@ -20,6 +20,7 @@ using Newtonsoft.Json.Linq;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Windows.Input;
+using System.Windows.Controls;
 //using System.Windows.Forms;
 
 namespace WeatherSpot
@@ -35,6 +36,7 @@ namespace WeatherSpot
 
         private string dayAfter = "";
         private string dayBefore = "";
+        private string dayCurrent = "";
         private string sensorLocation = "";
 
         public MainWindow()
@@ -44,23 +46,26 @@ namespace WeatherSpot
         }
 
         private void fetchClick(object sender, RoutedEventArgs e)
-        {
-            string dbQuery = "SELECT temperature FROM " + sensorLocation + " WHERE time > '" + dayBefore + "' AND time < '" + dayAfter + "'";
-
+        {            
+            string dbQuery = "SELECT * FROM " + sensorLocation + " WHERE '" + dayBefore + "' < time" + " and time < '" + dayAfter + "'";
+           
             try
             {               
                 JObject parseResults = JObject.Parse(NetworkClass.serverResponse(dbQuery));             
                 JArray jsonArray = (JArray)parseResults.SelectToken("points");
                 JArray jsonArrayLabels = (JArray)parseResults.SelectToken("columns");
-
+              
                 textBoxOut.Text = dbQuery;
 
                 fetchGraph.RemoveGraph();
                 fetchGraph.AddData(ref jsonArray, ref jsonArrayLabels);
                 fetchGraph.PlotGraph();
                 fetchGraph.SetStatistics(true);
+
+                fetchTime.Text = "Fetch Time: " + DateTime.Now.ToString("yyyy-MM-dd h:mm:ss tt");
+                //h:mm:ss tt       
             }
-            catch(Exception)
+            catch (Exception)
             {
                 MessageBox.Show("Fetch Error, Try Again");
                 textBoxOut.Text = dbQuery;
@@ -98,7 +103,8 @@ namespace WeatherSpot
                 }
 
                 importGraph.PlotGraph();
-                importGraph.SetStatistics(true);              
+                importGraph.SetStatistics(true);
+                fetchTime.Text = "Data Imported";
             }
         }
 
@@ -155,7 +161,7 @@ namespace WeatherSpot
                         consoleOutBox.Text += "\n";
 
                         for (int i = 0; i < jsonArray.Count; i++)
-                        {
+                        { 
                             for (int j = 0; j < rowCount; j++)
                             {
                                 consoleOutBox.Text += jsonArray[i][j].ToString() + "\t\t";
@@ -223,7 +229,10 @@ namespace WeatherSpot
         */
         private void consoleMouseClick(object sender, MouseButtonEventArgs e)
         {
-            consoleInBox.Text = "";
+            if(consoleInBox.Text == "Enter Query")
+            {
+                consoleInBox.Text = "";
+            }           
         } 
         
         /*
@@ -239,7 +248,7 @@ namespace WeatherSpot
 
                 dayBefore = date.AddDays(-1).ToString("yyyy-MM-dd");
                 dayAfter = date.AddDays(1).ToString("yyyy-MM-dd");
-
+                dayCurrent = date.ToString();
             }
         }
 
@@ -260,7 +269,7 @@ namespace WeatherSpot
             locationSelector.ItemsSource = data;
 
             // Selection of the first item
-            locationSelector.SelectedIndex = 0;
+            locationSelector.SelectedIndex = 0;        
         }
 
         private void ComboBoxSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -269,6 +278,14 @@ namespace WeatherSpot
                         
         } // end of method
 
+        private void printClick(object sender, RoutedEventArgs e)
+        {
+            PrintDialog printDialog = new PrintDialog();
+            if (printDialog.ShowDialog() == true)
+            {
+              //  printDialog.PrintVisual("My First Print Job");
+            }
+        }
     } // end of class
 
 } // end of namespace
