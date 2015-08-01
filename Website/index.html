@@ -5,7 +5,12 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+
+    <!-- For proper device scaling, from http://stackoverflow.com/questions/12021794/android-browser-ignores-responsive-web-design -->
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
     <title>Weatherspot</title>
 
     <!-- Bootstrap Core CSS -->
@@ -68,8 +73,12 @@
     <div class="container">
         <div class="row">
             <div id="front_page" class="col-lg-12">
-                <h1>Welcome to Weatherspot</h1>
-                <p>Magic that works</p>
+               <!--  <h1>Welcome to Weatherspot</h1> -->
+               <!--  <p>Magic that works</p>-->
+		<section>
+			<img src='/pic/logodraft1.png'></img> 
+			<a href="/locations.html">Get Started</a>
+		</section>
             </div>
         </div>
     </div>
