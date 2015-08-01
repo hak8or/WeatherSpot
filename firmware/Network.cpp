@@ -81,7 +81,7 @@ bool Network::init_wireless(const String SSID, const String password){
 	}
 	
 	// Delay a bit in case we get a "WIFI Disconnect" messege afterwards.
-	delay(60);
+	delay(1500);
 
 	// And the correct wireless mode.
 	if (send_command("AT+CWMODE=3", "OK", 2, 1500))
@@ -92,16 +92,16 @@ bool Network::init_wireless(const String SSID, const String password){
 	}
 
 	// Delay a bit since for some reason the CWMODE seems to return some gunk at the end.
-	delay(60);
+	delay(1500);
 	
 	// Login to the network.
 	// Todo: search for the AP we want to to confirm it exists.
 	String command = "AT+CWJAP_CUR=\"" + SSID + "\",\"" + password + "\"";
 	if (send_command(command, "WIFI GOT IP", 11, 5000))
-		Serial.println(F("Wifi connected to OpenWRT network succesfully!"));
+		Serial.println("Wifi connected to " + SSID + " network succesfully!");
 	else{
-		Serial.println(F("Wifi connected to OpenWRT network failed."));
-		return false;
+		Serial.println("Wifi connected to " + SSID + " network failed.");
+		return true;
 	}
 
 	// Allow just a single TCP connection.
