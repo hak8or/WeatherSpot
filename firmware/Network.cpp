@@ -69,7 +69,7 @@ bool Network::init_wireless(const String SSID, const String password){
 	// Generate the member object
 	// Pin D3 -> RX
 	// Pin D4 -> TX
-	wifi_serial = new SoftwareSerial(3, 4);
+	wifi_serial = new SoftwareSerial(4,3);
 	wifi_serial->begin(9600);
 
 	// Rest the module so it is in a known state and check if it works.
