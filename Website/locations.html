@@ -5,22 +5,63 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
     <title>Weatherspot</title>
     <style>
 	body {
 		background-color: #d0eafa;
 	}
-	html, body, #map-canvas {
-		max-width: 600px;
+	html, body {
 		width: 100%;
-		height: 400px;
 	}
+	/* Container for Google Map and Sidebar list */
+	#map-container {
+		width: 100%;
+		//outline: pink solid thick;
+	}
+	/* Map Canvas for drawing Google Map */
+	#map-container #map-canvas {
+		float:left;
 
-	/* This is a temporary fix, should actually make this more specific */
-	/* If another .container is added this line might interfere with it */
-	body > .container { padding-left: 20% }
+		display: block;
+		margin-left:auto;
+		margin-right:auto;
+
+		width: 74%;
+		height: 46vh;
+	} 
+	/* End Canvas */
+	#map-container ul {
+		width: 25%;
+		margin-left: 1%;
+		float: left;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	#map-container svg {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	/* End Container */
+
+	/* Make the Map Canvas taller and skinnier when in portrait view */
+	
+	@media only screen and (orientation: portrait) {
+		#map-container #map-canvas {
+			width: 60%;
+		}
+		#map-container ul {
+			width: 35%;
+		}
+		#map-container svg {
+			max-width: 90%;
+			transform: scale(.9,.9);
+		}
+	}
+	
 
 	/* Google Maps Sidebar List Items Styles */
 	#marker_list li {
@@ -59,6 +100,7 @@
 		}
 		///////////
 		addLocation("Staten_Island", 40.586510, -74.100813);
+		addLocation("THISISAVERYLONGNAMEFORASERIES", 40.600815, -73.894049);
 		addLocation("Downtown", 40.700815, -73.892049);
 		addLocation("Queens_County", 40.751447, -73.900095);
 		addLocation("Rikers_Island", 40.794339, -73.886076);
@@ -196,8 +238,8 @@
                     <li>
                         <a href="about.html">About</a>
                     </li>
-                        <li>
-                        <a href= locations.html>Spot Locations</a>
+                    <li>
+                        <a href="locations.html">Spot Locations</a>
                     </li>
                 </ul>
             </div>
@@ -211,9 +253,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1>Spot Locations</h1>
-		<div style="width: 75%" id="map-container">
-			<div style="float:left" id="map-canvas"> </div>
-			<ul style="float:right" id="marker_list"></ul>
+		<div id="map-container">
+			<div id="map-canvas"> </div>
+			<ul id="marker_list"></ul>
 		</div>
                 <p></p>
             </div>
