@@ -45,7 +45,7 @@ void setup(){
 	// Startup a heartbeat LED.
 	Heartbeat::start();
 
-	
+	// initiate DH11 sesnor at pin 2
 	sensors.init_DH11(2);
 
 	// Startup our network.
