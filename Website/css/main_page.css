@@ -1,15 +1,42 @@
+html, body { min-height: 100%; }
 
-html > body 
-{
-    background-image: url("../pic/sky_background.jpeg");
-    background-position: 0% 0%;
-    background-repeat: no-repeat;
-    -webkit-background-size: 100%; 
-    -moz-background-size: 100%;
-    background-size: 100%;
-    height: 100%;
-    min-height: 500px;
+body {
+    background: url("../pic/sky_background.jpeg") no-repeat center center fixed ;
+    -webkit-background-size: cover; 
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 
+
+}
+
+section {
+    outline: purple solid thick;
+    padding: 1em;
+    position: absolute;
+    left: 50%;
+    margin-top: 15%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+
+}
+
+/* Section is our main box centered with logo and "Get Started" text */
+section a {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: #0aff0f;
+    width: 6em;
+}
+section a:hover {
+    color: #ffeeff;
+}
+section img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #front_page
