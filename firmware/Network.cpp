@@ -24,8 +24,6 @@ bool Network::send_packet(Sensor_data sensor_data){
 	post_request = post_request + "series=Downtown";
 	post_request = post_request + "&temperature=" + String(sensor_data.temperature_f);
 	post_request = post_request + "&humidity=" + String(sensor_data.humidity);
-	post_request = post_request + "&pressure=65";
-	post_request = post_request + "&lighting=65";
 	post_request = post_request + "&pressure=" + String(sensor_data.pressure);
 	post_request = post_request + "&lighting=" + String(sensor_data.light);
 	post_request = post_request + "\r\n";
