@@ -1,11 +1,13 @@
 // Gotta include this because the arduino IDE does some magic including nonsense.
 #include <SoftwareSerial.h>
+#include <Wire.h>
 
 #include "Sensors.h"
 #include "Heartbeat.h"
 #include "Network.h"
 #include "DHT.h"
 #include "TimerOne.h"
+#include "SparkFunMPL3115A2.h"
 
 // global network object
 Network network;
@@ -13,10 +15,25 @@ Network network;
 // global sensors object
 Sensors sensors;
 
+// global pressure sesnor object
+MPL3115A2 pressure_sensor;
+
 void setup(){
 	// Start up the serial communication.
 	// Find out why this cuts off the next serial print.
 	Serial.begin(115200);
+
+  // join the I2C bus
+  Wire.begin(); 
+
+  // initiate the pressure sensor
+  pressure_sensor.begin();
+
+  // configure the pressure sensor
+  pressure_sensor.setModeBarometer();
+  pressure_sensor.setOversampleRate(7);
+  pressure_sensor.enableEventFlags();
+        
 	for(int i = 0; i < 3; i++)
 		Serial.print(F("==============="));
 
@@ -71,6 +88,7 @@ void setup(){
 void loop(){
         // Read our sensors.
 	Sensor_data sensor_data = sensors.read_sensors();
+  sensor_data.pressure = pressure_sensor.readPressure();
 
 	// Dump the info to our screen.
 	Serial.print(F("Sensor humidity: "));
@@ -79,6 +97,8 @@ void loop(){
 	Serial.println(sensor_data.temperature_f);
 	Serial.print(F("Sensor light reading: "));
 	Serial.println(sensor_data.light);
+  Serial.print(F("Sensor pressure reading: "));
+  Serial.println(sensor_data.pressure);
 
 	// Keep trying to send the packet to our backend server.
 	while (!network.send_packet(sensor_data)){

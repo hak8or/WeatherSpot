@@ -26,6 +26,7 @@ bool Network::send_packet(Sensor_data sensor_data){
 	post_request = post_request + "&humidity=" + String(sensor_data.humidity);
 	post_request = post_request + "&pressure=65";
 	post_request = post_request + "&lighting=65";
+	post_request = post_request + "&pressure=" + String(sensor_data.pressure);
 	post_request = post_request + "\r\n";
 
 	// Construct the command to begin our POST request.

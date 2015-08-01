@@ -35,6 +35,7 @@ struct Sensor_data {
 	float humidity;
 	float temperature_f;
 	uint16_t light;
+  float pressure;
 };
 
 #endif
