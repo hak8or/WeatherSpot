@@ -10,6 +10,7 @@ body {
 
 }
 
+/* Section is our main box centered with logo and "Get Started" text */
 section {
     outline: purple solid thick;
     padding: 1em;
@@ -20,8 +21,6 @@ section {
     transform: translate(-50%, -50%);
 
 }
-
-/* Section is our main box centered with logo and "Get Started" text */
 section a {
     display: block;
     margin-left: auto;
@@ -37,6 +36,13 @@ section img {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+/* When in Portrait, move the centered section down so it seems more centered */
+@media only screen and (orientation: portrait) {
+	section {
+		 margin-top: 50%;
+	}
 }
 
 #front_page
