@@ -81,15 +81,28 @@ void loop(){
   // Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
   Heartbeat::start();
 
-	// Keep trying to send the packet to our backend server.
-	while (!network.send_packet(sensor_data)){
-		Serial.println(F("Failed sending POST request to backend, retying in 3 seconds."));
-		Heartbeat::panic();
-		delay(3000);
-	}
-
-        // Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
-	Heartbeat::start();
+  // try to send 3 times, if 3 fail restart the module
+  for(int i = 0; i < 3; i++){
+    Serial.print("Trying to send data: ");
+    Serial.println(i);
+    
+    if(!network.send_packet(sensor_data)){
+      if(i == 2){
+        // we have reached the limit of our patience, restart the module and continue
+        network.send_command("AT+RST", "OK", 2, 1500);
+        
+        // start panic mode
+        Heartbeat::panic();
+        break;
+      }
+    }
+    else{
+      // Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
+      Heartbeat::start();
+      break;
+    }
+  }
+ 
 
 	Serial.println(F("Waiting 20 seconds ..."));
 	delay(20000);
