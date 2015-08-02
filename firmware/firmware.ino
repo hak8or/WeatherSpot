@@ -62,6 +62,12 @@ void setup(){
 }
 
 void loop(){
+
+  // time stamp each iteration
+  Serial.print("************ Time now in millis: ");
+  Serial.print(millis());
+  Serial.println(" ************");
+  
         // Read our sensors.
 	Sensor_data sensor_data = sensors.read_sensors();
   sensor_data.pressure = pressure_sensor.readPressure();
