@@ -48,17 +48,6 @@ void setup(){
 	// initiate DH11 sesnor at pin 2
 	sensors.init_DH11(2);
 
-	// Startup our network.
-	
-	while (!network.init_wireless("OpenWrt", "castle2004")){
-		Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
-		Heartbeat::panic();
-		delay(3000);
-	}
-
-	// Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
-	Heartbeat::start();
-
 }
 
 void loop(){
@@ -81,6 +70,16 @@ void loop(){
 	Serial.println(sensor_data.light);
   Serial.print(F("Sensor pressure reading: "));
   Serial.println(sensor_data.pressure);
+
+  // Startup our network.
+  while (!network.init_wireless("TRYME", "Damian126No#ash!")){
+    Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
+    Heartbeat::panic();
+    delay(3000);
+  }
+
+  // Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
+  Heartbeat::start();
 
 	// Keep trying to send the packet to our backend server.
 	while (!network.send_packet(sensor_data)){
