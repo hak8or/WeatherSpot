@@ -12,7 +12,6 @@ body {
 
 /* Section is our main box centered with logo and "Get Started" text */
 section {
-    outline: purple solid thick;
     padding: 1em;
     position: absolute;
     left: 50%;
@@ -45,6 +44,12 @@ section img {
 	}
 }
 
+.blueShadow {
+	border-radius: 20em;
+	-webkit-box-shadow: 10px 10px 160px 30px rgba(15,255,239,0.76);
+	-moz-box-shadow: 10px 10px 160px 30px rgba(15,255,239,0.76);
+	box-shadow: 10px 10px 160px 30px rgba(15,255,239,0.76);
+}
 #front_page
 {
     color: white;
