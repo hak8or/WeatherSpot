@@ -103,8 +103,11 @@ void loop(){
     }
   }
  
+  // disconnect from the AP to conserve energy
+  network.send_command("AT+CWQAP", "OK", 2, 1500);
 
 	Serial.println(F("Waiting 20 seconds ..."));
-	delay(20000);
+	delay(60000); // maxes out at 1 min apartenly.. 
+  delay(60000);
 
 }
