@@ -103,6 +103,21 @@ namespace WeatherSpot
             temp_y.Add(inY);
         }
 
+        public void AddYhum(double inY)
+        {
+            hum_y.Add(inY);
+        }
+
+        public void AddYpress(double inY)
+        {
+            press_y.Add(inY);
+        }
+
+        public void AddYlight(double inY)
+        {
+            light_y.Add(inY);
+        }
+
         public override string ToString()
         {
             string toStr = "";
@@ -111,11 +126,11 @@ namespace WeatherSpot
             {
                 if (i == (time_x.Count - 1))
                 {
-                    toStr += time_x[i] + ";" + temp_y[i];
+                    toStr += time_x[i] + ";" + temp_y[i] + ";" + hum_y[i] + ";" + press_y[i] + ";" + light_y[i];
                 }
                 else
                 {
-                    toStr += time_x[i] + ";" + temp_y[i] + ";";
+                    toStr += time_x[i] + ";" + temp_y[i] + ";" + hum_y[i] + ";" + press_y[i] + ";" + light_y[i] + ";";
                 }
             }
 
@@ -174,6 +189,9 @@ namespace WeatherSpot
         public void RemoveGraph()
         {
             main.plotter.RemoveUserElements();
+            main.plotter2.RemoveUserElements();
+            main.plotter3.RemoveUserElements();
+            main.plotter4.RemoveUserElements();
         }
 
         private double UnixTimeConverter(double unx)
@@ -216,7 +234,13 @@ namespace WeatherSpot
                 main.lightAvgOut.Text = Convert.ToString(Math.Round(light_y.Average()));
                 main.lightMaxOut.Text = Convert.ToString(light_y.Max());
                 main.lightMinOut.Text = Convert.ToString(light_y.Min());
-                main.lightMedianOut.Text = Convert.ToString(this.GetMedian(light_y));                           
+                main.lightMedianOut.Text = Convert.ToString(this.GetMedian(light_y));
+
+                main.temperatureStdOut.Text = Convert.ToString(Math.Round(this.GetStdDev(temp_y)));
+                main.humidityStdOut.Text = Convert.ToString(Math.Round(this.GetStdDev(hum_y)));
+                main.pressureStdOut.Text = Convert.ToString(Math.Round(this.GetStdDev(press_y)));
+                main.lightStdOut.Text = Convert.ToString(Math.Round(this.GetStdDev(light_y)));
+                                           
             }
             else
             {

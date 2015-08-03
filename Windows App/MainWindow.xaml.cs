@@ -88,17 +88,29 @@ namespace WeatherSpot
                 importGraph.RemoveGraph();
                 initialData =  File.ReadAllText(openFileDialog.FileName);
                 string[] stringTokens = initialData.Split(';');
-                
-                for(int i = 0; i < stringTokens.Length; i++)
+           
+                for (int i = 0; i < stringTokens.Length; i++)
                 {
                     initialData = stringTokens[i];
-                    if(i % 2 != 0)
+                    if (i % 5 == 0)
+                    {
+                        importGraph.AddX(Convert.ToDouble(initialData));
+                    }
+                    if (i % 5 == 1)
                     {
                         importGraph.AddY(Convert.ToDouble(initialData));
                     }
-                    else
+                    if (i % 5 == 2)
                     {
-                        importGraph.AddX(Convert.ToDouble(initialData));
+                        importGraph.AddYhum(Convert.ToDouble(initialData));
+                    }
+                    if (i % 5 == 3)
+                    {
+                        importGraph.AddYpress(Convert.ToDouble(initialData));
+                    }
+                    if (i % 5 == 4)
+                    {
+                        importGraph.AddYlight(Convert.ToDouble(initialData));
                     }
                 }
 
