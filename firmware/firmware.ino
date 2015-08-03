@@ -2,6 +2,9 @@
 #include <SoftwareSerial.h>
 #include <Wire.h>
 
+#include <avr/sleep.h>
+#include <avr/wdt.h>
+
 #include "Sensors.h"
 #include "Heartbeat.h"
 #include "Network.h"
@@ -106,8 +109,35 @@ void loop(){
   // disconnect from the AP to conserve energy
   network.send_command("AT+CWQAP", "OK", 2, 1500);
 
-	Serial.println(F("Waiting 20 seconds ..."));
-	delay(60000); // maxes out at 1 min apartenly.. 
-  delay(60000);
+	Serial.println(F("Waiting 5 min... - sleep time"));
+  delay(10); // necessary in order to get the text out the serial 
 
+  // stop the led
+  Heartbeat::stop();
+
+  // sleep for 5 min = 8 sec * 37
+  for(int i = 0; i < 37; i++){
+    EnableWatchDog(0b100001); // sleep for 8 seconds
+  }
+
+  // wake up little arduino
+  Heartbeat::start();
 }
+
+// disable watchdog interrupt
+ISR(WDT_vect){
+  // disable the watchdog
+  wdt_disable();
+}
+
+void EnableWatchDog(const byte time_to_sleep){
+  MCUSR = 0;                         
+  WDTCSR |= 0b00011000;              
+  WDTCSR =  0b01000000 | time_to_sleep;   
+
+  wdt_reset();
+  set_sleep_mode (SLEEP_MODE_PWR_DOWN); 
+  // sleep until we are interrupted
+  sleep_mode();           
+}
+
