@@ -118,13 +118,14 @@ void loop(){
   // stop the led
   Heartbeat::stop();
 
-  // sleep for 5 min = 8 sec * 37
-  for(int i = 0; i < 37; i++){
+  // sleep for 5 min = 10 sec * 30 
+  for(int i = 0; i < 30; i++){
     EnableWatchDog(0b100001); // sleep for 8 seconds
+    digitalWrite(13, HIGH);
+    EnableWatchDog(0b000110); // sleep for 1 second
+    digitalWrite(13, LOW);
+    EnableWatchDog(0b000110); // sleep for 1 second
   }
-
-  // wake up little arduino
-  Heartbeat::start();
 }
 
 // disable watchdog interrupt
