@@ -74,6 +74,9 @@ void loop(){
   Serial.print(F("Sensor pressure reading: "));
   Serial.println(sensor_data.pressure);
 
+  // wake up the led after the measurements
+  Heartbeat::start();
+  
   // Startup our network.
   while (!network.init_wireless("TRYME", "Damian126No#ash!")){
     Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
