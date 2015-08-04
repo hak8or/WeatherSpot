@@ -14,9 +14,6 @@ void Heartbeat::toggle(void){
 		// we have to do this manually.
 		PORTB = 1 << 5 ^ PORTB;
 	#endif
-
-  // turn off the led
-  PORTB = 0 << 5 & PORTB;
 }
 
 /**
@@ -44,6 +41,8 @@ void Heartbeat::start(void){
  * @brief Stops the heartbeat LED on PB5 using a timer.
  */
 void Heartbeat::stop(void){
+	// turn off the led
+  	PORTB = 0 << 5 & PORTB;
 	// Disable interrupts for our timer.
 	Timer1.detachInterrupt();
 }
