@@ -31,7 +31,18 @@ void setup(){
 	for(int i = 0; i < 3; i++)
 		Serial.print(F("==============="));
 
-	
+  // set pinmode for the CH_PD
+  pinMode(12, OUTPUT);
+  delay(3000);
+  
+	 // Startup our network.
+  while (!network.init_wireless("TRYME", "Damian126No#ash!")){
+    Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
+    Heartbeat::panic();
+    delay(3000);
+  }
+  delay(3000);
+  
 	// Startup a heartbeat LED.
 	Heartbeat::start();
 
@@ -41,32 +52,17 @@ void setup(){
   // Setup the pressure sensor.
   sensors.init_MPL3115A2();
 
-  // set pinmode for the CH_PD
-  pinMode(12, OUTPUT);
-
+ 
 }
 
-void loop(){
-
-  // turn on the module
-  digitalWrite(12, HIGH);
-
-  delay(2000); // let it turn on
-  
-  // Startup our network.
-  while (!network.init_wireless("TRYME", "Damian126No#ash!")){
-    Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
-    Heartbeat::panic();
-    delay(3000);
-  }
-  delay(3000);
+void loop(){ 
   
   // time stamp each iteration
   Serial.print("************ Time now in millis: ");
   Serial.print(millis());
   Serial.println(" ************");
   
-        // Read our sensors.
+        // Read our s.
 	Sensor_data sensor_data = sensors.read_sensors();
 
 	// Dump the info to our screen.
@@ -91,10 +87,7 @@ void loop(){
     Serial.println(i);
     
     if(!network.send_packet(sensor_data)){
-      if(i == 2){
-        // we have reached the limit of our patience, restart the module and continue
-        network.send_command("AT+RST", "OK", 2, 5000);
-        
+      if(i == 2){   
         // start panic mode
         Heartbeat::panic();
       }
@@ -105,30 +98,12 @@ void loop(){
       break;
     }
   }
-
-  // close the TCP connection 
-  network.send_command("AT+CIPCLOSE", "OK", 2, 1500);
-  // disconnect from the AP to conserve energy
-  network.send_command("AT+CWQAP", "OK", 2, 1500);
-
-  // turn off the module
-  digitalWrite(12, LOW);
-
-	Serial.println(F("Waiting 5 min... - sleep time"));
-  delay(10); // necessary in order to get the text out the serial 
-
-  // stop the led
-  Heartbeat::stop();
-
-  // sleep for 5 min = 10 sec * 30 
-  for(int i = 0; i < 1; i++){
-    EnableWatchDog(0b100001); // sleep for 8 seconds
-    digitalWrite(13, HIGH);
-    EnableWatchDog(0b000110); // sleep for 1 second
-    digitalWrite(13, LOW);
-    EnableWatchDog(0b000110); // sleep for 1 second
-  }
+  
+	Serial.println(F("Waiting 1 min... - sleep time"));
+  delay(60000); // wait
+  
 }
+
 
 // disable watchdog interrupt
 ISR(WDT_vect){
