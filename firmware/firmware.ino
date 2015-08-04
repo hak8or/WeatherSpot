@@ -88,6 +88,15 @@ void loop(){
     
     if(!network.send_packet(sensor_data)){
       if(i == 2){   
+        // something went wrong with the connection - try to reconnect
+        // Startup our network.
+        while (!network.init_wireless("TRYME", "Damian126No#ash!")){
+          Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
+          Heartbeat::panic();
+          delay(3000);
+        }
+        delay(3000);
+        
         // start panic mode
         Heartbeat::panic();
       }
