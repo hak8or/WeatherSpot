@@ -84,7 +84,7 @@ bool Network::init_wireless(const String SSID, const String password){
 	delay(1500);
 
 	// And the correct wireless mode.
-	if (send_command("AT+CWMODE=3", "OK", 2, 1500))
+	if (send_command("AT+CWMODE=1", "OK", 2, 1500))
 		Serial.println(F("Wifi mode select was succesfull."));
 	else{
 		Serial.println(F("Wifi mode select failed, no reply or garbage returned."));
