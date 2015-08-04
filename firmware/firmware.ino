@@ -18,24 +18,10 @@ Network network;
 // global sensors object
 Sensors sensors;
 
-// global pressure sesnor object
-MPL3115A2 pressure_sensor;
-
 void setup(){
 	// Start up the serial communication.
 	// Find out why this cuts off the next serial print.
 	Serial.begin(115200);
-
-  // join the I2C bus
-  Wire.begin(); 
-
-  // initiate the pressure sensor
-  pressure_sensor.begin();
-
-  // configure the pressure sensor
-  pressure_sensor.setModeBarometer();
-  pressure_sensor.setOversampleRate(7);
-  pressure_sensor.enableEventFlags();
         
 	for(int i = 0; i < 3; i++)
 		Serial.print(F("==============="));
@@ -51,6 +37,9 @@ void setup(){
 	// initiate DH11 sesnor at pin 2
 	sensors.init_DH11(2);
 
+  // Setup the pressure sensor.
+  sensors.init_MPL3115A2();
+
 }
 
 void loop(){
@@ -62,7 +51,6 @@ void loop(){
   
         // Read our sensors.
 	Sensor_data sensor_data = sensors.read_sensors();
-  sensor_data.pressure = pressure_sensor.readPressure();
 
 	// Dump the info to our screen.
 	Serial.print(F("Sensor humidity: "));
