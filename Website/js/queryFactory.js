@@ -1,4 +1,10 @@
 (function(queryFactory, $, undefined) {
+	// Class QueryFactory
+	// Purpose: Create a form which can yield an influxDB query 
+	// Includes:
+	//	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+
+
 	////////////
 	// Public:
 	////////////
@@ -14,7 +20,7 @@
 		buttonText = _buttonText;
 		queryCallback = _queryCallback;
 
-		$(appendToElem).append("<div id='factoryContainer' style='outline: pink solid 1px'><div id='queryFactory'></div></div>");
+		$(appendToElem).append("<div id='factoryContainer' style='outline: pink solid 1px'><div id='queryFactory' style='outline:none' tabindex='1'></div></div>");
 		makeSeriesSelection();
 		makeMeasurementSelection();
 		makeWHEREClauseButton();
@@ -23,6 +29,9 @@
 		$('#queryFactory').append('<br>');
 		makeQueryButton();
 		makeLabel();
+
+		eventRegisterENTERKey();
+		eventRegisterWHEREClause(); 
 	}
 
 	//Build a query string from the components of the queryFactory form
@@ -75,6 +84,7 @@
 		$('#queryFactory br:last-of-type').remove();
 		queryLimit = $('#limitTextbox').val();
 		$('#queryFactory p:last-of-type').remove();
+		$('#queryFactory a').remove();
 		if ($('#queryFactory br').length > 0) {
 			makeBooleanChoiceSelection();
 		}
@@ -90,6 +100,8 @@
 		$('#queryFactory').append('<br>');
 		makeQueryButton();
 		makeResetButton();
+		eventRegisterWHEREClause(); 
+		$('#queryFactory a').focus();
 		
 	}
 	queryFactory.QueryButtonOnClick = function() {
@@ -101,7 +113,7 @@
 	var WHERECount = 0;	//Number of WHERE clauses 
 	var buttonText = null;	//Text to print on the "Query" buton
 	var queryCallback = null;	// Callback to pass the query created by queryFactory into
-	var queryLimit = 1;		// Keep track of query limit
+	var queryLimit = 1000;		// Keep track of query limit
 
 	// Perform a query to the database and run callback functino on the data
 	function doQueryCallback(db, query, callback) {
@@ -283,5 +295,36 @@
 			//console.log("BOOLEAN Index: " + index + " Element: " + $(elem).val());
 		});
 		return formatStrArr;
+	}
+	///////////////
+	// Event Listener Functions
+	///////////////
+	function eventRegisterENTERKey() {
+		$("#queryFactory").bind('keydown', function(e) {
+			if (e.keyCode == 13) { 
+				queryFactory.QueryButtonOnClick();
+				console.log("FakeClicked");
+				if ($(this).has("select"))
+				{
+					console.log("Enter on Select");
+					return false;
+				}
+			}
+			return true;
+		});
+	}
+	function eventRegisterWHEREClause() {
+		$("#queryFactory a").bind('keydown', function(e) {
+			if (e.keyCode == 13) { 
+				queryFactory.WHEREClauseButtonOnClick();
+				console.log("FakeClicked");
+				if ($(this).has("select"))
+				{
+					console.log("Enter on Select");
+					return false;
+				}
+			}
+			return true;
+		});
 	}
 }( window.queryFactory = window.queryFactory || {}, jQuery));
