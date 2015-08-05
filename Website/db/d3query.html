@@ -8,25 +8,12 @@
 	<script src="/js/jquery.timepicker.min.js"></script>
 	<script src="/js/queryFactory.js"></script>
 	<link rel="stylesheet" type="text/css" href="/css/jquery.timepicker.css">
+	<link rel="stylesheet" type="text/css" href="/css/graphs.css">
 	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/dark-hive/jquery-ui.css">
 
 <style> /* set the CSS */
 
 body { font: 12px Arial;}
-
-path { 
-    stroke: steelblue;
-    stroke-width: 2;
-    fill: none;
-}
-
-.axis path,
-.axis line {
-    fill: none;
-    stroke: grey;
-    stroke-width: 1;
-    shape-rendering: crispEdges;
-}
 
 </style>
 </head>
@@ -123,7 +110,7 @@ path {
 
 		    // Scale the range of the data
 		    x.domain(d3.extent(points, function(d) { return d.time; }));
-		    y.domain([0, d3.max(points, function(d) { return d.temp; })]);
+		    y.domain([d3.min(points, function(d) { return d.temp; }) * .99, d3.max(points, function(d) { return d.temp; }) * 1.01]);
 
 		    // Add the valueline path.
 		    svg.append("path")
