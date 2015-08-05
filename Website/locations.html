@@ -1,92 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-
-    <title>Weatherspot</title>
-    <style>
-	body {
-		background-color: #d0eafa;
-	}
-	html, body {
-		width: 100%;
-	}
-	/* Container for Google Map and Sidebar list */
-	#map-container {
-		width: 100%;
-		//outline: pink solid thick;
-	}
-	/* Map Canvas for drawing Google Map */
-	#map-container #map-canvas {
-		float:left;
-
-		display: block;
-		margin-left:auto;
-		margin-right:auto;
-
-		width: 74%;
-		height: 46vh;
-	} 
-	/* End Canvas */
-	#map-container ul {
-		width: 25%;
-		margin-left: 1%;
-		float: left;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-	#map-container svg {
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
-	}
-	/* End Container */
-
-	/* Make the Map Canvas taller and skinnier when in portrait view */
-	
-	@media only screen and (orientation: portrait) {
-		#map-container #map-canvas {
-			width: 60%;
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="HandheldFriendly" content="True">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>Weatherspot</title>
+	<link href="css/graphs.css" rel="stylesheet">
+	<style>
+		html, body {
+			width: 100%;
 		}
+		html {
+			min-height: 100%;
+		}
+		/* Container for Google Map and Sidebar list */
+		#map-container {
+			width: 100%;
+			//outline: pink solid thick;
+		}
+		/* Map Canvas for drawing Google Map */
+		#map-container #map-canvas {
+			float:left;
+			margin-left:auto;
+			margin-right:auto;
+
+			width: 74%;
+			height: 350px; /* Support for anything that doesn't know vh unit*/
+			height: 46vh;
+		} 
+		/* End Canvas */
 		#map-container ul {
-			width: 35%;
+			width: 25%;
+			margin-left: 1%;
+			float: left;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 		#map-container svg {
-			max-width: 90%;
-			transform: scale(.9,.9);
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
 		}
-	}
-	
+		/* End Container */
 
-	/* Google Maps Sidebar List Items Styles */
-	#marker_list li {
-		list-style: none;
-		border: 1px solid #ccc;
-		cursor: pointer;
-		background-color: #efefef;
-	}
-	path { 
-	    stroke: steelblue;
-	    stroke-width: 2;
-	    fill: none;
-	}
+		/* Make the Map Canvas taller and skinnier when in portrait view */
+		
+		@media only screen and (orientation: portrait) {
+			#map-container #map-canvas {
+				width: 60%;
+			}
+			#map-container ul {
+				width: 35%;
+			}
+			#map-container svg {
+				transform: translate(-10%,0) scale(.7,.7);
+				top: 0;
+				text-size: 1em;
+				
+			}
+		}
+		
 
-	.axis path,
-	.axis line {
-	    fill: none;
-	    stroke: grey;
-	    stroke-width: 1;
-	    shape-rendering: crispEdges;
-	}
+		/* Google Maps Sidebar List Items Styles */
+		@font-face {
+			font-family: KRCloudNine;
+			src: url(/fonts/KR_Cloud_Nine.ttf);
+		}
+		#marker_list li {
+			list-style: none;
+			border: 1px solid #ccc;
+			cursor:pointer;
+			font-family: KRCloudNine;
+			font-size: 1.750em;
+
+			background: rgba(216,225,231,1);
+			background: -moz-linear-gradient(-45deg, rgba(216,225,231,1) 0%, rgba(216,225,231,1) 6%, rgba(181,198,208,1) 33%, rgba(242,246,248,1) 76%, rgba(224,239,249,1) 100%);
+			background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(216,225,231,1)), color-stop(6%, rgba(216,225,231,1)), color-stop(33%, rgba(181,198,208,1)), color-stop(76%, rgba(242,246,248,1)), color-stop(100%, rgba(224,239,249,1)));
+			background: -webkit-linear-gradient(-45deg, rgba(216,225,231,1) 0%, rgba(216,225,231,1) 6%, rgba(181,198,208,1) 33%, rgba(242,246,248,1) 76%, rgba(224,239,249,1) 100%);
+			background: -o-linear-gradient(-45deg, rgba(216,225,231,1) 0%, rgba(216,225,231,1) 6%, rgba(181,198,208,1) 33%, rgba(242,246,248,1) 76%, rgba(224,239,249,1) 100%);
+			background: -ms-linear-gradient(-45deg, rgba(216,225,231,1) 0%, rgba(216,225,231,1) 6%, rgba(181,198,208,1) 33%, rgba(242,246,248,1) 76%, rgba(224,239,249,1) 100%);
+			background: linear-gradient(135deg, rgba(216,225,231,1) 0%, rgba(216,225,231,1) 6%, rgba(181,198,208,1) 33%, rgba(242,246,248,1) 76%, rgba(224,239,249,1) 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d8e1e7', endColorstr='#e0eff9', GradientType=1 );
+
+
+			color: red;
+			color:rgba(76,76,76,1);
+		}
+		#marker_list li.list_highlight {
+			background: rgba(252,234,187,1);
+			background: -moz-linear-gradient(-45deg, rgba(252,234,187,1) 0%, rgba(248,181,0,0.62) 51%, rgba(251,223,147,0.25) 100%);
+			background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(252,234,187,1)), color-stop(51%, rgba(248,181,0,0.62)), color-stop(100%, rgba(251,223,147,0.25)));
+			background: -webkit-linear-gradient(-45deg, rgba(252,234,187,1) 0%, rgba(248,181,0,0.62) 51%, rgba(251,223,147,0.25) 100%);
+			background: -o-linear-gradient(-45deg, rgba(252,234,187,1) 0%, rgba(248,181,0,0.62) 51%, rgba(251,223,147,0.25) 100%);
+			background: -ms-linear-gradient(-45deg, rgba(252,234,187,1) 0%, rgba(248,181,0,0.62) 51%, rgba(251,223,147,0.25) 100%);
+			background: linear-gradient(135deg, rgba(252,234,187,1) 0%, rgba(248,181,0,0.62) 51%, rgba(251,223,147,0.25) 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fceabb', endColorstr='#fbdf93', GradientType=1 );
+		}
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
     <script type="text/javascript" src="js/label.js"></script>
-    <script type="text/javascript" src="js/queryFunctions.js"></script>
+    <script type="text/javascript" src="js/graphFactory.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
 	<script>
 
@@ -96,15 +110,14 @@
 		//If you use a series that does not exist, it will not appear on the map
 		var locations = {}; 
 		function addLocation(_name, _lat, _long) {
+			_lat = _lat || 40.700815;
+			_long = _long || -73.892049;
 			locations[_name] = new google.maps.LatLng(_lat, _long);
 		}
 		///////////
 		addLocation("Staten_Island", 40.586510, -74.100813);
-		addLocation("THISISAVERYLONGNAMEFORASERIES", 40.600815, -73.894049);
 		addLocation("Downtown", 40.700815, -73.892049);
-		addLocation("Queens_County", 40.751447, -73.900095);
-		addLocation("Rikers_Island", 40.794339, -73.886076);
-		addLocation("LaGuardia_Airport", 40.776857, -73.873911);
+		addLocation("Ridgewood", 40.751447, -73.900095);
 		///////////
 
 		var mapCenter = new google.maps.LatLng(40.690366, -74.045903);
@@ -117,7 +130,8 @@
 		var infowindow = new google.maps.InfoWindow();
 		google.maps.event.addListener(infowindow, 'closeclick', function() {
 			//Unhighlight the marker_list items
-			$("#marker_list li").css({"background-color": "#efefef"});
+//			$("#marker_list li").css({"background-color": "#efefef"});
+			$("#marker_list li").removeClass("list_highlight");
 		});
 
 		function makeMarkerWithLabelCallback(db, data) {
@@ -136,8 +150,10 @@
 			
 			//Trigger a click event to marker when the button is clicked.
 			google.maps.event.addDomListener(li, "click", function(){
-				$("#marker_list li").css({"background-color": "#efefef"});		//Unhighlight all list items
-				$(this).css({"background-color": "yellow"});				//Highlight clicked item
+//				$("#marker_list li").css({"background-color": "#efefef"});		//Unhighlight all list items
+				$("li.list_highlight").removeClass("list_highlight");			//Unhighlight all list items
+//				$(this).css({"background-color": "yellow"});				//Highlight clicked item
+				$(this).addClass("list_highlight");					//Highlight clicked item
 				google.maps.event.trigger(marker, "click");				//Forward click event to the marker
 			});
 		}	
@@ -159,11 +175,13 @@
                         label.bindTo('position', cloudmarker, 'position');
                         label.bindTo('text', cloudmarker, 'position');
 
+			var graphFactory = GraphFactory("div#map-container");
+			console.log(graphFactory);
 			google.maps.event.addListener(cloudmarker, 'click', function() {
 				infowindow.setContent("<strong>" + _title + ": " + _content + "</title>");
 				infowindow.open(map,cloudmarker);
-				removeGraphs();
-				graphFourMeasurements(_title);
+				graphFactory.removeGraphs();
+				graphFactory.graphFourMeasurements(_title);
 			});
 		}
 		function doQuery(db, query, callback) {
