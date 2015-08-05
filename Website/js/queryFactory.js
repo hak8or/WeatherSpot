@@ -67,24 +67,16 @@
 	// Button Click Handlers
 	////////////////////////
 	queryFactory.resetButtonOnClick = function() {
-		$('.beforeOrAfter').remove();
-		$('.datePicker').remove();
-		$('.timePicker').remove();
-		$('.booleanChoice').remove();	
+		$('.beforeOrAfter,.datePicker,.timePicker,.booleanChoice,#resetBtn').remove();	
 		while (WHERECount > 0) {
 			$('#queryFactory br:nth-last-of-type(3)').remove();
 			--WHERECount;
 		}
-		$('#resetBtn').remove();
 	}
 	queryFactory.WHEREClauseButtonOnClick = function() {
-		$('#queryBtn').remove();
-		$('#resetBtn').remove();
-		$('#queryFactory br:last-of-type').remove();
-		$('#queryFactory br:last-of-type').remove();
 		queryLimit = $('#limitTextbox').val();
-		$('#queryFactory p:last-of-type').remove();
-		$('#queryFactory a').remove();
+		$('#queryBtn,#resetBtn,#queryFactory br:last-of-type').remove();
+		$('#queryFactory br:last-of-type,#queryFactory p:last-of-type,#queryFactory a').remove();
 		if ($('#queryFactory br').length > 0) {
 			makeBooleanChoiceSelection();
 		}
@@ -101,6 +93,7 @@
 		makeQueryButton();
 		makeResetButton();
 		eventRegisterWHEREClause(); 
+		eventRegisterResetButton(); 
 		$('#queryFactory a').focus();
 		
 	}
@@ -317,12 +310,16 @@
 		$("#queryFactory a").bind('keydown', function(e) {
 			if (e.keyCode == 13) { 
 				queryFactory.WHEREClauseButtonOnClick();
-				console.log("FakeClicked");
-				if ($(this).has("select"))
-				{
-					console.log("Enter on Select");
-					return false;
-				}
+				return false;
+			}
+			return true;
+		});
+	}
+	function eventRegisterResetButton() {
+		$("#resetBtn").bind('keydown', function(e) {
+			if (e.keyCode == 13) { 
+				queryFactory.resetButtonOnClick() 
+				return false;
 			}
 			return true;
 		});
