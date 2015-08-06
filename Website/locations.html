@@ -8,116 +8,12 @@
 	<title>Weatherspot</title>
 	<link href="css/graphs.css" rel="stylesheet">
 	<link href="css/locations.css" rel="stylesheet">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqXcJY3eysr_J6Ck820mFS6eTOz0vy6vo"></script>
-    <script type="text/javascript" src="js/label.js"></script>
-    <script type="text/javascript" src="js/graphFactory.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-	<script>
-
-	function initialize() {
-
-		//Using the name of the series as the name of a spot, add a new location using addLocation(...) and it will auto-populate on the map 
-		//If you use a series that does not exist, it will not appear on the map
-		var locations = {}; 
-		function addLocation(_name, _lat, _long) {
-			_lat = _lat || 40.700815;
-			_long = _long || -73.892049;
-			locations[_name] = new google.maps.LatLng(_lat, _long);
-		}
-		///////////
-		addLocation("Staten_Island", 40.586510, -74.100813);
-		addLocation("Downtown", 40.700815, -73.892049);
-		addLocation("Ridgewood", 40.751447, -73.900095);
-		///////////
-
-		var mapCenter = new google.maps.LatLng(40.690366, -74.045903);
-		var mapOptions = {
-			zoom: 10,
-			center: mapCenter 
-		};
-		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-		var infowindow = new google.maps.InfoWindow();
-		google.maps.event.addListener(infowindow, 'closeclick', function() {
-			//Unhighlight the marker_list items
-//			$("#marker_list li").css({"background-color": "#efefef"});
-			$("#marker_list li").removeClass("list_highlight");
-		});
-
-		function makeMarkerWithLabelCallback(db, data) {
-			var seriesName = data[0].name;
-			var measurement = data[0].points[0][2]; 
-			makeMarkerWithLabel(seriesName, measurement.toString(), locations[seriesName]);
-		}
-		var image = 'pic/cloud.png';
-		function createMarkerButton(marker) {
-			//Creates a sidebar button
-			var ul = document.getElementById("marker_list");
-			var li = document.createElement("li");
-			var title = marker.getTitle();
-			li.innerHTML = title;
-			ul.appendChild(li);
-			
-			//Trigger a click event to marker when the button is clicked.
-			google.maps.event.addDomListener(li, "click", function(){
-//				$("#marker_list li").css({"background-color": "#efefef"});		//Unhighlight all list items
-				$("li.list_highlight").removeClass("list_highlight");			//Unhighlight all list items
-//				$(this).css({"background-color": "yellow"});				//Highlight clicked item
-				$(this).addClass("list_highlight");					//Highlight clicked item
-				google.maps.event.trigger(marker, "click");				//Forward click event to the marker
-			});
-		}	
-		function makeMarkerWithLabel(_title, _content, _where) {
-			console.log("Title: " + _title + "; Content: " + _content + "; Where: " + _where);
-				 
-			var cloudmarker = new google.maps.Marker({
-				position: _where,
-				map: map,
-				icon: image,
-				title: _title, 
-				animation: google.maps.Animation.DROP
-			});
-			createMarkerButton(cloudmarker);
-                        var label = new Label({
-                            map: map,
-                            label: _content
-                        });
-                        label.bindTo('position', cloudmarker, 'position');
-                        label.bindTo('text', cloudmarker, 'position');
-
-			var graphFactory = GraphFactory("div#map-container");
-			console.log(graphFactory);
-			google.maps.event.addListener(cloudmarker, 'click', function() {
-				infowindow.setContent("<strong>" + _title + ": " + _content + "</title>");
-				infowindow.open(map,cloudmarker);
-				graphFactory.removeGraphs();
-				graphFactory.graphFourMeasurements(_title);
-			});
-		}
-		function doQuery(db, query, callback) {
-			console.log(query);
-			var queryURL = "http://weatherspot.us/db/query.php?db=" + db + "&query=" + encodeURIComponent(query);
-			$.ajax({
-				type: 'GET',
-				url: queryURL,
-				success: function(data) {
-					callback(db, data);
-				},
-				error: function(jqXHR, textStatus, errorThrown) {
-				},
-				dataType: "json"
-			});
-		}
-
-		for (var loc in locations) {
-			var latestTemperature = "SELECT temperature FROM " + loc + " LIMIT 1";
-			doQuery("weather", latestTemperature, makeMarkerWithLabelCallback); 
-		}
-		console.log("Last Loc: " + loc);
-	}
-	google.maps.event.addDomListener(window, 'load', initialize);
-
-	</script>
+	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqXcJY3eysr_J6Ck820mFS6eTOz0vy6vo"></script>
+	<script src="/js/label.js"></script>
+	<script src="/js/graphFactory.js"></script>
+	<script src='/js/locations.js'></script>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
 
     <!-- Bootstrap Core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
@@ -190,9 +86,6 @@
         </div>
     </div>
     <!-- /.container -->
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
