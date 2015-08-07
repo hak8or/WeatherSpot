@@ -1,4 +1,10 @@
 
+g.x.axis > g.tick > text {
+	-webkit-transform: rotate(35deg) translate(0px,5px);
+	-ms-transform: rotate(35deg) translate(0px,5px);
+	transform: rotate(35deg) translate(0px,5px);
+}
+
 svg {
 	position: relative;
 	top: 2em;
