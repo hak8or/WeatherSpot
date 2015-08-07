@@ -60,7 +60,8 @@ Sensor_data Sensors::read_sensors(void){
 	}
 
   // True means Fahrenheit. Yeah, this library is trash.
-  sensor_data.temperature_f = dht_module->readTemperature(true);
+  //sensor_data.temperature_f = dht_module->readTemperature(true);
+  sensor_data.temperature_f = pressure_sensor->readTempF();
   sensor_data.humidity = dht_module->readHumidity();
   sensor_data.light = analogRead(A0);
   sensor_data.pressure = pressure_sensor->readPressure();
