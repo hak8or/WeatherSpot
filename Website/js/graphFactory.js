@@ -41,7 +41,7 @@ var GraphFactory = function(_appendTo) {
 		var queryURL = "/db/query.php?db=weather&query=" + encodeURIComponent(query); 
 
 		// Set the dimensions of the canvas / graph
-		var margin = {top: 30, right: 20, bottom: 50, left: 50},
+		var margin = {top: 30, right: 20, bottom: 50, left: 60},
 		    width = $(gAppendToElem).width() * .9 - margin.left - margin.right,
 		    height = 270 - margin.top - margin.bottom;
 
@@ -62,7 +62,7 @@ var GraphFactory = function(_appendTo) {
 		// Define the line
 		var valueline = d3.svg.line()
 		    .x(function(d) { return x(d.time); })
-		    .y(function(d) { return y(d.temp); });
+		    .y(function(d) { return y(d.point); });
 		    
 		// Adds the svg canvas
 		var svg = d3.select(gAppendToElem)
@@ -84,9 +84,10 @@ var GraphFactory = function(_appendTo) {
 		    }
 		    if (typeof data[0] === 'undefined') {
 			console.log("No Datas! " + queryURL);
-			$("#failText").html("No Data Returned");
-			$("#failText").css({"background-color": "red", "opacity": 1});
-			$("#failText").animate({"background-color": "", "opacity": 0}, 2500);
+			var $failText = $('#failText');
+			$failText.html("No Data Returned");
+			$failText.css({"background-color": "red", "opacity": 1});
+			$failText.animate({"background-color": "", "opacity": 0}, 2500);
 			$("svg:nth-last-of-type(1)").remove();
 			return;
 		    }
@@ -96,19 +97,19 @@ var GraphFactory = function(_appendTo) {
 		    points.forEach(function(d) {
 			d.time = d[0];
 			if (d.length < 3) {
-				d.temp = d[1];
+				d.point = d[1];
 			} else {
-				d.temp = d[2];
+				d.point = d[2];
 			}
 		    });
 
 		    // Scale the range of the data
 		    x.domain(d3.extent(points, function(d) { return d.time; }));
-		    y.domain([d3.min(points, function(d) { return d.temp; }) * .99, d3.max(points, function(d) { return d.temp; }) * 1.01]);
+		    y.domain([d3.min(points, function(d) { return d.point; }) * .99, d3.max(points, function(d) { return d.point; }) * 1.01]);
 
 		    // Add the valueline path.
 		    svg.append("path")
-			.attr("class", "slopeText line")
+			.attr("class", "line")
 			.attr("d", valueline(points))
 			.attr("style", "stroke:"+color);
 
