@@ -70,13 +70,20 @@
                         label.bindTo('position', cloudmarker, 'position');
                         label.bindTo('text', cloudmarker, 'position');
 
-			var graphFactory = GraphFactory("div#map-container");
+			var graphFactory = GraphFactory("div#graph-container");
 			console.log(graphFactory);
 			google.maps.event.addListener(cloudmarker, 'click', function() {
 				infowindow.setContent("<strong>" + _title + ": " + _content + "</title>");
 				infowindow.open(map,cloudmarker);
 				graphFactory.removeGraphs();
 				graphFactory.graphFourMeasurements(_title);
+				var offset = $('#graph-container').offset();
+				offset.left -= 20;
+				offset.top -= 40;
+				$('html, body').animate({
+				    scrollTop: offset.top,
+				    scrollLeft: offset.left
+				});
 			});
 		}
 		function doQuery(db, query, callback) {
