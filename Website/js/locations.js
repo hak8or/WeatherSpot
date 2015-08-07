@@ -1,3 +1,5 @@
+// Location.js depends upon /js/graphFactory.js
+
 (function(WeatherSpot_Map, $, undefined) {
 	function initialize() {
 
@@ -11,7 +13,7 @@
 		}
 		///////////
 		addLocation("Staten_Island", 40.586510, -74.100813);
-//		addLocation("Downtown", 40.700815, -73.892049);
+		addLocation("Downtown", 40.700815, -73.892049);
 		addLocation("Queens", 40.751447, -73.900095);
 		///////////
 
@@ -80,10 +82,12 @@
 				var offset = $('#graph-container').offset();
 				offset.left -= 20;
 				offset.top -= 40;
-				$('html, body').animate({
-				    scrollTop: offset.top,
-				    scrollLeft: offset.left
-				});
+				setTimeout(function() {
+					$('html, body').animate({
+					    scrollTop: offset.top,
+					    scrollLeft: offset.left
+					});
+				}, 1000);
 			});
 		}
 		function doQuery(db, query, callback) {
