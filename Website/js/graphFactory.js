@@ -20,10 +20,18 @@ var GraphFactory = function(_appendTo) {
 	// Public //
 	////////////
 	this.graphFourMeasurements = function(series) {
-		graphQuery("SELECT temperature FROM " + series + " WHERE time > now() - 24h", "red"); //" WHERE time > now() - 72h", "blue");
-		graphQuery("SELECT humidity FROM " + series + " WHERE time > now() - 24h", "blue"); //" WHERE time > now() - 72h", "blue");
-		graphQuery("SELECT pressure FROM " + series + " WHERE time > now() - 24h", "green"); //" WHERE time > now() - 72h", "blue");
-		graphQuery("SELECT lighting FROM " + series + " WHERE time > now() - 24h", "yellow"); //" WHERE time > now() - 72h", "blue");
+		var q = function(measurements) { 
+			var r = [];
+			for (var i=0,len=measurements.length; i<len; ++i ) {
+				r.push("SELECT mean(" + measurements[i] + ") FROM " + series + " GROUP BY time(10m) WHERE time > now() - 24h");
+			}
+			return r;
+		}(['temperature','humidity','pressure','lighting']);
+
+		graphQuery(q[0], "red"); //" WHERE time > now() - 72h", "blue");
+		graphQuery(q[1], "blue"); //" WHERE time > now() - 72h", "blue");
+		graphQuery(q[2], "green"); //" WHERE time > now() - 72h", "blue");
+		graphQuery(q[3], "orange"); //" WHERE time > now() - 72h", "blue");
 	}
 	this.removeGraphs = function() {
 		$(gAppendToElem).children("svg").remove();
@@ -33,8 +41,8 @@ var GraphFactory = function(_appendTo) {
 		var queryURL = "/db/query.php?db=weather&query=" + encodeURIComponent(query); 
 
 		// Set the dimensions of the canvas / graph
-		var margin = {top: 30, right: 20, bottom: 30, left: 50},
-		    width = 600 - margin.left - margin.right,
+		var margin = {top: 30, right: 20, bottom: 50, left: 50},
+		    width = $(gAppendToElem).width() * .9 - margin.left - margin.right,
 		    height = 270 - margin.top - margin.bottom;
 
 		// Parse the date / time
@@ -46,7 +54,7 @@ var GraphFactory = function(_appendTo) {
 
 		// Define the axes
 		var xAxis = d3.svg.axis().scale(x)
-		    .orient("bottom").ticks(8);
+		    .orient("bottom").ticks(width / 60 );
 
 		var yAxis = d3.svg.axis().scale(y)
 		    .orient("left").ticks(5);
@@ -61,6 +69,7 @@ var GraphFactory = function(_appendTo) {
 		    .append("svg")
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom)
+//			.attr("viewBox", "0 0 " + width + " " + height)		// I dont know how exactly to scale here
 		    .append("g")
 			.attr("transform", 
 			      "translate(" + margin.left + "," + margin.top + ")");
@@ -73,7 +82,7 @@ var GraphFactory = function(_appendTo) {
 			$("svg:nth-last-of-type(1)").remove();
 			return;
 		    }
-		    if (data[0] === undefined) {
+		    if (typeof data[0] === 'undefined') {
 			console.log("No Datas! " + queryURL);
 			$("#failText").html("No Data Returned");
 			$("#failText").css({"background-color": "red", "opacity": 1});
@@ -83,7 +92,7 @@ var GraphFactory = function(_appendTo) {
 		    }
 		    $("#failText").html("");
 		    points = data[0]["points"];
-		    console.log(data);
+		    //console.log(data);
 		    points.forEach(function(d) {
 			d.time = d[0];
 			if (d.length < 3) {
@@ -99,7 +108,7 @@ var GraphFactory = function(_appendTo) {
 
 		    // Add the valueline path.
 		    svg.append("path")
-			.attr("class", "line")
+			.attr("class", "slopeText line")
 			.attr("d", valueline(points))
 			.attr("style", "stroke:"+color);
 
@@ -118,15 +127,30 @@ var GraphFactory = function(_appendTo) {
 		var strIndex = query.indexOf(" FROM");
 		var field = query.substr("SELECT ".length, strIndex - "SELECT ".length);
 		field = field.charAt(0).toUpperCase() + field.slice(1);
-		// From: http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html
+		// Label From: http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html
 		svg.append("text")
 			.attr("x", (width / 2))             
 			.attr("y", 0 - (margin.top / 2))
 			.attr("text-anchor", "middle")  
 			.style("font-size", "16px") 
 			.style("text-decoration", "underline")  
-			.text(field + " vs Time");
+			.text(getTitleString(field) + " vs Time");
 	}
 
+	var getTitleString = function(field) {
+		console.log(field);
+		var str = field.replace(/mean\((.*)\)/i, function(m, $1) { return $1; });
+		str = (function(s) { return s.charAt(0).toUpperCase() + s.slice(1); })(str);
+		console.log(str);
+		return str;
+	}
+	var handleOrientationChange = function() {
+		//var margin = {top: 30, right: 20, bottom: 30, left: 50};
+		var ori = window.orientation,
+			width = (ori==90 || ori==-90) ? screen.height : screen.width;
+		
+		$(gAppendToElem + " svg").attr("width", width * .9 + 'px');
+	}
+	$(window).bind('orientationchange', handleOrientationChange);
 	return this;
 }
