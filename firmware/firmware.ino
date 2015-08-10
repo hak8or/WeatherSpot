@@ -97,11 +97,8 @@ void loop(){
 		}
 	}
 
-	Serial.println(F("Waiting 1 min... - sleep time"));
-	delay(60000); // wait
-
-	// kill the led before taking measurements
-	Heartbeat::stop();
+	Serial.println(F("Waiting 1 min ...."));
+	delay(60000);
 }
 
 /**
