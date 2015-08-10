@@ -101,6 +101,9 @@ bool Network::init_wireless(const String SSID, const String password){
 		Serial.println("Wifi connected to " + SSID + " network succesfully!");
 	else{
 		Serial.println("Wifi connected to " + SSID + " network failed.");
+
+		// Damiens WIFI board/network bugs out seemingly always at this point
+		// even though he is actually connected, so this is stuck at true. :/
 		return true;
 	}
 
