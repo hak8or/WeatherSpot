@@ -18,6 +18,9 @@ Network network;
 // global sensors object
 Sensors sensors;
 
+#define SSID "OpenWrt"
+#define password "castle2004"
+
 /**
  * @brief The main setup loop for our sensors and WIFI.
  */
@@ -39,7 +42,7 @@ void setup(){
   delay(3000);
   
 	 // Startup our network.
-  while (!network.init_wireless("TRYME", "Damian126No#ash!")){
+  while (!network.init_wireless(SSID, password)){
     Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
     Heartbeat::panic();
     delay(3000);
@@ -96,7 +99,7 @@ void loop(){
       if(i == 2){   
         // something went wrong with the connection - try to reconnect
         // Startup our network.
-        while (!network.init_wireless("TRYME", "Damian126No#ash!")){
+        while (!network.init_wireless(SSID, password)){
           Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
           Heartbeat::panic();
           delay(3000);
