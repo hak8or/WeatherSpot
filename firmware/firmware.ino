@@ -84,10 +84,8 @@ void loop(){
   Serial.print(F("Sensor pressure reading: "));
   Serial.println(sensor_data.pressure);
 
-  // wake up the led after the measurements
-  Heartbeat::start();
-
-  // Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
+  // Make our heartbeat LED blink at a normal rate again if we were panicking earlier
+  // or it was shut off.
   Heartbeat::start();
 
   // try to send 5 times, if 5 fail restart the module
