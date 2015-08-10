@@ -7,8 +7,11 @@
 /**
  * @brief Sends a peice of data over TCP to our backend.
  * @details Does a DNS lookup for our backend, sets up a TCP connection, and sends our data.
+ *
+ * @param  sensor_data The sensor data struct worth of data we will be sending.
+ * @param  series      What series (location) we want our data to be sent to.
  * 
- * @param  An enum for if we want to send our data over Wireless or Wired.
+ * @return             True if data was sent succesfully, false if otherwise.
  */
 bool Network::send_packet(const Sensors::Sensor_data sensor_data, const String series){
 	// Connect to our server.
