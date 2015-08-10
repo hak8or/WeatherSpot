@@ -31,6 +31,13 @@ public:
 	 */
 	struct Sensor_data read_sensors(void);
 
+	/**
+	 * @brief Prints the contents of sensor data nicely over uart.
+	 * 
+	 * @param sensor_data The sensor data struct we will be displaying.
+	 */
+	void print(const Sensor_data sensor_data);
+
 private:
 	uint8_t data_pin;
 	DHT *dht_module;

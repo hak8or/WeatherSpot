@@ -68,3 +68,19 @@ Sensor_data Sensors::read_sensors(void){
 
   return sensor_data;
 }
+
+/**
+ * @brief Prints the contents of sensor data nicely over uart.
+ * 
+ * @param sensor_data The sensor data struct we will be displaying.
+ */
+void Sensors::print(const Sensor_data sensor_data){
+	Serial.print(F("-  Humidity: "));
+	Serial.println(sensor_data.humidity);
+	Serial.print(F("-  Temperature: "));
+	Serial.println(sensor_data.temperature_f);
+	Serial.print(F("-  Light: "));
+	Serial.println(sensor_data.light);
+	Serial.print(F("-  Pressure: "));
+	Serial.println(sensor_data.pressure);
+}

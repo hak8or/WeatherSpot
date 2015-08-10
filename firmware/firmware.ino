@@ -64,19 +64,8 @@ void loop(){
 	// Read our s.
 	Sensor_data sensor_data = sensors.read_sensors();
 
-	// Dump the info to our screen.
-	Serial.print(F("Sensor humidity: "));
-	Serial.println(sensor_data.humidity);
-	Serial.print(F("Sensor temperature: "));
-	Serial.println(sensor_data.temperature_f);
-	Serial.print(F("Sensor light reading: "));
-	Serial.println(sensor_data.light);
-	Serial.print(F("Sensor pressure reading: "));
-	Serial.println(sensor_data.pressure);
-
-	// Make our heartbeat LED blink at a normal rate again if we were panicking earlier
-	// or it was shut off.
-	Heartbeat::start();
+	// Dump the sensor data to our screen.
+	sensors.print(sensor_data);
 
 	// try to send 5 times, if 5 fail restart the module
 	for(int i = 0; i < 5; i++){
