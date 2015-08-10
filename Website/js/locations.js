@@ -87,7 +87,7 @@
 					    scrollTop: offset.top,
 					    scrollLeft: offset.left
 					});
-				}, 1000);
+				}, 750);
 			});
 		}
 		function doQuery(db, query, callback) {
