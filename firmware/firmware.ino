@@ -59,9 +59,7 @@ void setup(){
  */
 void loop(){ 
 	// time stamp each iteration
-	Serial.print("************ Time now in millis: ");
-	Serial.print(millis());
-	Serial.println(" ************");
+	Serial.println("\n\n************ loop() starting at millis: " + String(millis()) + " ************");
 
 	// Read our s.
 	Sensor_data sensor_data = sensors.read_sensors();
