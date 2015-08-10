@@ -25,13 +25,7 @@ public:
 	 * 
 	 * @return True if we were able succesfully send the POST request, false if otherwise.
 	 */
-	bool send_packet(const Sensor_data sensor_data);
-
-	/**
-	 * @brief Turns the arduino in a proxy for serial commands from the PC to wifi module.
-	 * @details Not really working yet, sad face. :(
-	 */
-	void serial_proxy_mode(void);
+	bool send_packet(const Sensor_data sensor_data, const String series);
 
 	/**
 	 * @brief Sends a command to the WIFI module.

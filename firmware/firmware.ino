@@ -22,6 +22,9 @@ Sensors sensors;
 #define SSID "OpenWrt"
 #define password "castle2004"
 
+// Defines what location (Series) we will be sending our data too.
+#define location "Queens"
+
 /**
  * @brief The main setup loop for our sensors and WIFI.
  */
@@ -75,7 +78,7 @@ void loop(){
 		Serial.println("======== Data transmit attempt: [" + String(attempt) + "]/5");
 
 		// Make LED panic if sending failed, attempt to reconnect to wifi on 2nd try.
-		if(!network.send_packet(sensor_data)){
+		if(!network.send_packet(sensor_data, location)){
 			// start panic mode
 			Heartbeat::panic();
 

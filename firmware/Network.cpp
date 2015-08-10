@@ -10,7 +10,7 @@
  * 
  * @param  An enum for if we want to send our data over Wireless or Wired.
  */
-bool Network::send_packet(Sensor_data sensor_data){
+bool Network::send_packet(const Sensor_data sensor_data, const String series){
 	// Connect to our server.
 	if (send_command("AT+CIPSTART=\"TCP\",\"104.131.85.242\",80", "OK", 2, 1500))
 		Serial.println(F("Wifi TCP connection created."));
@@ -21,7 +21,7 @@ bool Network::send_packet(Sensor_data sensor_data){
 
 	// Construct our POST request.
 	String post_request = "POST /db/query.php?";
-	post_request = post_request + "series=Downtown";
+	post_request = post_request + "series=" + series;
 	post_request = post_request + "&temperature=" + String(sensor_data.temperature_f);
 	post_request = post_request + "&humidity=" + String(sensor_data.humidity);
 	post_request = post_request + "&pressure=" + String(sensor_data.pressure);
@@ -127,21 +127,6 @@ bool Network::init_wireless(const String SSID, const String password){
 	get_wifi_info();
 
 	return true;
-}
-
-/**
- * @brief Turns the arduino in a proxy for serial commands from the PC to wifi module.
- * @details Not really working yet, sad face. :(
- */
-void Network::serial_proxy_mode(void){
-	Serial.println(F("Entering Serial proxy mode."));
-	while(true){
-		while (wifi_serial->available() > 0)
-			Serial.write(wifi_serial->read());
-		while (Serial.available() > 0){
-			wifi_serial->write(Serial.read());
-		}
-	}
 }
 
 /**
