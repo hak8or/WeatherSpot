@@ -8,6 +8,7 @@ Sensors::Sensors(void){
 	// on a per project basis is nonexistant here, woooo!
 	// Therefore, we can't use C++11, and nullptr.
 	this->dht_module = NULL;
+	this->pressure_sensor = NULL;
 }
 
 /**
