@@ -1,8 +1,7 @@
 #include <DHT.h>
 #include "SparkFunMPL3115A2.h"
 
-#ifndef Sensors_h
-#define Sensors_h
+#pragma once
 
 class Sensors
 {
@@ -51,5 +50,3 @@ struct Sensor_data {
 	uint16_t light;
     float pressure;
 };
-
-#endif

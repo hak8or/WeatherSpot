@@ -2,8 +2,7 @@
 #include "Arduino.h"
 #include "Sensors.h"
 
-#ifndef Network_h
-#define Network_h
+#pragma once
 
 class Network
 {
@@ -70,4 +69,3 @@ private:
 	 */
 	void get_wifi_info(void);
 };
-#endif
