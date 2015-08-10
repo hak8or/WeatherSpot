@@ -48,24 +48,23 @@ Sensor_data Sensors::read_sensors(void){
 	// Check if this class was properly initiated.
 	if (dht_module == NULL || pressure_sensor == NULL) {
 		sensor_data.temperature_f = 0.0;
-  		sensor_data.humidity = 0.0;
-  		sensor_data.light = 0;
-  		sensor_data.pressure = 0.0;
+		sensor_data.humidity = 0.0;
+		sensor_data.light = 0;
+		sensor_data.pressure = 0.0;
 
-  		Heartbeat::panic();
-  		Serial.println(F("Attempt to read sensors before initilization."));
+		Heartbeat::panic();
+		Serial.println(F("Attempt to read sensors before initilization."));
 
-  		return sensor_data;
+		return sensor_data;
 	}
 
-  // True means Fahrenheit. Yeah, this library is trash.
-  //sensor_data.temperature_f = dht_module->readTemperature(true);
-  sensor_data.temperature_f = pressure_sensor->readTempF();
-  sensor_data.humidity = dht_module->readHumidity();
-  sensor_data.light = analogRead(A0);
-  sensor_data.pressure = pressure_sensor->readPressure();
+	// Read all our sensors.
+	sensor_data.temperature_f = pressure_sensor->readTempF();
+	sensor_data.humidity = dht_module->readHumidity();
+	sensor_data.light = analogRead(A0);
+	sensor_data.pressure = pressure_sensor->readPressure();
 
-  return sensor_data;
+	return sensor_data;
 }
 
 /**
