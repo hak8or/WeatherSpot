@@ -18,7 +18,7 @@
 
     <!-- Custom CSS -->
     <link href="css/logo-nav.css" rel="stylesheet">
-    <link href="css/main_page.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
 
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -31,6 +31,7 @@
 
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<a href="https://github.com/hak8or/weatherspot"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/c6625ac1f3ee0a12250227cf83ce904423abf351/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png"></a>
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -47,8 +48,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li>
-                        <a href="/">Main</a>
+                    <li style="opacity: 0;cursor: default">
+                        <a>Main</a>
                     </li>
                     <li>
                         <a href="graphs.html">Graphs</a>
@@ -57,11 +58,15 @@
                         <a href="sql.html">SQL</a>
                     </li>
                     <li>
-			<a href="about.html">About</a>
-                    </li>
-			<li>
+			<a href="about.html">Windows Application</a>
+		    </li>    
+		
+		    <li>
                         <a href= locations.html>Spot Locations</a>
                     </li>
+		    
+			
+		    
                 </ul>
            </div>
             <!-- /.navbar-collapse -->
@@ -73,11 +78,15 @@
     <div class="container">
         <div class="row">
             <div id="front_page" class="col-lg-12">
-               <!--  <h1>Welcome to Weatherspot</h1> -->
-               <!--  <p>Magic that works</p>-->
-		<section class="blueShadow">
-			<img src='/pic/logodraft1.png'></img> 
-			<a href="/locations.html">Get Started</a>
+		<section id="splash">
+			<h1>What is WeatherSpot?</h1>
+			<p>WeatherSpot is an open source, open architechture project with the goal of collecting local atmospheric data. The WeatherSpot Station is for use cases such as collecting home weather data, collecting data in an environment with limited internet access, or collecting atmosphere data indoors or even inside a computer case.</p>
+			<section id="get_started">
+				<div id="click_here" class="blueShadow">
+					<img src='/pic/logodraft1.png'></img> 
+					<a href="/locations.html">Get Started</a>
+				</div>
+			</section>
 		</section>
             </div>
         </div>
