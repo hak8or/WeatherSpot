@@ -30,13 +30,10 @@ void setup(){
 	// Find out why this cuts off the next serial print.
 	Serial.begin(115200);
 
-	for(int i = 0; i < 3; i++)
-		Serial.print(F("==============="));
-
-	Serial.println(F("\r\nWeatherSpot firmware Uno-V0.1"));
-
-	for(int i = 0; i < 3; i++)
-		Serial.print(F("==============="));
+	// Dump a decent header to our console.
+	Serial.println(F("============================"));
+	Serial.println(F("\t WeatherSpot firmware Uno-V1.0 RC1"));
+	Serial.println(F("============================"));
 
 	// set pinmode for the CH_PD
 	pinMode(12, OUTPUT);
