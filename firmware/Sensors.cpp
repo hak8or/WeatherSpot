@@ -17,8 +17,7 @@ Sensors::Sensors(void){
  * @param data_pin Pin used for data communication.
  */
 void Sensors::init_DH11(const uint8_t data_pin){
-	this->data_pin = data_pin;
-	dht_module = new DHT(this->data_pin, DHT11, 2);
+	dht_module = new DHT(data_pin, DHT11, 2);
 	dht_module->begin();
 }
 

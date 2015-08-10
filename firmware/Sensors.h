@@ -51,7 +51,6 @@ public:
 	void print(const Sensor_data sensor_data);
 
 private:
-	uint8_t data_pin;
 	DHT *dht_module;
 	MPL3115A2 *pressure_sensor;
 };
