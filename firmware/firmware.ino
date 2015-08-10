@@ -11,7 +11,7 @@
 #include "Heartbeat.h"
 #include "Network.h"
 #include "DHT.h"
-#include "TimerOne.h"
+#include <TimerOne.h>
 #include "SparkFunMPL3115A2.h"
 
 // Global because arduno says we need setup and loop functions.

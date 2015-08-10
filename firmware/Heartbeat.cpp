@@ -1,6 +1,6 @@
 #include "Heartbeat.h"
 #include "Arduino.h"
-#include "TimerOne.h"
+#include <TimerOne.h>
 
 /**
  * @brief ISR for toggling the heartbeat LED.
