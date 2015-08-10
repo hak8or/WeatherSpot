@@ -27,17 +27,12 @@ Sensors sensors;
  */
 void setup(){
 	// Start up the serial communication.
-	// Find out why this cuts off the next serial print.
 	Serial.begin(115200);
 
 	// Dump a decent header to our console.
 	Serial.println(F("============================"));
 	Serial.println(F("\t WeatherSpot firmware Uno-V1.0 RC1"));
 	Serial.println(F("============================"));
-
-	// set pinmode for the CH_PD
-	pinMode(12, OUTPUT);
-	delay(3000);
 
 	// Startup our network.
 	while (!network.init_wireless(SSID, password)){
@@ -123,7 +118,6 @@ void loop(){
  * @brief Disable WDT.
  */
 ISR(WDT_vect){
-	// disable the watchdog
 	wdt_disable();
 }
 
