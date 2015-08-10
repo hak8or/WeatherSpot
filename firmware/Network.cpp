@@ -160,10 +160,7 @@ bool Network::find(const String reply, const uint8_t reply_length, const uint16_
 
 	// Make sure we don't spend forever waiting for the char sequence.
 	while((millis() - start_time) < milliseconds){
-		// Serial.println("Start time: " + String(start_time) + " Millis: " + String(millis()));
-		// Serial.println("Time passed: " + String(millis() - start_time) + " Timeout: " + String(milliseconds));
 		if (wifi_serial->available() > 0) {
-			// Check if the reply on our serial port is the first char of reply.
 			char reply_char = wifi_serial->read();
 			if (reply_char == reply[current_reply_index]){
 				// Check if we succesfully compared the entire reply.
