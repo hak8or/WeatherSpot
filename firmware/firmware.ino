@@ -96,6 +96,8 @@ void loop(){
 			// Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
 			Heartbeat::start();
 
+			Serial.println(F("Sensor data was sent to the server succesfully!"));
+
 			break;
 		}
 	}
