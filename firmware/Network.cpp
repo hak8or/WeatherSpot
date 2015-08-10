@@ -31,9 +31,9 @@ bool Network::send_packet(const Sensor_data sensor_data, const String series){
 	// Construct the command to begin our POST request.
 	String command = "AT+CIPSEND=" + String(post_request.length());
 
-	Serial.print(F("Sending:  \n\t"));
+	Serial.print(F("Sending:\n\t"));
 	Serial.println(command);
-	Serial.print(F("\nWith the contents:\n\t"));
+	Serial.print(F("With the contents:\n\t"));
 	Serial.println(post_request);
 
 	// Tell the wifi module we want to send a HTTP request.
@@ -133,14 +133,16 @@ bool Network::init_wireless(const String SSID, const String password){
  * @brief Dumps wifi network information over to the pc serial.
  */
  void Network::get_wifi_info(void){
-	Serial.println(F("\r\n============== Wifi Network info =============="));
+	Serial.println(F("============== Wifi Network info vvv"));
 	uint32_t start_time = millis();
 
 	// Mirror output of a "get network info" command.
 	wifi_serial->println("AT+CIFSR");
 	while ((millis() - start_time) < 500)
 		if (wifi_serial->available())
-	    	Serial.write(wifi_serial->read());
+			Serial.write(wifi_serial->read());
+
+	Serial.println(F("============== Wifi Network info ^^^"));
 }
 
 /**
@@ -215,10 +217,10 @@ bool Network::send_command(const String command, const String reply, const uint8
 		Serial.println(command);
 
 		// Dump the buffer.
-		Serial.println(F("Reply ======= start"));
+		Serial.println(F("Reply ------- start  vvvv"));
 		for (int i = 0; i < reply_buffer_current_index; i++)
 			Serial.print(reply_buffer[i]);
-		Serial.println(F("Reply ======= end"));
+		Serial.println(F("Reply ------- end    ^^^^"));
 
 		// Empty our buffer.
 		reply_buffer_current_index = 0;
