@@ -22,9 +22,13 @@ switch ($method) {
 	
 		$paramSeries = test_GETSetOrDefault("series", test_GETSetOrDefault("s", ""));
 		$paramTemperature = test_GETSetOrDefault("temperature", test_GETSetOrDefault("t", ""));
+		$paramTemperature = validWithinRange($paramTemperature, -40, 125);
 		$paramHumidity = test_GETSetOrDefault("humidity", test_GETSetOrDefault("h", ""));
+		$paramHumidity = validWithinRange($paramHumidity, 0, 100);
 		$paramPressure = test_GETSetOrDefault("pressure", test_GETSetOrDefault("pr", ""));
+		$paramPressure = validWithinRange($paramPressure, 100000, 105000);
 		$paramLighting = test_GETSetOrDefault("lighting", test_GETSetOrDefault("l", ""));
+		$paramLighting = validWithinRange($paramLighting, 0, 1024);
 		$paramData = buildJSON($paramSeries, $paramTemperature, $paramHumidity, $paramPressure, $paramLighting);
 		if ($paramData == "") {
 			echo "Bad Data";
@@ -40,6 +44,12 @@ switch ($method) {
 	break;
 }
 
+function validWithinRange($n, $_min, $_max) {
+	if (($_min <= $n) && ($n <= $_max)) {
+		return $n;
+	}
+	return "";
+}
 
 function buildJSON($series, $temperature, $humidity, $pressure, $light) {
 	if (!$series || !$temperature || !$humidity || !$pressure || !$light) {
