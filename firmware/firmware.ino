@@ -18,6 +18,9 @@ Network network;
 // global sensors object
 Sensors sensors;
 
+/**
+ * @brief The main setup loop for our sensors and WIFI.
+ */
 void setup(){
 	// Start up the serial communication.
 	// Find out why this cuts off the next serial print.
@@ -55,6 +58,9 @@ void setup(){
  
 }
 
+/**
+ * @brief Main loop of our application to read sensors and send data to server.
+ */
 void loop(){ 
   
   // time stamp each iteration
