@@ -16,7 +16,7 @@ public:
 	 * 
 	 * @param data_pin [Pin used for data communication.
 	 */
-	void init_DH11(uint8_t data_pin);
+	void init_DH11(const uint8_t data_pin);
 
 	/**
 	 * @brief Sets up the MPL3115A2 module for pressure readings.
