@@ -52,9 +52,10 @@ private:
 	 * @brief Blocks till either timeout or we find the requested reply.
 	 * 
 	 * @param reply The reply we are waiting for.
+	 * @param reply_length Number of chars of our reply.
 	 * @param milliseconds The timeout for how long we are willing to wait.
 	 * 
-	 * @return If we found the reply within the timeout.
+	 * @return True if we found the reply within the timeout.
 	 */
 	bool find(const String reply, const uint8_t reply_length, const uint16_t milliseconds);
 
