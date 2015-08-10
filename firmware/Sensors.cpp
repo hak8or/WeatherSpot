@@ -42,8 +42,8 @@ void Sensors::init_MPL3115A2(void){
  * 
  * @return Data from the reading in the form of a sensor_data struct.
  */
-Sensor_data Sensors::read_sensors(void){
-	Sensor_data sensor_data;
+Sensors::Sensor_data Sensors::read_sensors(void){
+	Sensors::Sensor_data sensor_data;
 
 	// Check if this class was properly initiated.
 	if (dht_module == NULL || pressure_sensor == NULL) {
@@ -72,7 +72,7 @@ Sensor_data Sensors::read_sensors(void){
  * 
  * @param sensor_data The sensor data struct we will be displaying.
  */
-void Sensors::print(const Sensor_data sensor_data){
+void Sensors::print(const Sensors::Sensor_data sensor_data){
 	Serial.print(F("-  Humidity: "));
 	Serial.println(sensor_data.humidity);
 	Serial.print(F("-  Temperature: "));

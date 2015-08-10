@@ -10,7 +10,7 @@
  * 
  * @param  An enum for if we want to send our data over Wireless or Wired.
  */
-bool Network::send_packet(const Sensor_data sensor_data, const String series){
+bool Network::send_packet(const Sensors::Sensor_data sensor_data, const String series){
 	// Connect to our server.
 	if (send_command("AT+CIPSTART=\"TCP\",\"104.131.85.242\",80", "OK", 2, 1500))
 		Serial.println(F("Wifi TCP connection created."));

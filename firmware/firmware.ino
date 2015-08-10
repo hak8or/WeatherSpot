@@ -68,7 +68,7 @@ void loop(){
 	Heartbeat::stop();
 
 	// Read our sensors.
-	Sensor_data sensor_data = sensors.read_sensors();
+	Sensors::Sensor_data sensor_data = sensors.read_sensors();
 
 	// Dump the sensor data to our screen.
 	sensors.print(sensor_data);

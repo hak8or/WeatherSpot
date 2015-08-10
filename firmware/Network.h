@@ -28,7 +28,7 @@ public:
 	 * 
 	 * @return True if we were able succesfully send the POST request, false if otherwise.
 	 */
-	bool send_packet(const Sensor_data sensor_data, const String series);
+	bool send_packet(const Sensors::Sensor_data sensor_data, const String series);
 
 	/**
 	 * @brief Sends a command to the WIFI module.

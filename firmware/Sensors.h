@@ -27,11 +27,21 @@ public:
 	void init_MPL3115A2(void);
 
 	/**
+	 * Just a struct to hold all our sensor data.
+	 */
+	struct Sensor_data {
+		float humidity;
+		float temperature_f;
+		uint16_t light;
+	    float pressure;
+	};
+
+	/**
 	 * @brief Reads sensor data.
 	 * 
 	 * @return Data from the reading in the form of a sensor_data struct.
 	 */
-	struct Sensor_data read_sensors(void);
+	Sensor_data read_sensors(void);
 
 	/**
 	 * @brief Prints the contents of sensor data nicely over uart.
@@ -46,10 +56,4 @@ private:
 	MPL3115A2 *pressure_sensor;
 };
 
-// Struct to hold our weather data.
-struct Sensor_data {
-	float humidity;
-	float temperature_f;
-	uint16_t light;
-    float pressure;
-};
+
