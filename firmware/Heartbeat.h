@@ -1,6 +1,8 @@
 #pragma once
 
-// Used to turn the heartbeat LED on and off using a timer.
+/**
+ * Controls a heartbeat LED for knowing the state of our system.
+ */
 class Heartbeat
 {
 public:

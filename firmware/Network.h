@@ -4,6 +4,9 @@
 
 #pragma once
 
+/**
+ * API for all our network ncesessities.
+ */
 class Network
 {
 public:

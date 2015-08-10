@@ -3,6 +3,9 @@
 
 #pragma once
 
+/**
+ * API for all our sensor needs.
+ */
 class Sensors
 {
 public:
