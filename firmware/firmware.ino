@@ -61,35 +61,38 @@ void loop(){
 	// time stamp each iteration
 	Serial.println("\n\n************ loop() starting at millis: " + String(millis()) + " ************");
 
-	// Read our s.
+	// Make sure the LED doesn't interefere with light sensing.
+	Heartbeat::stop();
+
+	// Read our sensors.
 	Sensor_data sensor_data = sensors.read_sensors();
 
 	// Dump the sensor data to our screen.
 	sensors.print(sensor_data);
 
 	// try to send 5 times, if 5 fail restart the module
-	for(int i = 0; i < 5; i++){
-		Serial.print("Trying to send data: ");
-		Serial.println(i);
+	for(int attempt = 0; attempt < 5; attempt++){
+		Serial.println("======== Data transmit attempt: [" + String(attempt) + "]/5");
 
+		// Make LED panic if sending failed, attempt to reconnect to wifi on 2nd try.
 		if(!network.send_packet(sensor_data)){
-			if(i == 2){
-				// something went wrong with the connection - try to reconnect
-				// Startup our network.
+			// start panic mode
+			Heartbeat::panic();
+
+			// Reconnect to the WIFI, seems to make the WIFI module happier on the 2nd try.
+			if(attempt == 2){
 				while (!network.init_wireless(SSID, password)){
 					Serial.println(F("Failed connecting to wireless network, retying in 3 seconds."));
-					Heartbeat::panic();
 					delay(3000);
 				}
 
+				// Extra delay for extra safety.
 				delay(3000);
-
-				// start panic mode
-				Heartbeat::panic();
 			}
 		} else {
 			// Make our heartbeat LED blink at a normal rate again if we were panicking earlier.
 			Heartbeat::start();
+
 			break;
 		}
 	}
