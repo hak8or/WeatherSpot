@@ -49,6 +49,9 @@ namespace WeatherSpot
         {
             time_x.Clear();
             temp_y.Clear();
+            hum_y.Clear();
+            press_y.Clear();
+            light_y.Clear();
 
             for(int i = 0; i < jsonLabelArray.Count; i++)
             {
@@ -78,19 +81,6 @@ namespace WeatherSpot
                 press_y.Add(Convert.ToDouble(jsonDataArray[i][presLabel].ToString()));
                 light_y.Add(Convert.ToDouble(jsonDataArray[i][lightLabel].ToString()));             
             }
-            /*
-
-                TimeSpan time = TimeSpan.FromSeconds(Convert.ToDouble(jsonDataArray[2][0].ToString()));
-                double hours = time.Hours;
-                main.fetchTime.Text = hours.ToString();
-
-            
-                double unx = 1434585421459;
-                System.DateTime dtDateTime = new DateTime(1970,1,1,0,0,0,0,System.DateTimeKind.Utc);
-                dtDateTime = dtDateTime.AddSeconds(unx).ToLocalTime();
-                main.fetchTime.Text = dtDateTime.ToString();
-            */
-
         }
 
         public void AddX(double inX)
@@ -194,22 +184,12 @@ namespace WeatherSpot
             main.plotter4.RemoveUserElements();
         }
 
-        private double UnixTimeConverter(double unx)
-        {
-         
+        public static DateTime UnixTimeConverter(double unx)
+        {         
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            dateTime = dateTime.AddMilliseconds(unx).ToLocalTime();
 
-            // First make a System.DateTime equivalent to the UNIX Epoch.
-            System.DateTime dateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
-
-            // Add the number of seconds in UNIX timestamp to be converted.
-            dateTime = dateTime.AddSeconds(unx);
-
-            // The dateTime now contains the right date/time so to format the string,
-            // use the standard formatting methods of the DateTime object.
-           
-
-
-            return Convert.ToDouble(dateTime.Hour);
+            return dateTime;
         }
 
         public void SetStatistics(bool setParameter)
@@ -248,6 +228,25 @@ namespace WeatherSpot
                 main.temperatureMaxOut.Text = "0.0";
                 main.temperatureMinOut.Text = "0.0";
                 main.temperatureMedianOut.Text = "0.0";
+                main.temperatureStdOut.Text = "0.0";
+
+                main.humidityAvgOut.Text = "0.0";
+                main.humidityMaxOut.Text = "0.0";
+                main.humidityMinOut.Text = "0.0";
+                main.humidityMedianOut.Text = "0.0";
+                main.humidityStdOut.Text = "0.0";
+
+                main.pressureAvgOut.Text = "0.0";
+                main.pressureMaxOut.Text = "0.0";
+                main.pressureMinOut.Text = "0.0";
+                main.pressureMedianOut.Text = "0.0";
+                main.pressureStdOut.Text = "0.0";
+
+                main.lightAvgOut.Text = "0.0";
+                main.lightMaxOut.Text = "0.0";
+                main.lightMaxOut.Text = "0.0";
+                main.lightMedianOut.Text = "0.0";
+                main.lightStdOut.Text = "0.0";
             }
         }
 

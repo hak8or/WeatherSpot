@@ -48,7 +48,7 @@ namespace WeatherSpot
         private void fetchClick(object sender, RoutedEventArgs e)
         {            
             string dbQuery = "SELECT * FROM " + sensorLocation + " WHERE '" + dayBefore + "' < time" + " and time < '" + dayAfter + "'";
-           
+
             try
             {               
                 JObject parseResults = JObject.Parse(NetworkClass.serverResponse(dbQuery));             
@@ -166,7 +166,14 @@ namespace WeatherSpot
 
                         for (int i = 0; i < jsonArray.Count; i++)
                         {
-                            consoleOutBox.Text += jsonArray[i].ToString() + "\t\t";
+                            if(i == 0)
+                            {
+                                consoleOutBox.Text += jsonArray[i].ToString() + "\t\t\t";
+                            }
+                            else
+                            {
+                                consoleOutBox.Text += jsonArray[i].ToString() + "\t\t\t";
+                            }
                         }
 
                         jsonArray = (JArray)parseResults.SelectToken("points");
@@ -176,7 +183,15 @@ namespace WeatherSpot
                         { 
                             for (int j = 0; j < rowCount; j++)
                             {
-                                consoleOutBox.Text += jsonArray[i][j].ToString() + "\t\t";
+
+                                if (j == 0)
+                                {
+                                    consoleOutBox.Text += PlottingClass.UnixTimeConverter(Convert.ToDouble(jsonArray[i][j].ToString())).ToString() + "\t\t\t";
+                                }
+                                else
+                                {
+                                    consoleOutBox.Text += jsonArray[i][j].ToString() + "\t\t\t";
+                                }
                             }
 
                             consoleOutBox.Text += "\n";
@@ -274,8 +289,9 @@ namespace WeatherSpot
             // Adding values for the drop menu box
             List<string> data = new List<string>();
             data.Add("Downtown");
-            data.Add("Sun");
-            data.Add("Black Hole");
+            data.Add("Queens");
+            data.Add("Staten_Island");
+            data.Add("Hunter");
 
             // Binding data with locationSelection xaml element
             locationSelector.ItemsSource = data;
@@ -288,7 +304,7 @@ namespace WeatherSpot
         {
             sensorLocation = locationSelector.SelectedItem as string;
                         
-        } // end of method
+        } 
 
         private void printClick(object sender, RoutedEventArgs e)
         {
@@ -297,7 +313,9 @@ namespace WeatherSpot
             {
               //  printDialog.PrintVisual("My First Print Job");
             }
-        }
+
+        } // end of method
+
     } // end of class
 
 } // end of namespace

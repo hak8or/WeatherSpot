@@ -12,23 +12,23 @@
         <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="630" VerticalAlignment="Top" Width="1245">
             <TabItem Header="Graphs">
                 <Grid Background="#FFE5E5E5" Margin="0,0,0.2,-0.6">
-                    <Button x:Name="closeButton" Content="Close" HorizontalAlignment="Left" Margin="84,369,0,0" VerticalAlignment="Top" Width="75" Click="closeClick"/>
-                    <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Margin="84,315,0,0" VerticalAlignment="Top" Width="75" Click="exportClick"/>
-                    <Button x:Name="fetchButton" Content="Fetch" HorizontalAlignment="Left" Margin="84,261,0,0" VerticalAlignment="Top" Width="75" Click="fetchClick"/>
-                    <Calendar Name="FetchCalendar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,14,0,0" IsTodayHighlighted="False" IsManipulationEnabled="True" SelectedDatesChanged="CalendarSelectedDatesChanged"/>
+                    <Button x:Name="closeButton" Content="Close" HorizontalAlignment="Left" Margin="84,382,0,0" VerticalAlignment="Top" Width="75" Click="closeClick"/>
+                    <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Margin="84,329,0,0" VerticalAlignment="Top" Width="75" Click="exportClick"/>
+                    <Button x:Name="fetchButton" Content="Fetch" HorizontalAlignment="Left" Margin="84,275,0,0" VerticalAlignment="Top" Width="75" Click="fetchClick"/>
+                    <Calendar Name="FetchCalendar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,32,0,0" IsTodayHighlighted="False" IsManipulationEnabled="True" SelectedDatesChanged="CalendarSelectedDatesChanged"/>
                     <d3:ChartPlotter Name="plotter" Margin="353,32,530.8,345.4" Background="#FFE5E5E5">
                         <d3:VerticalAxisTitle Content="F"/>
                         <d3:HorizontalAxisTitle>Time</d3:HorizontalAxisTitle>
-                    </d3:ChartPlotter>
+                       </d3:ChartPlotter>
                     <TextBox x:Name="textBoxOut" HorizontalAlignment="Left" Height="105" Margin="11,433,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="274"/>
-                    <Button x:Name="importButton" Content="Import" HorizontalAlignment="Left" Margin="84,288,0,0" VerticalAlignment="Top" Width="75" Click="importClick"/>
+                    <Button x:Name="importButton" Content="Import" HorizontalAlignment="Left" Margin="84,302,0,0" VerticalAlignment="Top" Width="75" Click="importClick"/>
                     <Rectangle Height="35.2" VerticalAlignment="Bottom" Fill="#FF2C2CD0" Margin="-9.6,0,-9.5,-10.3"/>
-                    <ComboBox x:Name="locationSelector" HorizontalAlignment="Left" Margin="35,185,0,0" VerticalAlignment="Top" Width="179" Loaded="ComboBoxLoaded"
+                    <ComboBox x:Name="locationSelector" HorizontalAlignment="Left" Margin="35,205,0,0" VerticalAlignment="Top" Width="179" Loaded="ComboBoxLoaded"
 	                    SelectionChanged="ComboBoxSelectionChanged"/>
-                    <Button x:Name="printButton" Content="Print" HorizontalAlignment="Left" Margin="84,342,0,0" VerticalAlignment="Top" Width="75" Click="printClick"/>
+                    <Button x:Name="printButton" Content="Print" HorizontalAlignment="Left" Margin="84,356,0,0" VerticalAlignment="Top" Width="75" Click="printClick"/>
                     <TextBlock x:Name="fetchTime" HorizontalAlignment="Left" Margin="985,583,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="White" Width="210"/>
-                    <TextBox x:Name="hourBox" Text="{Binding ElementName=hourSelector, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Margin="244,208,965.8,365.4" RenderTransformOrigin="-0.577,0.466" />
-                    <Slider x:Name="hourSelector" HorizontalAlignment="Left" Margin="35,212,0,0" VerticalAlignment="Top" Width="179" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="24" TickPlacement="BottomRight"/>
+                    <TextBox x:Name="hourBox" Text="{Binding ElementName=hourSelector, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Margin="233,232,976,341" RenderTransformOrigin="-0.577,0.466" />
+                    <Slider x:Name="hourSelector" HorizontalAlignment="Left" Margin="35,232,0,0" VerticalAlignment="Top" Width="179" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="24" TickPlacement="BottomRight"/>
                     <d3:ChartPlotter x:Name="plotter3" Margin="353,266,530.8,111.4" Background="#FFE5E5E5">
                         <d3:VerticalAxisTitle Content="F"/>
                         <d3:HorizontalAxisTitle Content="Time"/>
