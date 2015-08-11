@@ -2,10 +2,6 @@
 #include <SoftwareSerial.h>
 #include <Wire.h>
 
-// For the WDT sleep functionality.
-#include <avr/sleep.h>
-#include <avr/wdt.h>
-
 // Includes relevant to our project.
 #include "Sensors.h"
 #include "Heartbeat.h"
@@ -33,9 +29,9 @@ void setup(){
 	Serial.begin(115200);
 
 	// Dump a decent header to our console.
-	Serial.println(F("============================"));
+	Serial.println(F("=================================================="));
 	Serial.println(F("\t WeatherSpot firmware Uno-V1.0 RC1"));
-	Serial.println(F("============================"));
+	Serial.println(F("=================================================="));
 
 	// Startup our network.
 	while (!network.init_wireless(SSID, password)){
@@ -106,27 +102,3 @@ void loop(){
 	delay(60000);
 }
 
-/**
- * @brief Disable WDT.
- */
-ISR(WDT_vect){
-	wdt_disable();
-}
-
-/**
- * @brief Enables WDT to fire after a certain time.
- * 
- * @param time_to_sleep How long till the WDT fires again.
- */
-void EnableWatchDog(const byte time_to_sleep){
-	MCUSR = 0;
-	WDTCSR |= 0b00011000;
-	WDTCSR =  0b01000000 | time_to_sleep;
-
-	wdt_reset();
-
-	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-
-	// sleep until we are interrupted
-	sleep_mode();
-}
