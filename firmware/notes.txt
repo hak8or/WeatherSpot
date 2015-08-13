@@ -1,0 +1,68 @@
+Make a sensors struct or class to hold all our sensor data which will be used for JSON data sent to our server.
+
+AT+UART_DEF=9600,8,1,0,0
+AT+UART_CUR=9600,8,1,0,0
+AT+RST
+AT+CWMODE=1
+AT+CWJAP="OpenWrt","castle2004"
+AT+CIFSR
+AT+GMR
+
+00170901
+
+http://www.electrodragon.com/w/ESP8266
+http://www.rei-labs.net/esp8266-connecting-to-internet/
+http://electronut.in/an-iot-project-with-esp8266/
+http://mcuoneclipse.com/2014/12/14/tutorial-iot-datalogger-with-esp8266-wifi-module-and-frdm-kl25z/
+https://github.com/espressif/esp8266_at/wiki/TCPIP_at_0019000902
+http://www.instructables.com/id/Blink-for-ESP8266-native-like-arduino-using-Window/step2/Upload-latest-firmware-SDK/
+https://www.youtube.com/watch?v=QkZrrydLw-8
+http://bbs.espressif.com/viewtopic.php?f=5&t=680
+http://www.esp8266.com/viewtopic.php?f=6&t=1428
+http://blog.electrodragon.com/cloud-updating-your-wi07c-esp8266-now/
+http://tech.scargill.net/esp8266-busy-s/
+http://tomeko.net/other/ESP8266/
+http://kacangbawang.com/latest-at-firmware-for-esp8266-with-512k-flash/
+https://github.com/pfalcon/esp-open-sdk
+
+=========================
+I have been fumbling around with trying to update my SFP module from "00170901" (AT-thinker Firmware) as given by "AT+GMR".
+
+I tried to update using "AT+CIUPDATE" but got an Error after the fourth step instead of OK, so I tried to do it manually using flash_download_tool_v1.2_150512, but I fear I really botched things up since now I get a "MEM CHECK FAIL" from the module, and pressing enter after a command using Putty just puts the cursor back at the beginning of the line instead of executing the command (such as AT+GMR).
+
+I have attempted to flash the firmware using the most recent SDK (esp_iot_sdk_v1.2.0_15_07_03) as per [this](https://www.youtube.com/watch?v=QkZrrydLw-8) video, but I afterwards began to receive the memcheck error. I also attempted to flash the module as per the directions in the SDK readme but still same issue. I fear I probably overwrote some critical sections of flash and before botching things up further, I wanted to make sure I have an up to date resource.
+
+So, does anyone know what files go to what locations from the most recent SDK so I can get my SFP-01 back up and running? Assume that I overwrote the entire flash with 0's, so I am starting from scratch. I wasn't sure if I should have posted this here or on the official [here](http://bbs.espressif.com/viewtopic.php?f=5&t=680).
+=====================
+
+### How to manually flash new SDK
+esp_iot_sdk_v1.2.0\bin\at\eagle.flash.bin         0x00000
+esp_iot_sdk_v1.2.0\bin\at\eagle.irom0text.bin     0x40000
+esp_iot_sdk_v1.2.0\bin\blank.bin                  0x3e000
+esp_iot_sdk_v1.2.0\bin\blank.bin                  0x7e000
+esp_iot_sdk_v1.2.0\bin\esp_init_data_default.bin  0xFC000
+26 Mhz crystal
+40 MHZ SPI speed, Quad I/O, 4 megabit (SpiAutoSet probably does this automatically, need to check)
+Now running at 115200 default, need to reset to lower speed because softserial sucks butt and can't keep up that fast. Reset to 9600 baud via AT+UART_DEF=9600,8,1,0,0
+
+Also, putty does not offer to do a proper carriage return, so press enter and then ctrl-j after every command if you need to use putty. Suprisingly enough, the Arduino serial monitor has an option for newline and carriage return which works correctly.
+http://comp.terminals.narkive.com/K5YqczS3/i-want-putty-to-send-a-linefeed-and-carriage-return-everytime-i-press-cr
+
+### Output of GMR now.
+AT+GMR
+
+AT version:0.30.0.0(Jul  3 2015 19:35:49)
+SDK version:1.2.0
+compile time:Jul  3 2015 20:52:41
+
+
+
+Pinout of wifi module:
+TX -> RX
+RX -> TX
+CH_PD -> 3v3
+VCC -> 3v3
+GND -> GND
+RST -> OPEN
+
+pull RST down only for a second and let go, it will restart the module
