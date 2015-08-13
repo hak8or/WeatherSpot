@@ -8,6 +8,7 @@ Sensors::Sensors(void){
 	// on a per project basis is nonexistant here, woooo!
 	// Therefore, we can't use C++11, and nullptr.
 	this->dht_module = NULL;
+	this->pressure_sensor = NULL;
 }
 
 /**
@@ -15,12 +16,9 @@ Sensors::Sensors(void){
  * 
  * @param data_pin Pin used for data communication.
  */
-void Sensors::init_DH11(uint8_t data_pin){
-	this->data_pin = data_pin;
-	dht_module = new DHT(this->data_pin, DHT11, 2);
+void Sensors::init_DH11(const uint8_t data_pin){
+	dht_module = new DHT(data_pin, DHT11, 2);
 	dht_module->begin();
-
-	Serial.println(F("Setting up DHT11."));
 }
 
 /**
@@ -43,27 +41,43 @@ void Sensors::init_MPL3115A2(void){
  * 
  * @return Data from the reading in the form of a sensor_data struct.
  */
-Sensor_data Sensors::read_sensors(void){
-	Sensor_data sensor_data;
+Sensors::Sensor_data Sensors::read_sensors(void){
+	Sensors::Sensor_data sensor_data;
 
 	// Check if this class was properly initiated.
 	if (dht_module == NULL || pressure_sensor == NULL) {
 		sensor_data.temperature_f = 0.0;
-  		sensor_data.humidity = 0.0;
-  		sensor_data.light = 0;
-  		sensor_data.pressure = 0.0;
+		sensor_data.humidity = 0.0;
+		sensor_data.light = 0;
+		sensor_data.pressure = 0.0;
 
-  		Heartbeat::panic();
-  		Serial.println(F("Attempt to read sensors before initilization."));
+		Heartbeat::panic();
+		Serial.println(F("Attempt to read sensors before initilization."));
 
-  		return sensor_data;
+		return sensor_data;
 	}
 
-  // True means Fahrenheit. Yeah, this library is trash.
-  sensor_data.temperature_f = dht_module->readTemperature(true);
-  sensor_data.humidity = dht_module->readHumidity();
-  sensor_data.light = analogRead(A0);
-  sensor_data.pressure = pressure_sensor->readPressure();
+	// Read all our sensors.
+	sensor_data.temperature_f = pressure_sensor->readTempF();
+	sensor_data.humidity = dht_module->readHumidity();
+	sensor_data.light = analogRead(A0);
+	sensor_data.pressure = pressure_sensor->readPressure();
 
-  return sensor_data;
+	return sensor_data;
+}
+
+/**
+ * @brief Prints the contents of sensor data nicely over uart.
+ * 
+ * @param sensor_data The sensor data struct we will be displaying.
+ */
+void Sensors::print(const Sensors::Sensor_data sensor_data){
+	Serial.print(F("-  Humidity: "));
+	Serial.println(sensor_data.humidity);
+	Serial.print(F("-  Temperature: "));
+	Serial.println(sensor_data.temperature_f);
+	Serial.print(F("-  Light: "));
+	Serial.println(sensor_data.light);
+	Serial.print(F("-  Pressure: "));
+	Serial.println(sensor_data.pressure);
 }

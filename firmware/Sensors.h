@@ -1,9 +1,11 @@
 #include <DHT.h>
 #include "SparkFunMPL3115A2.h"
 
-#ifndef Sensors_h
-#define Sensors_h
+#pragma once
 
+/**
+ * API for all our sensor needs.
+ */
 class Sensors
 {
 public:
@@ -17,7 +19,7 @@ public:
 	 * 
 	 * @param data_pin [Pin used for data communication.
 	 */
-	void init_DH11(uint8_t data_pin);
+	void init_DH11(const uint8_t data_pin);
 
 	/**
 	 * @brief Sets up the MPL3115A2 module for pressure readings.
@@ -25,24 +27,32 @@ public:
 	void init_MPL3115A2(void);
 
 	/**
+	 * Just a struct to hold all our sensor data.
+	 */
+	struct Sensor_data {
+		float humidity;
+		float temperature_f;
+		uint16_t light;
+	    float pressure;
+	};
+
+	/**
 	 * @brief Reads sensor data.
 	 * 
 	 * @return Data from the reading in the form of a sensor_data struct.
 	 */
-	struct Sensor_data read_sensors(void);
+	Sensor_data read_sensors(void);
+
+	/**
+	 * @brief Prints the contents of sensor data nicely over uart.
+	 * 
+	 * @param sensor_data The sensor data struct we will be displaying.
+	 */
+	void print(const Sensor_data sensor_data);
 
 private:
-	uint8_t data_pin;
 	DHT *dht_module;
 	MPL3115A2 *pressure_sensor;
 };
 
-// Struct to hold our weather data.
-struct Sensor_data {
-	float humidity;
-	float temperature_f;
-	uint16_t light;
-    float pressure;
-};
 
-#endif

@@ -7,10 +7,13 @@
 /**
  * @brief Sends a peice of data over TCP to our backend.
  * @details Does a DNS lookup for our backend, sets up a TCP connection, and sends our data.
+ *
+ * @param  sensor_data The sensor data struct worth of data we will be sending.
+ * @param  series      What series (location) we want our data to be sent to.
  * 
- * @param  An enum for if we want to send our data over Wireless or Wired.
+ * @return             True if data was sent succesfully, false if otherwise.
  */
-bool Network::send_packet(Sensor_data sensor_data){
+bool Network::send_packet(const Sensors::Sensor_data sensor_data, const String series){
 	// Connect to our server.
 	if (send_command("AT+CIPSTART=\"TCP\",\"104.131.85.242\",80", "OK", 2, 1500))
 		Serial.println(F("Wifi TCP connection created."));
@@ -21,7 +24,7 @@ bool Network::send_packet(Sensor_data sensor_data){
 
 	// Construct our POST request.
 	String post_request = "POST /db/query.php?";
-	post_request = post_request + "series=Downtown";
+	post_request = post_request + "series=" + series;
 	post_request = post_request + "&temperature=" + String(sensor_data.temperature_f);
 	post_request = post_request + "&humidity=" + String(sensor_data.humidity);
 	post_request = post_request + "&pressure=" + String(sensor_data.pressure);
@@ -31,9 +34,9 @@ bool Network::send_packet(Sensor_data sensor_data){
 	// Construct the command to begin our POST request.
 	String command = "AT+CIPSEND=" + String(post_request.length());
 
-	Serial.print(F("Sending:  \n\t"));
+	Serial.print(F("Sending:\n\t"));
 	Serial.println(command);
-	Serial.print(F("\nWith the contents:\n\t"));
+	Serial.print(F("With the contents:\n\t"));
 	Serial.println(post_request);
 
 	// Tell the wifi module we want to send a HTTP request.
@@ -84,7 +87,7 @@ bool Network::init_wireless(const String SSID, const String password){
 	delay(1500);
 
 	// And the correct wireless mode.
-	if (send_command("AT+CWMODE=3", "OK", 2, 1500))
+	if (send_command("AT+CWMODE=1", "OK", 2, 1500))
 		Serial.println(F("Wifi mode select was succesfull."));
 	else{
 		Serial.println(F("Wifi mode select failed, no reply or garbage returned."));
@@ -101,6 +104,9 @@ bool Network::init_wireless(const String SSID, const String password){
 		Serial.println("Wifi connected to " + SSID + " network succesfully!");
 	else{
 		Serial.println("Wifi connected to " + SSID + " network failed.");
+
+		// Damiens WIFI board/network bugs out seemingly always at this point
+		// even though he is actually connected, so this is stuck at true. :/
 		return true;
 	}
 
@@ -127,41 +133,29 @@ bool Network::init_wireless(const String SSID, const String password){
 }
 
 /**
- * @brief Turns the arduino in a proxy for serial commands from the PC to wifi module.
- * @details Not really working yet, sad face. :(
- */
-void Network::serial_proxy_mode(void){
-	Serial.println(F("Entering Serial proxy mode."));
-	while(true){
-		while (wifi_serial->available() > 0)
-			Serial.write(wifi_serial->read());
-		while (Serial.available() > 0){
-			wifi_serial->write(Serial.read());
-		}
-	}
-}
-
-/**
  * @brief Dumps wifi network information over to the pc serial.
  */
  void Network::get_wifi_info(void){
-	Serial.println(F("\r\n============== Wifi Network info =============="));
+	Serial.println(F("============== Wifi Network info vvv"));
 	uint32_t start_time = millis();
 
 	// Mirror output of a "get network info" command.
 	wifi_serial->println("AT+CIFSR");
 	while ((millis() - start_time) < 500)
 		if (wifi_serial->available())
-	    	Serial.write(wifi_serial->read());
+			Serial.write(wifi_serial->read());
+
+	Serial.println(F("============== Wifi Network info ^^^"));
 }
 
 /**
  * @brief Blocks till either timeout or we find the requested reply on the wifi serial port.
  * 
  * @param reply The reply we are waiting for.
+ * @param reply_length Number of chars of our reply.
  * @param milliseconds The timeout for how long we are willing to wait.
  * 
- * @return If we found the reply within the timeout.
+ * @return True if we found the reply within the timeout.
  */
 bool Network::find(const String reply, const uint8_t reply_length, const uint16_t milliseconds){
 	uint32_t start_time = millis();
@@ -169,10 +163,7 @@ bool Network::find(const String reply, const uint8_t reply_length, const uint16_
 
 	// Make sure we don't spend forever waiting for the char sequence.
 	while((millis() - start_time) < milliseconds){
-		// Serial.println("Start time: " + String(start_time) + " Millis: " + String(millis()));
-		// Serial.println("Time passed: " + String(millis() - start_time) + " Timeout: " + String(milliseconds));
 		if (wifi_serial->available() > 0) {
-			// Check if the reply on our serial port is the first char of reply.
 			char reply_char = wifi_serial->read();
 			if (reply_char == reply[current_reply_index]){
 				// Check if we succesfully compared the entire reply.
@@ -227,10 +218,10 @@ bool Network::send_command(const String command, const String reply, const uint8
 		Serial.println(command);
 
 		// Dump the buffer.
-		Serial.println(F("Reply ======= start"));
+		Serial.println(F("Reply ------- start  vvvv"));
 		for (int i = 0; i < reply_buffer_current_index; i++)
 			Serial.print(reply_buffer[i]);
-		Serial.println(F("Reply ======= end"));
+		Serial.println(F("Reply ------- end    ^^^^"));
 
 		// Empty our buffer.
 		reply_buffer_current_index = 0;

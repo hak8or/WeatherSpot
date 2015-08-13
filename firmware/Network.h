@@ -2,9 +2,11 @@
 #include "Arduino.h"
 #include "Sensors.h"
 
-#ifndef Network_h
-#define Network_h
+#pragma once
 
+/**
+ * API for all our network ncesessities.
+ */
 class Network
 {
 public:
@@ -21,18 +23,13 @@ public:
 	/**
 	 * @brief Sends a peice of data over TCP to our backend.
 	 * @details Does a DNS lookup for our backend, sets up a TCP connection, and sends our data.
+	 *
+	 * @param  sensor_data The sensor data struct worth of data we will be sending.
+	 * @param  series      What series (location) we want our data to be sent to.
 	 * 
-	 * @param  An enum for if we want to send our data over Wireless or Wired.
-	 * 
-	 * @return True if we were able succesfully send the POST request, false if otherwise.
+	 * @return             True if data was sent succesfully, false if otherwise.
 	 */
-	bool send_packet(const Sensor_data sensor_data);
-
-	/**
-	 * @brief Turns the arduino in a proxy for serial commands from the PC to wifi module.
-	 * @details Not really working yet, sad face. :(
-	 */
-	void serial_proxy_mode(void);
+	bool send_packet(const Sensors::Sensor_data sensor_data, const String series);
 
 	/**
 	 * @brief Sends a command to the WIFI module.
@@ -59,9 +56,10 @@ private:
 	 * @brief Blocks till either timeout or we find the requested reply.
 	 * 
 	 * @param reply The reply we are waiting for.
+	 * @param reply_length Number of chars of our reply.
 	 * @param milliseconds The timeout for how long we are willing to wait.
 	 * 
-	 * @return If we found the reply within the timeout.
+	 * @return True if we found the reply within the timeout.
 	 */
 	bool find(const String reply, const uint8_t reply_length, const uint16_t milliseconds);
 
@@ -70,4 +68,3 @@ private:
 	 */
 	void get_wifi_info(void);
 };
-#endif
