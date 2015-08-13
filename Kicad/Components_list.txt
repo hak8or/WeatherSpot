@@ -1,0 +1,9 @@
+Components list
+
+1. MPL3115A2 - Freescale Altimeter/pressure sensor. Digikey reference: MPL3115A2-ND. Price: $3.29 per unit
+2. DHT11 - Digital Humidity Temperature Sensor. Price: $7.49 for 4 pieces
+3. Light sensor. Price: free
+4. Atmega328p - Main microcontroller Price: free
+5. MCP1802 - Voltage Regulator - Digikey reference: MCP1802T-3302I/OTCT-ND. Price: free
+6. Other - Subcomponents such as capacitors or resistors. Price: free
+7. ESP8266 - Wifi module. Price:~$6? per unit

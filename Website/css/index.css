@@ -1,0 +1,63 @@
+html, body { min-height: 100%; }
+
+body {
+    background: url("../pic/sky_background.jpeg") no-repeat center center fixed ;
+    -webkit-background-size: cover; 
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+
+}
+
+/* section#splash is the first screen to be seen upon arrival at the site */
+section#splash {
+    display: block;
+    width: 100%;
+}
+
+div#click_here {
+    padding: 1em;
+    position: absolute;
+    left: 50%;
+    margin-top: 15%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
+/* section#get_started is our main box centered with logo and "Get Started" text */
+/* Start of #get_started */
+section#splash {
+    width: 100%;
+}
+section#splash a {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: #0aff0f;
+    width: 6em;
+}
+section#splash a:hover {
+    color: #ffeeff;
+}
+section#splash img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* End of #get_started */
+
+
+
+.blueShadow {
+	border-radius: 20em;
+	-webkit-box-shadow: 10px 10px 160px 30px rgba(15,255,239,0.76);
+	-moz-box-shadow: 10px 10px 160px 30px rgba(15,255,239,0.76);
+	box-shadow: 10px 10px 160px 30px rgba(15,255,239,0.76);
+}
+#front_page
+{
+    color: white;
+}

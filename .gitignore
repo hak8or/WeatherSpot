@@ -1,0 +1,2 @@
+# Since I use sublime but want to keep manually ignoring it from my git status.
+*.sublime-workspace

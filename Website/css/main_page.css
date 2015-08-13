@@ -1,0 +1,56 @@
+html, body { min-height: 100%; }
+
+body {
+    background: url("../pic/sky_background.jpeg") no-repeat center center fixed ;
+    -webkit-background-size: cover; 
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+
+}
+
+/* Section is our main box centered with logo and "Get Started" text */
+section {
+    padding: 1em;
+    position: absolute;
+    left: 50%;
+    margin-top: 15%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+
+}
+section a {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: #0aff0f;
+    width: 6em;
+}
+section a:hover {
+    color: #ffeeff;
+}
+section img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* When in Portrait, move the centered section down so it seems more centered */
+@media only screen and (orientation: portrait) {
+	section {
+		 margin-top: 50%;
+	}
+}
+
+.blueShadow {
+	border-radius: 20em;
+	-webkit-box-shadow: 10px 10px 160px 30px rgba(15,255,239,0.76);
+	-moz-box-shadow: 10px 10px 160px 30px rgba(15,255,239,0.76);
+	box-shadow: 10px 10px 160px 30px rgba(15,255,239,0.76);
+}
+#front_page
+{
+    color: white;
+}

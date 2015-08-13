@@ -1,0 +1,66 @@
+Cmp-Mod V01 Created by Cvpcb (2014-12-04 BZR 5312)-product   date = 7/26/2015 12:26:49 PM
+
+BeginCmp
+TimeStamp = /55B511A6;
+Reference = C1;
+ValeurCmp = 10uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /55B5115D;
+Reference = C2;
+ValeurCmp = 2.2uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /55B50086;
+Reference = C3;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /55B50107;
+Reference = C4;
+ValeurCmp = 10uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /55B50120;
+Reference = C5;
+ValeurCmp = 0.1uF;
+IdModule  = Capacitors_SMD:C_0402;
+EndCmp
+
+BeginCmp
+TimeStamp = /55B506EC;
+Reference = conn1;
+ValeurCmp = I2C_CONN;
+IdModule  = custom:I2C_CONN;
+EndCmp
+
+BeginCmp
+TimeStamp = /55B51024;
+Reference = IC1;
+ValeurCmp = SPX1117M3;
+IdModule  = custom:SPX1117M3;
+EndCmp
+
+BeginCmp
+TimeStamp = /55B51D16;
+Reference = J1;
+ValeurCmp = BATT;
+IdModule  = custom:BATT_CONN;
+EndCmp
+
+BeginCmp
+TimeStamp = /55B4FCED;
+Reference = U1;
+ValeurCmp = MPL3115A2;
+IdModule  = custom:MPL3115A2;
+EndCmp
+
+EndListe

@@ -1,0 +1,114 @@
+﻿<Window x:Class="WeatherSpot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WeatherSpot"
+        mc:Ignorable="d"
+        xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
+        Title="WeatherSpot" Height="660" Width="1250" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Background="White">
+
+    <Grid>
+        <TabControl x:Name="tabControl" HorizontalAlignment="Left" Height="630" VerticalAlignment="Top" Width="1245">
+            <TabItem Header="Graphs">
+                <Grid Background="#FFE5E5E5" Margin="0,0,0.2,-0.6">
+                    <Button x:Name="closeButton" Content="Close" HorizontalAlignment="Left" Margin="84,382,0,0" VerticalAlignment="Top" Width="75" Click="closeClick"/>
+                    <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Margin="84,329,0,0" VerticalAlignment="Top" Width="75" Click="exportClick"/>
+                    <Button x:Name="fetchButton" Content="Fetch" HorizontalAlignment="Left" Margin="84,275,0,0" VerticalAlignment="Top" Width="75" Click="fetchClick"/>
+                    <Calendar Name="FetchCalendar" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="35,32,0,0" IsTodayHighlighted="False" IsManipulationEnabled="True" SelectedDatesChanged="CalendarSelectedDatesChanged"/>
+                    <d3:ChartPlotter Name="plotter" Margin="353,32,530.8,345.4" Background="#FFE5E5E5">
+                        <d3:VerticalAxisTitle Content="F"/>
+                        <d3:HorizontalAxisTitle>Time</d3:HorizontalAxisTitle>
+                       </d3:ChartPlotter>
+                    <TextBox x:Name="textBoxOut" HorizontalAlignment="Left" Height="105" Margin="11,433,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="274"/>
+                    <Button x:Name="importButton" Content="Import" HorizontalAlignment="Left" Margin="84,302,0,0" VerticalAlignment="Top" Width="75" Click="importClick"/>
+                    <Rectangle Height="35.2" VerticalAlignment="Bottom" Fill="#FF2C2CD0" Margin="-9.6,0,-9.5,-10.3"/>
+                    <ComboBox x:Name="locationSelector" HorizontalAlignment="Left" Margin="35,205,0,0" VerticalAlignment="Top" Width="179" Loaded="ComboBoxLoaded"
+	                    SelectionChanged="ComboBoxSelectionChanged"/>
+                    <Button x:Name="printButton" Content="Print" HorizontalAlignment="Left" Margin="84,356,0,0" VerticalAlignment="Top" Width="75" Click="printClick"/>
+                    <TextBlock x:Name="fetchTime" HorizontalAlignment="Left" Margin="985,583,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="White" Width="210"/>
+                    <TextBox x:Name="hourBox" Text="{Binding ElementName=hourSelector, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Margin="233,232,976,341" RenderTransformOrigin="-0.577,0.466" />
+                    <Slider x:Name="hourSelector" HorizontalAlignment="Left" Margin="35,232,0,0" VerticalAlignment="Top" Width="179" TickFrequency="1" IsSnapToTickEnabled="True" Maximum="24" TickPlacement="BottomRight"/>
+                    <d3:ChartPlotter x:Name="plotter3" Margin="353,266,530.8,111.4" Background="#FFE5E5E5">
+                        <d3:VerticalAxisTitle Content="F"/>
+                        <d3:HorizontalAxisTitle Content="Time"/>
+                    </d3:ChartPlotter>
+                    <d3:ChartPlotter x:Name="plotter2" Margin="788,32,95.8,345.4" Background="#FFE5E5E5">
+                        <d3:VerticalAxisTitle Content="F"/>
+                        <d3:HorizontalAxisTitle Content="Time"/>
+                    </d3:ChartPlotter>
+                    <d3:ChartPlotter x:Name="plotter4" Margin="788,266,94.8,111.4" Background="#FFE5E5E5">
+                        <d3:VerticalAxisTitle Content="F"/>
+                        <d3:HorizontalAxisTitle Content="Time"/>
+                    </d3:ChartPlotter>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Statistics">
+                <Grid Background="#FFE5E5E5">
+                    <GroupBox x:Name="groupBoxMax_Copy1" Header="Median" HorizontalAlignment="Left" Margin="411,24,0,0" VerticalAlignment="Top" Height="160" Width="338"/>
+                    <GroupBox x:Name="groupBoxMax_Copy" Header="Min" HorizontalAlignment="Left" Margin="411,202,0,0" VerticalAlignment="Top" Height="160" Width="338"/>
+                    <GroupBox x:Name="groupBoxMax" Header="Max" HorizontalAlignment="Left" Margin="34,202,0,0" VerticalAlignment="Top" Height="160" Width="338"/>
+                    <GroupBox x:Name="groupBoxAvg" Header="Average" HorizontalAlignment="Left" Margin="34,24,0,0" VerticalAlignment="Top" Height="160" Width="338"/>
+                    <TextBox x:Name="temperatureAvgOut" HorizontalAlignment="Left" Height="23" Margin="230,57,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityAvgLabel" HorizontalAlignment="Left" Height="23" Margin="55,85,0,0" TextWrapping="Wrap" Text="Humidity" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureAvgLabel" HorizontalAlignment="Left" Height="23" Margin="55,113,0,0" TextWrapping="Wrap" Text="Pressure" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityAvgOut" HorizontalAlignment="Left" Height="23" Margin="230,86,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureAvgOut" HorizontalAlignment="Left" Height="23" Margin="230,114,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureAvgLabel" HorizontalAlignment="Left" Height="23" Margin="55,57,0,0" TextWrapping="Wrap" Text="Temperature" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMaxLabel" HorizontalAlignment="Left" Height="23" Margin="55,235,0,0" TextWrapping="Wrap" Text="Temperature" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMaxLabel" HorizontalAlignment="Left" Height="23" Margin="55,263,0,0" TextWrapping="Wrap" Text="Humidity" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMaxLabel" HorizontalAlignment="Left" Height="23" Margin="55,291,0,0" TextWrapping="Wrap" Text="Pressure" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMaxOut" HorizontalAlignment="Left" Height="23" Margin="230,235,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMaxOut" HorizontalAlignment="Left" Height="23" Margin="230,263,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMaxOut" HorizontalAlignment="Left" Height="23" Margin="230,291,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMinLabel" HorizontalAlignment="Left" Height="23" Margin="432,235,0,0" TextWrapping="Wrap" Text="Temperature" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMinLabel" HorizontalAlignment="Left" Height="23" Margin="432,263,0,0" TextWrapping="Wrap" Text="Humidity" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMinLabel" HorizontalAlignment="Left" Height="23" Margin="432,291,0,0" TextWrapping="Wrap" Text="Pressure" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMinOut" HorizontalAlignment="Left" Height="23" Margin="608,235,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMinOut" HorizontalAlignment="Left" Height="23" Margin="608,264,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMinOut" HorizontalAlignment="Left" Height="23" Margin="608,292,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMedianLabel" HorizontalAlignment="Left" Height="23" Margin="432,57,0,0" TextWrapping="Wrap" Text="Temperature" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMedianLabel" HorizontalAlignment="Left" Height="23" Margin="432,85,0,0" TextWrapping="Wrap" Text="Humidity" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMedianLabel" HorizontalAlignment="Left" Height="23" Margin="432,113,0,0" TextWrapping="Wrap" Text="Pressure" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureMedianOut" HorizontalAlignment="Left" Height="23" Margin="608,57,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityMedianOut" HorizontalAlignment="Left" Height="23" Margin="608,85,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureMedianOut" HorizontalAlignment="Left" Height="23" Margin="608,113,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <Rectangle Height="35.2" VerticalAlignment="Bottom" Fill="#FFDF8E10" Margin="-9.6,0,-9.6,-10.4"/>
+                    <TextBox x:Name="lightAvgLabel" HorizontalAlignment="Left" Height="23" Margin="55,141,0,0" TextWrapping="Wrap" Text="Light" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="lightAvgOut" HorizontalAlignment="Left" Height="23" Margin="230,142,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="lightMedianLabel" HorizontalAlignment="Left" Height="23" Margin="432,141,0,0" TextWrapping="Wrap" Text="Light" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="lightMedianOut" HorizontalAlignment="Left" Height="23" Margin="608,141,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="lightMaxLabel" HorizontalAlignment="Left" Height="23" Margin="55,319,0,0" TextWrapping="Wrap" Text="Light" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="lightMaxOut" HorizontalAlignment="Left" Height="23" Margin="230,319,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="lightMinLabel" HorizontalAlignment="Left" Height="23" Margin="432,319,0,0" TextWrapping="Wrap" Text="Light" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="lightMinOut" HorizontalAlignment="Left" Height="23" Margin="608,319,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <GroupBox x:Name="groupBoxMax_Copy2" Header="Std Deviation" HorizontalAlignment="Left" Margin="791,24,0,0" VerticalAlignment="Top" Height="160" Width="338"/>
+                    <TextBox x:Name="temperatureStdLabel" HorizontalAlignment="Left" Height="23" Margin="809,57,0,0" TextWrapping="Wrap" Text="Temperature" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityStdLabel" HorizontalAlignment="Left" Height="23" Margin="809,85,0,0" TextWrapping="Wrap" Text="Humidity" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureStdLabel" HorizontalAlignment="Left" Height="23" Margin="809,114,0,0" TextWrapping="Wrap" Text="Pressure" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="lightStdLabel" HorizontalAlignment="Left" Height="23" Margin="809,141,0,0" TextWrapping="Wrap" Text="Light" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="temperatureStdOut" HorizontalAlignment="Left" Height="23" Margin="982,57,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="humidityStdOut" HorizontalAlignment="Left" Height="23" Margin="982,86,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="pressureStdOut" HorizontalAlignment="Left" Height="23" Margin="982,114,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                    <TextBox x:Name="lightStdOut" HorizontalAlignment="Left" Height="23" Margin="982,142,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Console">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="consoleOutBox" HorizontalAlignment="Left" Height="505" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="1215"  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
+                    <TextBox x:Name="consoleInBox" HorizontalAlignment="Left" Height="23" Margin="10,533,0,0" TextWrapping="Wrap" Text="Enter Query" VerticalAlignment="Top" Width="1215" KeyDown="consoleKeyPressed" PreviewKeyDown="consolePreviewKeyDown" PreviewMouseLeftButtonDown="consoleMouseClick"/>
+                    <Rectangle Height="35.2" VerticalAlignment="Bottom" Fill="#FF630A9F" Margin="-9.6,0,-9.6,-10.4"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="About">
+                <Grid Background="#FFE5E5E5">
+                    <TextBlock x:Name="creditsSection" HorizontalAlignment="Left" Margin="454,169,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="176" Width="294" TextAlignment="Center"><Run FontSize="21.333" Text="The Weatherspot Team"/><LineBreak/><Run FontSize="14.667"/><LineBreak/><Run FontSize="14.667" Text="Glinojecki, Damian "/><LineBreak/><Run FontSize="14.667" Text="Kapela, Piotr "/><LineBreak/><Run FontSize="14.667" Text="Lenahan, Peter"/><LineBreak/><Run FontSize="14.667" Text="Shoykhet, Brandon"/><LineBreak/><Run FontSize="14.667" Text="Ziemianowicz, Marcin "/><LineBreak/><Run FontSize="21.333" Text=""/><LineBreak/><Run FontSize="21.333"/><LineBreak/><Run FontSize="21.333"/></TextBlock>
+                    <Image x:Name="cloudImage" HorizontalAlignment="Left" Height="149" Margin="548,75,0,0" VerticalAlignment="Top" Width="117" Source="cloud.png"/>
+                    <TextBlock x:Name="licenseSection" HorizontalAlignment="Left" Margin="400,326,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="427" Height="103" TextAlignment="Justify" Text="Weatherspot © 2015, This software uses two external open source libraries  Dynamic Data Display which is protected under the license of Microsoft Reciprocal License (Ms-RL) and Json.NET by Newtonsoft protected by the MIT License (MIT). Please refer to the documentation of the program for more details as well as for the copies of the licenses. "/>
+                    <TextBlock x:Name="httpSection" HorizontalAlignment="Left" Margin="536,431,0,0" TextWrapping="Wrap" Text="http://weatherspot.us" VerticalAlignment="Top" Width="143" FontSize="14.667"/>
+                    <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="901,431,0,0" TextWrapping="Wrap" Text="version: 0.1b" VerticalAlignment="Top" Height="23" Width="98"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
