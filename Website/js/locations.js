@@ -13,7 +13,7 @@
 		}
 		///////////
 		addLocation("Staten_Island", 40.586510, -74.100813);
-		addLocation("Downtown", 40.700815, -73.892049);
+		addLocation("Manhattan", 40.767875, -73.964059);
 		addLocation("Queens", 40.751447, -73.900095);
 		///////////
 
@@ -32,6 +32,7 @@
 		});
 
 		function makeMarkerWithLabelCallback(db, data) {
+			console.log("Data: " + data);
 			var seriesName = data[0].name;
 			var measurement = data[0].points[0][2]; 
 			makeMarkerWithLabel(seriesName, measurement.toString(), locations[seriesName]);
