@@ -1,0 +1,294 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:weather_station_library
+LIBS:vreg_pressure-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L MPL3115A2 U1
+U 1 1 55B4FCED
+P 6100 3175
+F 0 "U1" V 5850 2900 39  0000 C CNN
+F 1 "MPL3115A2" V 6250 3025 39  0000 C CNN
+F 2 "custom:MPL3115A2" H 6100 3175 39  0001 C CNN
+F 3 "" H 6100 3175 39  0000 C CNN
+	1    6100 3175
+	0    1    1    0   
+$EndComp
+$Comp
+L C C3
+U 1 1 55B50086
+P 6675 3325
+F 0 "C3" H 6675 3425 40  0000 L CNN
+F 1 "0.1uF" H 6681 3240 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 6713 3175 30  0001 C CNN
+F 3 "" H 6675 3325 60  0000 C CNN
+	1    6675 3325
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C4
+U 1 1 55B50107
+P 6975 3325
+F 0 "C4" H 6975 3425 40  0000 L CNN
+F 1 "10uF" H 6981 3240 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 7013 3175 30  0001 C CNN
+F 3 "" H 6975 3325 60  0000 C CNN
+	1    6975 3325
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C5
+U 1 1 55B50120
+P 7275 3325
+F 0 "C5" H 7275 3425 40  0000 L CNN
+F 1 "0.1uF" H 7281 3240 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 7313 3175 30  0001 C CNN
+F 3 "" H 7275 3325 60  0000 C CNN
+	1    7275 3325
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR01
+U 1 1 55B501D7
+P 6375 3650
+F 0 "#PWR01" H 6375 3650 30  0001 C CNN
+F 1 "GND" H 6375 3580 30  0001 C CNN
+F 2 "" H 6375 3650 60  0000 C CNN
+F 3 "" H 6375 3650 60  0000 C CNN
+	1    6375 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L 3V3 #PWR02
+U 1 1 55B503B8
+P 6375 2750
+F 0 "#PWR02" H 6375 2850 40  0001 C CNN
+F 1 "3V3" H 6375 2875 40  0000 C CNN
+F 2 "" H 6375 2750 60  0000 C CNN
+F 3 "" H 6375 2750 60  0000 C CNN
+	1    6375 2750
+	1    0    0    -1  
+$EndComp
+NoConn ~ 5650 3000
+NoConn ~ 5650 3075
+$Comp
+L I2C_CONN conn1
+U 1 1 55B506EC
+P 5050 3150
+F 0 "conn1" H 5375 3475 60  0000 C CNN
+F 1 "I2C_CONN" H 5350 2800 60  0000 C CNN
+F 2 "custom:I2C_CONN" H 5050 3150 60  0001 C CNN
+F 3 "" H 5050 3150 60  0000 C CNN
+	1    5050 3150
+	-1   0    0    1   
+$EndComp
+$Comp
+L SPX1117M3 IC1
+U 1 1 55B51024
+P 4750 4100
+F 0 "IC1" H 4850 3825 60  0000 C CNN
+F 1 "SPX1117M3" H 4775 4400 60  0000 C CNN
+F 2 "custom:SPX1117M3" H 4600 4100 60  0001 C CNN
+F 3 "" H 4600 4100 60  0000 C CNN
+	1    4750 4100
+	-1   0    0    1   
+$EndComp
+$Comp
+L C C2
+U 1 1 55B5115D
+P 5675 4350
+F 0 "C2" H 5675 4450 40  0000 L CNN
+F 1 "2.2uF" H 5681 4265 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 5713 4200 30  0001 C CNN
+F 3 "" H 5675 4350 60  0000 C CNN
+	1    5675 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C1
+U 1 1 55B511A6
+P 5375 4350
+F 0 "C1" H 5375 4450 40  0000 L CNN
+F 1 "10uF" H 5381 4265 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 5413 4200 30  0001 C CNN
+F 3 "" H 5375 4350 60  0000 C CNN
+	1    5375 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR03
+U 1 1 55B51333
+P 5175 4800
+F 0 "#PWR03" H 5175 4800 30  0001 C CNN
+F 1 "GND" H 5175 4730 30  0001 C CNN
+F 2 "" H 5175 4800 60  0000 C CNN
+F 3 "" H 5175 4800 60  0000 C CNN
+	1    5175 4800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6225 3075 6675 3075
+Wire Wire Line
+	6675 3075 6675 3125
+Wire Wire Line
+	6225 3000 7275 3000
+Wire Wire Line
+	6975 3000 6975 3125
+Wire Wire Line
+	7275 3000 7275 3125
+Connection ~ 6975 3000
+Wire Wire Line
+	6225 3225 6525 3225
+Wire Wire Line
+	6525 3225 6525 3000
+Connection ~ 6525 3000
+Wire Wire Line
+	6225 3150 6375 3150
+Wire Wire Line
+	6375 3150 6375 3650
+Wire Wire Line
+	7275 3550 7275 3525
+Wire Wire Line
+	6375 3550 7275 3550
+Connection ~ 6375 3550
+Wire Wire Line
+	6675 3525 6675 3550
+Connection ~ 6675 3550
+Wire Wire Line
+	6975 3525 6975 3550
+Connection ~ 6975 3550
+Wire Wire Line
+	6375 2750 6375 3000
+Connection ~ 6375 3000
+Wire Wire Line
+	5050 3300 5550 3300
+Wire Wire Line
+	5550 3300 5550 3150
+Wire Wire Line
+	5550 3150 5650 3150
+Wire Wire Line
+	5050 3100 5150 3100
+Wire Wire Line
+	5150 3100 5150 2850
+Wire Wire Line
+	5150 2850 6375 2850
+Connection ~ 6375 2850
+Wire Wire Line
+	5050 3000 5475 3000
+Wire Wire Line
+	5475 3000 5475 3425
+Wire Wire Line
+	5475 3425 6375 3425
+Connection ~ 6375 3425
+Wire Wire Line
+	5050 3200 5050 3225
+Wire Wire Line
+	5050 3225 5650 3225
+Wire Wire Line
+	5375 4100 5375 4150
+Wire Wire Line
+	5050 4100 5375 4100
+Wire Wire Line
+	5050 4000 6350 4000
+Wire Wire Line
+	5675 4000 5675 4150
+Wire Wire Line
+	5050 4200 5175 4200
+Wire Wire Line
+	5175 4200 5175 4800
+Wire Wire Line
+	5675 4625 5675 4550
+Wire Wire Line
+	5175 4625 5675 4625
+Connection ~ 5175 4625
+Wire Wire Line
+	5375 4550 5375 4625
+Connection ~ 5375 4625
+$Comp
+L 3V3 #PWR04
+U 1 1 55B51B4B
+P 5250 3875
+F 0 "#PWR04" H 5250 3975 40  0001 C CNN
+F 1 "3V3" H 5250 4000 40  0000 C CNN
+F 2 "" H 5250 3875 60  0000 C CNN
+F 3 "" H 5250 3875 60  0000 C CNN
+	1    5250 3875
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5250 3875 5250 4100
+Connection ~ 5250 4100
+$Comp
+L BATT J1
+U 1 1 55B51D16
+P 6850 4075
+F 0 "J1" H 6800 4275 60  0000 C CNN
+F 1 "BATT" H 6850 3875 60  0000 C CNN
+F 2 "custom:BATT_CONN" H 6750 4125 60  0001 C CNN
+F 3 "" H 6750 4125 60  0000 C CNN
+	1    6850 4075
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6550 4125 6350 4125
+Wire Wire Line
+	6350 4125 6350 4000
+Connection ~ 5675 4000
+$Comp
+L GND #PWR05
+U 1 1 55B51E0C
+P 6450 4325
+F 0 "#PWR05" H 6450 4325 30  0001 C CNN
+F 1 "GND" H 6450 4255 30  0001 C CNN
+F 2 "" H 6450 4325 60  0000 C CNN
+F 3 "" H 6450 4325 60  0000 C CNN
+	1    6450 4325
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6450 4325 6450 4025
+Wire Wire Line
+	6450 4025 6550 4025
+$EndSCHEMATC
